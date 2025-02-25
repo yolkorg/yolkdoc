@@ -1,0 +1,49 @@
+---
+title: "Dispatches"
+description: "Dispatches are how you command you bot to...do something!"
+---
+
+Dispatches are how you tell the bot to do something.
+
+```js
+import SpawnDispatch from 'yolkbot/dispatch/SpawnDispatch';
+
+bot.dispatch(new SpawnDispatch());
+```
+
+## Dispatch Checks
+Dispatches will always run a check to see if they can occur. This check just returns `true` or `false`, and you *should* do it on your own to make sure the Dispatch will succeed.
+
+```js
+import SpawnDispatch from 'yolkbot/dispatch/SpawnDispatch';
+
+const spawnDispatch = new SpawnDispatch();
+
+if (spawnDispatch.check()) {
+    bot.dispatch(spawnDispatch);
+}
+```
+
+If the check is false, the Dispatch will not run.
+
+## Dispatch List
+The good part! Here are all of the dispatches:
+
+- [BootPlayerDispatch](../dispatches/bootPlayer) - boot a player from a private room
+- [ChatDispatch](../dispatches/chat) - send a chat message
+- [FireDispatch](../dispatches/fire) - fire the gun
+- [GameOptionsDispatch](../dispatches/gameOptions) - change game settings in private rooms
+- [LookAtDispatch](../dispatches/lookAt) - look at a player
+- [LookToDispatch](../dispatches/lookTo) - look in a specified direction
+- [MeleeDispatch](../dispatches/melee) - use the melee
+- [MovementDispatch](../dispatches/movement) - move!!
+- [PauseDispatch](../dispatches/pause) - pause the game (basically clicking esc)
+- [ReloadDispatch](../dispatches/reload) - reload the gun
+- [ReportPlayerDispatch](../dispatches/reportPlayer) - report someone
+- [SaveLoadoutDispatch](../dispatches/saveLoadout) - change your gun & skins
+- [SwapWeaponDispatch](../dispatches/swapWeapon) - swap between primary & secondary
+- [SwitchTeamDispatch](../dispatches/switchTeam) - switch your team
+
+Each of these has their own file to explain what checks are ran and the function in a deeper form.
+
+In the end, dispatches are fairly simple - check they can run and run them!

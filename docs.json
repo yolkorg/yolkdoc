@@ -17,22 +17,41 @@
     "navigation": {
         "tabs": [
             {
-                "tab": "Guides",
+                "tab": "Documentation",
                 "groups": [
                     {
                         "group": "Get Started",
                         "pages": [
-                            "guides/intro/introduction",
-                            "guides/intro/quickstart",
-                            "guides/intro/tests"
+                            "docs/intro/introduction",
+                            "docs/intro/quickstart",
+                            "docs/intro/tests"
                         ]
                     },
                     {
                         "group": "How It Works",
                         "pages": [
-                            "guides/how/dispatches",
-                            "guides/how/hooks",
-                            "guides/how/updates"
+                            "docs/how/dispatches",
+                            "docs/how/hooks",
+                            "docs/how/updates"
+                        ]
+                    },
+                    {
+                        "group": "Dispatches",
+                        "pages": [
+                            "docs/dispatches/bootPlayer",
+                            "docs/dispatches/chat",
+                            "docs/dispatches/fire",
+                            "docs/dispatches/gameOptions",
+                            "docs/dispatches/lookAt",
+                            "docs/dispatches/lookTo",
+                            "docs/dispatches/melee",
+                            "docs/dispatches/movement",
+                            "docs/dispatches/pause",
+                            "docs/dispatches/reload",
+                            "docs/dispatches/reportPlayer",
+                            "docs/dispatches/saveLoadout",
+                            "docs/dispatches/swapWeapon",
+                            "docs/dispatches/switchTeam"
                         ]
                     }
                 ]
