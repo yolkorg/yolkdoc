@@ -1,0 +1,52 @@
+---
+title: "Quickstart"
+description: "Get started with yolkbot in just a few minutes!"
+---
+
+You can install yolkbot using whatever package manager supports your needs. We heavily recommend using **yarn** or **bun**.
+
+<CodeGroup>
+
+```sh npm
+npm install yolkbot@latest
+```
+
+```sh pnpm
+pnpm install yolkbot@latest
+```
+
+```sh yarn
+yarn add yolkbot@latest
+```
+
+```sh bun
+bun add yolkbot@latest
+```
+
+</CodeGroup>
+
+You can also choose to use the alpha version, where we test features still in development. This is not recommended for production use, and should be used if you have a specific feature you want to use. You can select the alpha version by replacing `yolkbot` with `yolkbot-alpha`.
+
+<Note>We only officially use two package names: `yolkbot` & `yolkbot-alpha`. Do not install any others, as they are not supported and may lead to you being hacked.</Note>
+
+Once you have yolkbot installed, you can create a new bot in just a few lines of code. Here's an example of a simple bot that joins a game an logs when players join:
+
+```js
+import Bot from 'yolkbot/bot';
+
+const bot = new Bot({ name: 'my bot' });
+
+bot.on('playerJoin', (player) => {
+    console.log(`${player.name} joined the game!`);
+});
+
+await bot.join('game-code-here');
+```
+
+It's that easy! From here, you can learn how the bot works by reading the following key pages:
+
+- [Dispatches](../how/dispatches)
+- [Hooks](../how/hooks)
+- [Updates](../how/updates)
+
+These are the three main things you need to know about yolkbot, and will help you understand how to create a bot that does exactly what you want it to do. If you have any questions, feel free to ask in our [Discord](https://discord.gg/gYugVUCaMr)!

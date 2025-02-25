@@ -1,0 +1,70 @@
+{
+    "$schema": "https://mintlify.com/docs.json",
+    "theme": "linden",
+    "name": "yolkbot",
+    "colors": {
+        "primary": "#009bdc",
+        "light": "#009bdc",
+        "dark": "#009bdc"
+    },
+    "favicon": "/img/icon.png",
+    "fonts": {
+        "family": "Nunito"
+    },
+    "appearance": {
+        "default": "light"
+    },
+    "navigation": {
+        "tabs": [
+            {
+                "tab": "Guides",
+                "groups": [
+                    {
+                        "group": "Get Started",
+                        "pages": [
+                            "guides/intro/introduction",
+                            "guides/intro/quickstart",
+                            "guides/intro/tests"
+                        ]
+                    },
+                    {
+                        "group": "How It Works",
+                        "pages": [
+                            "guides/how/dispatches",
+                            "guides/how/hooks",
+                            "guides/how/updates"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "global": {
+            "anchors": [
+                {
+                    "anchor": "npm package",
+                    "href": "https://npmjs.com/yolkbot",
+                    "icon": "npm"
+                },
+                {
+                    "anchor": "github repo",
+                    "href": "https://github.com/enbyte/yolkbot",
+                    "icon": "github"
+                },
+                {
+                    "anchor": "discord guild",
+                    "href": "https://discord.gg/gYugVUCaMr",
+                    "icon": "discord"
+                }
+            ]
+        }
+    },
+    "logo": {
+        "light": "/img/logo-light.png",
+        "dark": "/img/logo-dark.png"
+    },
+    "footer": {
+        "socials": {
+            "discord": "https://discord.gg/gYugVUCaMr"
+        }
+    }
+}
