@@ -1,0 +1,89 @@
+{
+    "$schema": "https://mintlify.com/docs.json",
+    "theme": "linden",
+    "name": "yolkbot",
+    "colors": {
+        "primary": "#009bdc",
+        "light": "#009bdc",
+        "dark": "#009bdc"
+    },
+    "favicon": "/img/icon.png",
+    "fonts": {
+        "family": "Nunito"
+    },
+    "appearance": {
+        "default": "light"
+    },
+    "navigation": {
+        "tabs": [
+            {
+                "tab": "Documentation",
+                "groups": [
+                    {
+                        "group": "Get Started",
+                        "pages": [
+                            "docs/intro/introduction",
+                            "docs/intro/quickstart",
+                            "docs/intro/tests"
+                        ]
+                    },
+                    {
+                        "group": "How It Works",
+                        "pages": [
+                            "docs/how/dispatches",
+                            "docs/how/hooks",
+                            "docs/how/updates"
+                        ]
+                    },
+                    {
+                        "group": "Dispatches",
+                        "pages": [
+                            "docs/dispatches/bootPlayer",
+                            "docs/dispatches/chat",
+                            "docs/dispatches/fire",
+                            "docs/dispatches/gameOptions",
+                            "docs/dispatches/lookAt",
+                            "docs/dispatches/lookTo",
+                            "docs/dispatches/melee",
+                            "docs/dispatches/movement",
+                            "docs/dispatches/pause",
+                            "docs/dispatches/reload",
+                            "docs/dispatches/reportPlayer",
+                            "docs/dispatches/saveLoadout",
+                            "docs/dispatches/swapWeapon",
+                            "docs/dispatches/switchTeam"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "global": {
+            "anchors": [
+                {
+                    "anchor": "npm package",
+                    "href": "https://npmjs.com/yolkbot",
+                    "icon": "npm"
+                },
+                {
+                    "anchor": "github repo",
+                    "href": "https://github.com/enbyte/yolkbot",
+                    "icon": "github"
+                },
+                {
+                    "anchor": "discord guild",
+                    "href": "https://discord.gg/gYugVUCaMr",
+                    "icon": "discord"
+                }
+            ]
+        }
+    },
+    "logo": {
+        "light": "/img/logo-light.png",
+        "dark": "/img/logo-dark.png"
+    },
+    "footer": {
+        "socials": {
+            "discord": "https://discord.gg/gYugVUCaMr"
+        }
+    }
+}
