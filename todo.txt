@@ -1,0 +1,5 @@
+- create and fill in all hooks/ files
+- do all the work for dispatches/
+- write classes/matchmaker.mdx
+- authFail and close events
+- document pathfinding changes

@@ -1,0 +1,44 @@
+---
+title: "Utility API"
+description: "yolkbot provides a few API-related functions."
+---
+
+<Note>You probably shouldn't directly use any of these. Most of them are used internally and exposed for *advanced users*.</Note>
+
+### [async] loginAnonymously
+This lets you login anonymously. It returns a response from the `auth` services command.
+
+```js
+import { loginAnonymously } from 'yolkbot/api';
+
+let response = await loginAnonymously();
+console.log(response);
+```
+
+This gives you a lot of information about the anonymous account.
+
+You can also pass a proxy (socks4 or socks5) to use on the servies query as the first argument.
+
+### [async] loginWithCredentials
+This lets you login with a specified email and password.
+
+```js
+import { loginWithCredentials } from 'yolkbot/api';
+
+let response = await loginWithCredentials('email@example.com', 'ThisIsAPassword123!');
+console.log(response);
+```
+
+You can also pass a proxy (socks4 or socks5) to use on the servies query as the third argument.
+
+### [async] queryServices
+This lets you directly query the `services` socket.
+
+```js
+import { queryServices } from 'yolkbot/api';
+
+let response = await queryServices({ cmd: 'auth', firebaseToken: '...' });
+console.log(response);
+```
+
+You can also pass a proxy (socks4 or socks5) to use on the servies query as the second argument.

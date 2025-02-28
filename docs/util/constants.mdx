@@ -1,0 +1,140 @@
+----
+title: "Constants"
+description: "Constants are global variables that are usable across a Bot."
+---
+
+Constants are the core numbers and ways we can easily define information in a readable format. Instead of always calling the blue team `1`, the value, we instead can call it `Teams.blue`!
+
+You don't *need* to use constants, but if anything changes in shell, they will be updated and your "magic numbers" might not be. Constants are super easy to understand and improve code readability, so we highly recommend them.
+
+You can import any constant using this format:
+
+```js
+import { CONSTANT_NAME } from 'yolkbot/constants';
+```
+
+To import multiple constants at once, you can use this format:
+
+```js
+import { CONSTANT_NAME_1, CONSTANT_NAME_2 } from 'yolkbot/constants';
+```
+
+### Constant List
+These do not have indivisual pages or code examples. If you become confused, paste this into ChatGPT and ask it how to import a specific constant. The names are exactly how you'd import them. If you see the name `Teams`, you'd use:
+
+```js
+import { Teams } from 'yolkbot/constants';
+```
+
+If you want to see the values of each constant, [read the internal file](https://github.com/enbyte/yolkbot/blob/main/src/constants.js). Documentation is handtyped by us and we do not have that time.
+
+- `CollectTypes` - The enum of items on the ground (ammo/grenade)
+- `CoopStates` - The different stages of a coop name (contested, capturing, abandoned, etc)
+- `GameActions` - The different actions executed by a host (pause/reset)
+- `GameModes` - The different game modes. (kotc, ffa, etc)
+- `GameOptionFlags` - The different extra options game hosts control (team switching/locking)
+- `GunList` - An **array** of all the guns in the game, ordered by the selector menu.
+- `Movements` - The different ways to move. Critical for MovementDispatch.
+- `PlayTypes` - These are the different ways to join a game. The key is the name and the value is the 
+- `ShellStreaks` - The different streaks in the game. (health shield, double damage, etc)
+- `Teams` - The two teams (blue/red)
+- `UserAgent` - The user agent used for connecting to WebSockets and sending requests
+
+Some of these, like `Movements`, are very important for the movement dispatch. Others, like `GameOptionFlags`, are relatively obscure and will likely never be needed by you.
+
+## Game Data
+Game data also falls into the constant category.
+
+### Guns
+Guns are represented by classes.
+
+```js
+import { AUG, CSG1, DozenGauge, Eggk47, M24, RPEGG, SMG } from 'yolkbot/constants/guns.js';
+```
+
+This is a list of all of the guns in the game. Some are the name in the game, some are the actual name of the gun. The gun names match what the game's code calls them. Here's what each is:
+
+- Eggk47 - Eggk47
+- Scrambler - DozenGauge
+- Free Ranger - CSG1
+- RPEGG - RPEGG
+- Whipper - SMG
+- Crackshot - M24
+- Tri-Hard - AUG
+- Secondary - Cluck9mm
+
+The guns (excluding secondary) are listed in the `GunList` constant mentioned above.
+
+The gun class has a lot of information about each gun, which is better gleamed by just...[reading the code...](https://github.com/enbyte/yolkbot/blob/main/src/constants/guns.js)
+
+### Items
+Items are a giant array. Like, a really giant array. Yoinked directly from the game source.
+
+```js
+import { Items } from 'yolkbot/constants/items';
+```
+
+Items are a large thing I don't want to document. I'm documenting yolkbot, not shell. [Read the code.](https://github.com/enbyte/yolkbot/blob/main/src/constants/items.js)
+
+You can use the `findItemById` constant from `yolkbot/constants`:
+
+```js
+import { findItemById } from 'yolkbot/constants';
+
+console.log(findItemById(1001)) // ==> { id: 1001, name: 'Baseball Hat', ... }
+```
+
+Example item:
+
+```json
+{
+    "id": 1001,
+    "name": "Ball Cap",
+    "price": 0,
+    "item_type_id": 1,
+    "item_type_name": "Hat",
+    "category_name": "Hats",
+    "exclusive_for_class": null,
+    "item_data": {
+        "meshName": "hat_ballCap",
+        "tags": [
+            "Green",
+            "White"
+        ]
+    },
+    "is_available": true,
+    "unlock": "default",
+    "align": {
+        "x": -0.12075649338775385,
+        "y": -0.2670312477499075,
+        "z": -0.05526682671835026
+    }
+}
+```
+
+### Maps
+Maps are ALSO a giant array. Yoinked directly from the game source.
+
+```js
+import { Maps } from 'yolkbot/constants/maps';
+```
+
+I'm not documenting the Map object either. It's briefly covered when discussing the Matchmaker in the [Bot](../classes/bot) guide. [Read the code.](https://github.com/enbyte/yolkbot/blob/main/src/constants/maps.js)
+
+Example map:
+
+```json
+{
+    "filename": "aqueduct",
+    "hash": "11dp765kifr",
+    "name": "Aqueduct",
+    "modes": {
+        "FFA": true,
+        "Teams": true,
+        "Spatula": true,
+        "King": true
+    },
+    "availability": "both",
+    "numPlayers": "18"
+}
+```

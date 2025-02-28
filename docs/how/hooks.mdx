@@ -6,3 +6,42 @@ description: "Hooks are how you find out what's going on in game!"
 Hooks are how you find out what's going on in game. They are called when certain events happen, and you can use them to do things like log information, send messages, or even dispatch other actions.
 
 If you've ever used Discord.JS or some other library with a `.on` system, that's what a hook is, we just needed a creative name for it.
+
+```js
+bot.on('playerJoin', (player) => {
+    console.log(`${player.name} has joined the game!`);
+});
+```
+
+## Hook List
+
+Each file has a basic example and description of usage.
+
+- [balanceUpdate](../hooks/balanceUpdate)
+- [chat](../hooks/chat)
+- [collectAmmo](../hooks/collectAmmo)
+- [collectGrenade](../hooks/collectGrenade)
+- [gameForcePause](../hooks/gameForcePause)
+- [gameOptionsChange](../hooks/gameOptionsChange)
+- [gameReset](../hooks/gameReset)
+- [gameStateChange](../hooks/gameStateChange)
+- [pingUpdate](../hooks/pingUpdate)
+- [playerBeginStreak](../hooks/playerBeginStreak)
+- [playerChangeCharacter](../hooks/playerChangeCharacter)
+- [playerDeath](../hooks/playerDeath)
+- [playerFire](../hooks/playerFire)
+- [playerJoin](../hooks/playerJoin)
+- [playerLeave](../hooks/playerLeave)
+- [playerPause](../hooks/playerPause)
+- [playerReload](../hooks/playerReload)
+- [playerRespawn](../hooks/playerRespawn)
+- [playerSwapWeaon](../hooks/playerSwapWeaon)
+- [playerSwitchTeam](../hooks/playerSwitchTeam)
+- [playerDamaged](../hooks/playerDamaged)
+- [playerDeath](../hooks/playerDeath)
+- [playerSwitchTeam](../hooks/playerSwitchTeam)
+- [selfDamaged](../hooks/selfDamaged)
+- [selfMoved](../hooks/selfMoved)
+- [selfRespawnFail](../hooks/selfRespawnFail)
+- [selfShieldHit](../hooks/selfShieldHit)
+- [selfShieldLost](../hooks/selfShieldLost)

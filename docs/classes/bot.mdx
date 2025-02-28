@@ -1,0 +1,257 @@
+---
+title: "Bot Class"
+description: "The methods & attributes of a Bot."
+---
+
+This is a generic Bot.
+
+```js
+import Bot from 'yolkbot/bot';
+```
+
+You can create one using the standard constructor format:
+
+```js
+const bot = new Bot();
+```
+
+The constructor has one parameter, which is an object with configuration. The configuration object can have the following properties:
+
+```js
+const bot = new Bot({
+    name: 'My Bot', // the name of the bot
+    proxy: 'socks4://69.69.69.69:4200', // a socks4 OR socks5 proxy url for the bot
+
+    doPing: true, // should the bot automatically ping the server for latency?
+    pingInterval: 1000, // how often should the bot ping the server for latency? 1000 is shell's default
+
+    doUpdate: true, // should the bot automatically update? (see how/updates)
+    updateInterval: 5, // how often should the bot update? (see how/updates)
+})
+```
+
+From there, you can use the various methods and attributes of the bot.
+
+## Methods
+Methods are things that allow you to run actions on a `Bot` instance.
+
+A method tagged with the `[async]` tag means that it is an asynchronous function, and you should use `await` when calling it.
+
+For example, here is a normal method:
+
+```js
+bot.method();
+```
+
+Here is an `[async]` method:
+
+```js
+await bot.asyncMethod();
+```
+
+If you have errors relating to "await being called in a non-async function", you should read [this article](https://javascript.info/async-await), which helps explain how async/await work as well as how to properly use them.
+
+### [async] bot.login
+Logs you into an account using an email and password. If you do not call this, joining a game will create and use an anonymous account.
+
+```js
+await bot.login('email@example.com', 'MyEpicPassword123!!');
+```
+
+### bot.dispatch
+Allows you to [dispatch](../how/dispatches) an action to the game server.
+
+```js
+import LookAtDispatch from 'yolkbot/dispatch/LookAtDispatch';
+
+bot.dispatch(new LookAtDispatch(0));
+```
+
+If you become confused with dispatches, refer to the [dispatches](../how/dispatches) guide.
+
+### [async] bot.createPrivateGame
+Creates a private game with a specified region, mode, and map.
+
+```js
+await bot.createPrivateGame({
+    region: 'useast',
+    mode: 'ffa',
+    map: 0 // aqueduct
+});
+```
+
+You can find a region list from the [matchmaker](./matchmaker) guide.
+
+Modes can be found using the [GameMode constant](../util/constants).
+
+Maps can be found using the [Map constant](../util/constants). Use the ID of the map, or the index of where it is in the array. For example, to find the ID of the Castle map, you'd do this:
+
+```js
+import { Maps } from 'yolkbot/constants';
+
+let castleInfo = Maps.find((map) => map.name === 'Castle');
+let castleId = Maps.indexOf(castleInfo);
+```
+
+You'd then pass that `castleId` to the `Map` parameter.
+
+### [async] bot.join
+Join a public game with the provided game code.
+
+```js
+await bot.join('game-code-here');
+```
+
+You can also pass a result directly from the Matchmaker:
+
+```js
+const game = await bot.matchmaker.findGame({ region: 'useast', mode: 'ffa' });
+await bot.join(game);
+```
+
+### bot.update
+This runs a manual update for the bot. Do not call this unless you have a *clear understanding* how [updates](../how/updates) work.
+
+```js
+bot.update();
+```
+
+### bot.on
+This is how you listen to a [hook](../how/hooks) on the bot. You can listen to any hook that is available.
+
+```js
+bot.on('playerJoin', (player) => {
+    console.log('a player joined! say hi to ' + player.name);
+});
+```
+
+You can get a list of hooks in the [hook guide](../how/hooks).
+
+### bot.onAny
+This is how you listen for ALL events in the bot. Since this includes things like packets, ticks, and pings, this probably isn't good unless you're debugging issues.
+
+```js
+bot.onAny((eventName, data) => {
+    console.log('event ' + eventName + ' was called with data: ' + data);
+});
+```
+
+`data` is what would be passed to the specified event name. So, for a `playerJoin`, eventName = `playerJoin and data = `playerThatJoined`.
+
+### [async] bot.initMatchmaker
+This manually creates of a [Matchmaker](./matchmaker) on a Bot. This is why you really should never create a Matchmaker unless you don't plan to join a game at any point.
+
+You should, if logging in and attempting to find regions:
+- Create a bot with `new Bot()`
+- Call `bot.login()` with the proper credentials
+- Call `bot.initMatchmaker()`
+- Call the various matchmaker calls you need to
+- Call `bot.join(code)`
+
+There are several important things about the matchmaker that don't relate, so let's use a bullet pointed list:
+
+- If you don't login before using initMatchmaker, it will first create an anonymous account, attach the anon account to the bot, then use that anon account until you call `login()`. This is why you should really call `login()` first.
+- The matchmaker will use the proxy you used to create the bot. Note that the Matchmaker will disconnect if you spam `findPublicGame` on the same proxy ~10 times.
+- The matchmaker will use the same proxy as the bot.
+- This will automatically be run anytime you use `bot.join()` or `bot.createPrivateGame()`, so you don't need to call this unless you're doing something special (e.g. finding a public game and joining it).
+
+## Attributes
+These are variables on `bot.*` that let you get information about the Bot.
+
+<Note>Some variables are not listed, as their usage is for advanced users and messing with them may cause issues.</Note>
+
+### Constructor Config
+This is config passed in the constructor (when you ran `new Bot({ ...opts })`)
+
+- `bot.proxy` - the socks proxy url
+- `bot.name` - the name of the bot
+- `bot.autoUpdate` - do auto updates? see [updates](../how/updates)
+- `bot.updateInterval` - how often to update? see [updates](../how/updates)
+- `bot.autoPing` - automatically ping the server to test latency?
+- `bot.pingInterval` - how often to ping the server?
+
+### bot.players
+`bot.players` is an array of players.
+
+<Note>bot.me is a reference to the `bot.players` object that represents you.</Note>
+
+- `bot.players[i].id` - the id of the player relative to the players
+    - IDs are the index of `bot.players` the bot is
+    - for example, ID 3 would be `bot.players[3]`
+- `bot.players[i].team` - the team the player is on
+- `bot.players[i].name` - the name of the player
+- `bot.players[i].uniqueId` - the unique id of the player
+- `bot.players[i].position` - the position of the player
+    - `bot.players[i].position.x` - the x position of the player
+    - `bot.players[i].position.y` - the y position of the player
+    - `bot.players[i].position.z` - the z position of the player
+- `bot.players[i].view` - the view of the player
+    - `bot.players[i].view.yaw` - the yaw of the player
+    - `bot.players[i].view.pitch` - the pitch of the player
+- `bot.players[i].jumping` - if the player is jumping
+- `bot.players[i].climbing` - if the player is climbing
+- `bot.players[i].character` - the character of the player
+    - `bot.players[i].character.eggColor` - the color of the player's egg
+    - `bot.players[i].character.primaryGun` - the primary gun of the player
+    - `bot.players[i].character.secondaryGun` - the secondary gun of the player
+    - `bot.players[i].character.stamp` - the stamp of the player
+    - `bot.players[i].character.hat` - the hat of the player
+    - `bot.players[i].character.grenade` - the grenade of the player
+    - `bot.players[i].character.melee` - the melee of the player
+- `bot.players[i].activeGun` - the active gun of the player (primary or secondary)
+- `bot.players[i].selectedGun` - the selected gun of the player (eggk, crackshot, etc)
+- `bot.players[i].weapons` - the weapons of the player
+    - `bot.players[i].weapons[0]` - the primary weapon of the player (instanceof [gun](../constants/gun))
+    - `bot.players[i].weapons[1]` - the secondary weapon of the player (instanceof [gun](../constants/gun), always a cluck9mm)
+- `bot.players[i].grenades` - the number of grenades the player has
+- `bot.players[i].kills` - the number of kills the player has
+- `bot.players[i].hp` - the health of the player
+- `bot.players[i].hpShield` - the shield of the player
+- `bot.players[i].streakRewards` - the rewards the player has for their streak - a list of the [StreakRewards constant](../util/constants)
+
+### bot.game
+
+- `bot.game.code` - the game code of the game
+- `bot.game.gameMode` - the game mode of the game (instanceof [GameMode](../util/constants))
+- `bot.game.map` - the map of the game (instanceof [Map](../util/constants))
+- `bot.game.playerLimit` - the player limit of the game
+- `bot.game.isGameOwner` - if the bot is the game owner
+- `bot.game.isPrivate` - if the game is private
+- `bot.game.options` - the options of the game
+    - `bot.game.options.gravity` - the gravity of the game
+    - `bot.game.options.damage` - the damage of the game
+    - `bot.game.options.healthRegen` - the health regen of the game
+    - `bot.game.options.locked` - if the game is locked
+    - `bot.game.options.noTeamChange` - if the game has no team change
+    - `bot.game.options.noTeamShuffle` - if the game has no team shuffle
+    - `bot.game.options.weaponsDisabled` - the weapons disabled in the game - in the order of [GunList](../util/constants) - 1 = disabled, 0 = enabled
+    - `bot.game.options.mustUseSecondary` - if the player must use the secondary weapon due to all weapons being disabled
+- `bot.game.teamScore` - the team score of the game
+- `bot.game.spatula` - the spatula of the game
+    - `bot.game.spatula.coords` - the coords of the spatula
+    - `bot.game.spatula.controlledBy` - the player id controlling the spatula
+    - `bot.game.spatula.controlledByTeam` - the team controlling the spatula
+- `bot.game.stage` - the stage of the game (instanceof [CoopStates](../util/constants))
+- `bot.game.activeZone` - the active coop zone number
+- `bot.game.capturing` - the users capturing the coop
+- `bot.game.captureProgress` - a number 1-1000 that signifies the progress of the capture
+- `bot.game.numCapturing` - the number of players capturing
+- `bot.game.stageName` - the name of the game stage (as `bot.game.stage` is a number)
+- `bot.game.capturePercent` - the capture percent of the game (as `bot.game.captureProgress` is a number, this is for convenience)
+
+### bot.account
+
+- `bot.account.firebaseId` - the firebase id (for auth)
+- `bot.account.sessionId` - the session id (for auth)
+- `bot.account.session` - the session (for auth)
+- `bot.account.ownedItemIds` - the owned items' IDs
+- `bot.account.vip` - if the account is vip status
+- `bot.account.accountAge` - the age of the account in milliseconds
+- `bot.account.emailVerified` - if the account's email is verified
+- `bot.account.eggBalance` - the egg balance
+
+### bot.*
+
+- `bot.ping` - the websocket latency (ping)
+- `bot.initTime` - a `Date.now()` of the bot instance's creation time (for benchmarks)
+- `bot.matchmaker` - an instance of [matchmaker](./matchmaker) that uses the bot's proxy & auth
