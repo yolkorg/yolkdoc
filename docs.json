@@ -36,6 +36,20 @@
                         ]
                     },
                     {
+                        "group": "Deep Docs",
+                        "pages": [
+                            "docs/classes/bot",
+                            "docs/classes/matchmaker"
+                        ]
+                    },
+                    {
+                        "group": "Utilities",
+                        "pages": [
+                            "docs/util/api",
+                            "docs/util/constants"
+                        ]
+                    },
+                    {
                         "group": "Dispatches",
                         "pages": [
                             "docs/dispatches/bootPlayer",
