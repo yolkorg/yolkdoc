@@ -24,6 +24,7 @@
                         "pages": [
                             "docs/intro/introduction",
                             "docs/intro/quickstart",
+                            "docs/intro/browser",
                             "docs/intro/tests"
                         ]
                     },

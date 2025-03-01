@@ -1,4 +1,2 @@
 - create and fill in all hooks/ files
 - do all the work for dispatches/
-- authFail and close events
-- document pathfinding changes
