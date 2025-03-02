@@ -1,0 +1,16 @@
+---
+title: "ReloadDispatch"
+description: "Reload the gun currently in your hand"
+---
+
+### Example Usage
+
+```js
+import ReloadDispatch from 'yolkbot/dispatches/ReloadDispatch';
+
+bot.dispatch(new ReloadDispatch());
+```
+
+### Checks
+- The bot must be playing the game
+- The bot must not be already reloading, swapping between the primary/secondary, or using the melee

@@ -1,0 +1,20 @@
+---
+title: "LookAtDispatch"
+description: "Look at a player"
+---
+
+### Example Usage
+
+```js
+import LookAtDispatch from 'yolkbot/dispatches/LookAtDispatch';
+
+bot.dispatch(new LookAtDispatch(0)); // a player's ID
+bot.dispatch(new LookAtDispatch('playerName')); // a player's name
+```
+
+### Checks
+- The bot must be playing the game
+- The player passed must be a valid player in the game
+
+### Notes
+The bot will calculate the yaw and pitch of a player and look at the player. Bloom is NOT calculated.

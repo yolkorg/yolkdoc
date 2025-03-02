@@ -1,0 +1,16 @@
+---
+title: "LookAtPosDispatch"
+description: "Look at an X/Y/Z position"
+---
+
+### Example Usage
+
+```js
+import LookAtPosDispatch from 'yolkbot/dispatches/LookAtPosDispatch';
+
+bot.dispatch(new LookAtPosDispatch({ x: 0, y: 0, z: 0 }));
+```
+
+### Checks
+- The bot must be playing the game
+- The position passed must have an X, Y, and Z value

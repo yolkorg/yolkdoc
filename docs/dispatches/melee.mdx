@@ -1,0 +1,19 @@
+---
+title: "MeleeDispatch"
+description: "Use the melee weapon"
+---
+
+### Example Usage
+
+```js
+import MeleeDispatch from 'yolkbot/dispatches/MeleeDispatch';
+
+bot.dispatch(new MeleeDispatch());
+```
+
+### Checks
+- The bot must be playing the game
+- The bot must not be reloading, swapping between the primary/secondary, or using the melee already
+
+### Notes
+The bot will melee in the direction the bot is facing.

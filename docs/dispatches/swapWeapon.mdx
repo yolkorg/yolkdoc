@@ -1,0 +1,16 @@
+---
+title: "SwapWeaponDispatch"
+description: "Swaps between your primary and secondary"
+---
+
+### Example Usage
+
+```js
+import SwapWeaponDispatch from 'yolkbot/dispatches/SwapWeaponDispatch';
+
+bot.dispatch(new SwapWeaponDispatch());
+```
+
+### Checks
+- The bot must be playing the game
+- The bot must not be reloading, already swapping between the primary/secondary, or using the melee

@@ -1,0 +1,35 @@
+---
+title: "ReportPlayerDispatch"
+description: "Report a player in your game"
+---
+
+### Example Usage
+
+```js
+import ReportPlayerDispatch from 'yolkbot/dispatches/ReportPlayerDispatch';
+
+bot.dispatch(new ReportPlayerDispatch(0, {
+    cheating: true,
+    harassment: true,
+    offensive: true,
+    other: false
+})); // a player's ID with the "cheating", "harassment", and "offensive" reasons selected
+
+bot.dispatch(new ReportPlayerDispatch('playerName')); // a player's name with no reasons selected (it will select just the "other" option)
+```
+
+### Checks
+- The bot must be in a game
+- The player passed must be a valid player in the game
+
+### Notes
+The following options can be passed:
+
+- `cheating`
+- `harassment`
+- `offensive`
+- `other`
+
+If you don't pass an option, it will be assumed that the option is not selected.
+
+If you don't pass a reason object, it will assume reason is "other" and go through with the report. 

@@ -1,0 +1,22 @@
+---
+title: "ChatDispatch"
+description: "Send a chat message"
+---
+
+### Example Usage
+
+```js
+import ChatDispatch from 'yolkbot/dispatches/ChatDispatch';
+
+bot.dispatch(new ChatDispatch('message here'));
+```
+
+### Checks
+- The message must be a valid string
+- The message must be between 1 and 64 characters (game limit)
+- The bot must be in a game and not have chatted in the last 3 seconds
+    - This helps prevent ratelimits in chat.
+    - If you want to disable this functionality, pass `true` as the second argument to the dispatch.
+        - Example: `bot.dispatch(new ChatDispatch('message here', true));`
+- If the bot is not in a private game, the account must be email verified and at least 12 hours old
+    - This is because chat is disabled for unverified accounts in public games.

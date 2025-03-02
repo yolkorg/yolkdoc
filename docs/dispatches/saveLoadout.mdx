@@ -1,0 +1,31 @@
+---
+title: "SaveLoadoutDispatch"
+description: "Change the bot's skin(s) or gun"
+---
+
+### Example Usage
+
+```js
+import SaveLoadoutDispatch from 'yolkbot/dispatches/SaveLoadoutDispatch';
+import { Items } from 'yolkbot/constants/items';
+
+bot.dispatch(new SaveLoadoutDispatch({
+    gunId: 0, // 0 to 6, eggk to tri-hard, in order of the gun list
+
+    // these are all skins, you must pass a valid skin id for each skin that IS the skin
+
+    hatId: Items.find(item => item.name === 'Derby Hat').id, // finds the derby hat and selects it
+    stampId: 2004, // a hardcoded stamp ID (the peace stamp in this case)
+    grenadeId: null, // pass "null" for the default grenade
+    meleeId: Items.find(item => item.name === 'The Whisk Melee').id, // the default melee
+    eggColor: 0, // the color list as in the game inventory, from left to right 0-13
+    primaryId: ['eggk ID', 'scrambler ID', 'free ranger ID', '...'] // an array of primary gun skin IDs
+    secondaryId: ['the secondary used with eggk', 'the secondary used with scrambler', '...'] // an array of secondary gun skin IDs
+}));
+```
+
+### Checks
+- The bot must not actively be playing (can be in a game, but not playing)
+- The gun ID must be a valid ID from 0-6
+- The egg color must be 0-6 if you the bot is not a VIP, and 0-13 if the bot is
+- For each skin, it must either be a default skin or something the bot owns

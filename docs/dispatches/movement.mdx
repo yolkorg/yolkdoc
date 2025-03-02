@@ -1,0 +1,26 @@
+---
+title: "MovementDispatch"
+description: "Move the bot"
+---
+
+### Example Usage
+
+```js
+import MovementDispatch from 'yolkbot/dispatches/MovementDispatch';
+import { Movements } from 'yolkbot/constants';
+
+bot.dispatch(new MovementDispatch(Movement.FORWARD)); // move forward
+bot.dispatch(new MovementDispatch([Movement.FORWARD, Movement.LEFT])); // move forward & to the left
+bot.dispatch(new MovementDispatch([Movement.FORWARD, Movement.LEFT, Movement.JUMP])); // move forward & to the left while jumping
+bot.dispatch(new MovementDispatch()); // stop moving entirely
+```
+
+### Checks
+- The bot must be playing the game
+- The movement passed must be a valid movement
+    - Movement validation is not as strict as other dispatches due to the enum format
+    - Be careful to only pass valid movement patterns
+    - Things like moving forward and backwards at the same time will not fail the check!
+
+### Notes
+Similar to how firing/the FireDispatch works, movement is not instantly sent. It is sent with the next `syncMe` packet. Movement is part of the `syncMe` packet, not a separate one.

@@ -1,0 +1,22 @@
+---
+title: "FireDispatch"
+description: "Fire the gun currently in your hand"
+---
+
+### Example Usage
+
+```js
+import FireDispatch from 'yolkbot/dispatches/FireDispatch';
+
+// where 3 is the number of bullets
+bot.dispatch(new FireDispatch(3));
+```
+
+### Checks
+- The bot must be playing the game
+- The bot must not be reloading, swapping between the primary/secondary, or using the melee
+- The specified number of bullets must be greater than or equal to 1
+- The bot's active gun's ammo must have enough to shoot the specified number of bullets
+
+### Notes
+The bullet's direction is decided by where the player is looking, not by any specification of the bot. The bullets will be specified to be fired the next time the player syncs to the server, which is when the bot specifies the number of bullets to shoot.

@@ -1,0 +1,19 @@
+---
+title: "GameOptionsDispatch"
+description: "Change game settings in private game (where you are the host)"
+---
+
+### Example Usage
+
+```js
+import GameOptionsDispatch from 'yolkbot/dispatches/GameOptionsDispatch';
+
+bot.dispatch(new GameOptionsDispatch());
+```
+
+### Dispatch Checks
+- The bot must be the owner of the game
+- Each of the `bot.game` options must be valid
+
+### Changing Options
+Option changing isn't handled directly through the dispatch. To change game options, modify the `bot.game.options` object through raw setting values (e.g. `bot.game.options.gravity = 0.5`). Then, call the dispatch to apply the changes.

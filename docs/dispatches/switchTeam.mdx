@@ -1,0 +1,21 @@
+---
+title: "SwitchTeamDispatch"
+description: "Switch the bot's team"
+---
+
+### Example Usage
+
+```js
+import SwitchTeamDispatch from 'yolkbot/dispatches/SwitchTeamDispatch';
+
+bot.dispatch(new SwitchTeamDispatch());
+```
+
+### Checks
+- The bot must be in a game, but not playing
+- The bot must not be in an FFA game
+- If the room is private:
+    - The host must not have disabled team switching
+- If the room is public:
+    - The bot must have fewer teammates than the enemies
+    - This *should* end up running the same check the server does, and will never switch teams if the bot shouldn't be able it

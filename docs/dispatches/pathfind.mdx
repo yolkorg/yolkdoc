@@ -1,0 +1,24 @@
+---
+title: "PathfindDispatch"
+description: "Pathfind to a player"
+---
+
+### Example Usage
+
+```js
+import PathfindDispatch from 'yolkbot/dispatches/PathfindDispatch';
+
+bot.dispatch(new PathfindDispatch(bot.players[0])); // the argument must be an entire "player" object
+```
+
+### Checks
+- The bot must be playing
+- The target must be valid and playing
+
+### Important Note
+A PathfindDispatch will hijack **both the looking and the movement** of the bot. This means that the bot will not be able to look around or move until it reaches the target. If you NEED TO MOVE, you can:
+
+1. Set `bot.pathing.followingPath` to false
+2. Do whatever looking/movement/whatever you want to do
+3. If you HAVE NOT MOVED, just set `bot.pathing.followingPath` back to true
+4. If you HAVE MOVED, you will need to create a new PathfindDispatch on your target

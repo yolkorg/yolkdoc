@@ -1,0 +1,21 @@
+---
+title: "BootPlayerDispatch"
+description: "Boot a player from a private game (where you are the host)"
+---
+
+### Example Usage
+
+```js
+import BootPlayerDispatch from 'yolkbot/dispatches/BootPlayerDispatch';
+
+// uniqueId must be a player's "uniqueId" property
+bot.dispatch(new BootPlayerDispatch(uniqueId));
+```
+
+### Checks
+- The `uniqueId` must be a string.
+- The `uniqueId` must be the unique ID of a valid player in the game.
+- The bot must be the owner of the game.
+
+### Notes
+Booting causes a player to be removed from the game. The player's IP will be banned from that game. That player's account (may?) be banned from that game. It will also cause any accounts on the same IP to be removed from the game.
