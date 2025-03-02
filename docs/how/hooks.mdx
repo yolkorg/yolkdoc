@@ -14,36 +14,391 @@ bot.on('playerJoin', (player) => {
 ```
 
 ## Hook List
+Each hook has a basic example and description of usage.
 
-Each file has a basic example and description of usage.
+- [authFail](#authfail)
+- [balanceUpdate](#balanceupdate)
+- [chat](#chat)
+- [close](#close)
+- [collectAmmo](#collectammo)
+- [collectGrenade](#collectgrenade)
+- [gameForcePause](#gameforcepause)
+- [gameOptionsChange](#gameoptionschange)
+- [gameReset](#gamereset)
+- [gameStateChange](#gamestatechange)
+- [pingUpdate](#pingupdate)
+- [playerBeginStreak](#playerbeginstreak)
+- [playerChangeCharacter](#playerchangecharacter)
+- [playerChangeGun](#playerchangegun)
+- [playerDamaged](#playerdamaged)
+- [playerDeath](#playerdeath)
+- [playerFire](#playerfire)
+- [playerJoin](#playerjoin)
+- [playerLeave](#playerleave)
+- [playerPause](#playerpause)
+- [playerReload](#playerreload)
+- [playerRespawn](#playerrespawn)
+- [playerSwapWeapon](#playerswapweaon)
+- [playerSwitchTeam](#playerswitchteam)
+- [selfDamaged](#selfdamaged)
+- [selfMoved](#selfmoved)
+- [selfRespawnFail](#selfrespawnfail)
+- [selfShieldHit](#selfshieldhit)
+- [selfShieldLost](#selfshieldlost)
 
-- [authFail](../hooks/authFail)
-- [balanceUpdate](../hooks/balanceUpdate)
-- [chat](../hooks/chat)
-- [close](../hooks/close)
-- [collectAmmo](../hooks/collectAmmo)
-- [collectGrenade](../hooks/collectGrenade)
-- [gameForcePause](../hooks/gameForcePause)
-- [gameOptionsChange](../hooks/gameOptionsChange)
-- [gameReset](../hooks/gameReset)
-- [gameStateChange](../hooks/gameStateChange)
-- [pingUpdate](../hooks/pingUpdate)
-- [playerBeginStreak](../hooks/playerBeginStreak)
-- [playerChangeCharacter](../hooks/playerChangeCharacter)
-- [playerDeath](../hooks/playerDeath)
-- [playerFire](../hooks/playerFire)
-- [playerJoin](../hooks/playerJoin)
-- [playerLeave](../hooks/playerLeave)
-- [playerPause](../hooks/playerPause)
-- [playerReload](../hooks/playerReload)
-- [playerRespawn](../hooks/playerRespawn)
-- [playerSwapWeaon](../hooks/playerSwapWeaon)
-- [playerSwitchTeam](../hooks/playerSwitchTeam)
-- [playerDamaged](../hooks/playerDamaged)
-- [playerDeath](../hooks/playerDeath)
-- [playerSwitchTeam](../hooks/playerSwitchTeam)
-- [selfDamaged](../hooks/selfDamaged)
-- [selfMoved](../hooks/selfMoved)
-- [selfRespawnFail](../hooks/selfRespawnFail)
-- [selfShieldHit](../hooks/selfShieldHit)
-- [selfShieldLost](../hooks/selfShieldLost)
+They are not individual files. I'm too lazy to create all of them!
+
+## Hooks
+This is the entire list. My fingers will probably hurt.
+
+### authFail
+This is called when Firebase authentication fails. Usually, it is accompanied by several console errors.
+
+```js
+bot.on('authFail', () => {
+    console.log('ah, shoot. auth failed. above me is probably why.');
+});
+```
+
+### balanceUpdate
+This is called when the bot's egg balance updates, likely due to the bot killing someone.
+
+- `oldBalance` is a number
+- `newBalance` is a number
+
+```js
+bot.on('balanceUpdate', (oldBalance, newBalance) => {
+    console.log(`bot's balance was ${oldBalance}, now it's ${newBalance}`);
+    console.log(`the bot gained ${newBalance - oldBalance} eggs!`);
+});
+```
+
+### chat
+This is called when a chat message is sent in the game.
+
+- `player` is a Player object
+- `message` is a string
+- `flags` is a number
+
+```js
+bot.on('chat', (player, message, flags) => {
+    if (player) console.log(`${player.name} said: ${message}`);
+    else if (flags === 255) console.log(`<SERVER (probably Harrison)> ${message}`);
+    else if (flags === 254) console.log(`<Mod> ${message}`);
+    else console.log(`Unknown sourced chat message: ${message}`);
+});
+```
+
+### close
+This is called when the bot's connection to the game is closed.
+
+- `code` is a number
+
+```js
+bot.on('close', (code) => {
+    console.log('bot has disconnected from the game with code', code);
+});
+```
+
+You can compare this to the `CloseCode` [constant](../util/constants).
+
+### collectAmmo
+This is called when a player collects an ammo pack.
+
+- `player` is a Player object
+- `weapon` is a Gun class (see [Gun](../util/constants))
+
+```js
+bot.on('collectAmmo', (player, weapon) => {
+    console.log(`${player.name} collected ${weapon.ammo.pickup} ammo for their ${weapon.weaponName}!`);
+});
+```
+
+### collectGrenade
+This is called when a player collects a grenade.
+
+- `player` is a Player object
+
+```js
+bot.on('collectGrenade', (player) => {
+    console.log(`${player.name} collected a grenade, and now has ${player.grenades} greades!`);
+});
+```
+
+### gameForcePause
+This is called when the game is forcibly paused. It's not horribly clear WHEN this is called.
+
+```js
+bot.on('gameForcePause', () => {
+    console.log('game has been forcibly paused, who knows why');
+});
+```
+
+### gameOptionsChange
+This is called when the game options change by a host in a private room.
+
+- `oldOptions` is an object (specifically [Bot](../classes/bot).game.options)
+- `newOptions` is an object (specifically [Bot](../classes/bot).game.options)
+
+```js
+bot.on('gameOptionsChange', (oldOptions, newOptions) => {
+    console.log('game options have changed!');
+    console.log('old options:', oldOptions);
+    console.log('new options:', newOptions);
+});
+```
+
+### gameReset
+This is called when the game is reset by the host. This is probably when `gameForcePause` is called.
+
+```js
+bot.on('gameReset', () => {
+    console.log('game has been reset!');
+});
+```
+
+### gameStateChange
+This is called when the game state changes. This is MAINLY used in the spatula & KOTC gamemodes, wich signify whe things like the spatula is dropped or someone starts/stops capturing a coop, among many other things.
+
+- `oldState` is an object (specifically [Bot](../classes/bot).game.state)
+- `newState` is an object (specifically [Bot](../classes/bot).game.state)
+
+```js
+import { GameModes } from 'yolkbot/constants';
+
+bot.on('gameStateChange', (oldState, newState) => {
+    console.log(`game state has changed`);
+    console.log(`old state:`, oldState);
+    console.log(`new state:`, newState);
+});
+```
+
+The current game state can be accessed at any time with `bot.game.state`. The object is so large, documenting it here would be a headache. See the [Bot](../classes/bot) class for more information.
+
+### pingUpdate
+This is called when the bot's ping updates.
+
+- `oldPing` is a number
+- `newPing` is a number
+
+```js
+bot.on('pingUpdate', (oldPing, newPing) => {
+    console.log(`bot's ping was ${oldPing}, now it's ${newPing}`);
+});
+```
+
+### playerBeginStreak
+This is called when a player begins a streak reward (2x damage, overheal, etc).
+
+- `player` is a Player object
+- `streak` is a value of the [`ShellStreaks`](../util/constants) enum
+
+```js
+bot.on('playerBeginStreak', (player, streak) => {
+    console.log(`${player.name} has begun a ${streak} killstreak!`);
+});
+```
+
+### playerChangeCharacter
+This is called when a player changes their skin set.
+
+- `player` is a Player object
+- `oldCharacter` is an object (specifically [Bot](../classes/bot).game.players[player.id].character)
+- `newCharacter` is an object (specifically [Bot](../classes/bot).game.players[player.id].character)
+
+```js
+bot.on('playerChangeCharacter', (player, oldCharacter, newCharacter) => {
+    console.log(`${player.name} has changed their skins`);
+    console.log(`old skins:`, oldCharacter);
+    console.log(`new skins:`, newCharacter);
+});
+```
+
+### playerChangeGun
+This is called when a player changes their gun. The guns are a 0-6 index, with 0 being the eggk and 6 being the tri-hard (in order of gun list).
+
+- `player` is a Player object
+- `oldGun` is a number (0-6)
+- `newGun` is a number (0-6)
+
+```js
+bot.on('playerChangeGun', (player, oldGun, newGun) => {
+    console.log(`${player.name} has changed their gun`);
+    console.log(`old gun:`, oldGun);
+    console.log(`new gun:`, newGun);
+});
+```
+
+### playerDamaged
+This is called when a player is hurt (using gun/grenade/melee). It's not clear if this is when ANYONE hits a player, or when just the bot hits a player.
+
+- `player` is a Player object
+- `oldHp` is a number
+- `newHp` is a number
+
+```js
+bot.on('playerDamaged', (player, oldHp, newHp) => {
+    console.log(`${player.name} was hit! their health was ${oldHp}, now it's ${newHp}`);
+});
+```
+
+### playerDeath
+This is called when a player dies.
+
+- `player` is a Player object
+- `killer` is a Player object
+
+```js
+bot.on('playerDeath', (player, killer) => {
+    console.log(`${player.name} was killed by ${killer.name}`);
+});
+```
+
+### playerFire
+This is called when a player fires their gun.
+
+- `player` is a Player object
+- `weapon` is a Gun class (see [Gun](../util/constants))
+
+```js
+bot.on('playerFire', (player, weapon) => {
+    console.log(`${player.name} fired their ${weapon.weaponName}!`);
+});
+```
+
+### playerJoin
+This is called when a player joins the game.
+
+- `player` is a Player object
+
+```js
+bot.on('playerJoin', (player) => {
+    console.log(`${player.name} has joined the game!`);
+});
+```
+
+### playerLeave
+This is called when a player leaves the game.
+
+- `player` is a Player object
+
+```js
+bot.on('playerLeave', (player) => {
+    console.log(`${player.name} has left the game, RIP :(`);
+});
+```
+
+### playerPause
+This is called when a player pauses the game (clicks ESC).
+
+- `player` is a Player object
+
+```js
+bot.on('playerPause', (player) => {
+    console.log(`${player.name} has paused the game!`);
+});
+```
+
+### playerReload
+This is called when a player reloads their gun.
+
+- `player` is a Player object
+- `weapon` is a Gun class (see [Gun](../util/constants))
+
+```js
+bot.on('playerReload', (player, weapon) => {
+    console.log(`${player.name} reloaded their ${weapon.weaponName}!`);
+});
+```
+
+### playerRespawn
+This is called when a player respawns.
+
+- `player` is a Player object
+
+```js
+bot.on('playerRespawn', (player) => {
+    console.log(`${player.name} has respawned!`);
+});
+```
+
+### playerSwapWeapon
+This is called when a player swaps their weapon (between primary and secondary).
+
+- `player` is a Player object
+- `nowActive` is a number (0 or 1)
+
+```js
+bot.on('playerSwapWeapon', (player, nowActive) => {
+    console.log(`${player.name} swapped to their ${nowActive == 0 ? 'primary' : 'secondary'} weapon!`);
+});
+```
+
+### playerSwitchTeam
+This is called when a player switches teams.
+
+- `player` is a Player object
+- `oldTeam` is a number (see the [`Teams`](../util/constants) enum)
+- `newTeam` is a number (see the [`Teams`](../util/constants) enum)
+
+```js
+bot.on('playerSwitchTeam', (player, oldTeam, newTeam) => {
+    console.log(`${player.name} switched from team ${oldTeam} to team ${newTeam}`);
+});
+```
+
+### selfDamaged
+This is called when the bot is hurt.
+
+- `oldHp` is a number
+- `newHp` is a number
+
+```js
+bot.on('selfDamaged', (oldHp, newHp) => {
+    console.log(`bot was hit! its health was ${oldHp}, now it's ${newHp}`);
+});
+```
+
+### selfMoved
+This is called when the bot moves.
+
+- `oldPos` is an object with the `x`, `y`, and `z` properties
+- `newPos` is an object with the `x`, `y`, and `z` properties
+
+```js
+bot.on('selfMoved', (oldPos, newPos) => {
+    console.log(`bot moved from ${oldPos} to ${newPos}`);
+});
+```
+
+### selfRespawnFail
+This is called when the bot fails to respawn. This ideally should never be called, as our dispatch checks should stop this from happening.
+
+```js
+bot.on('selfRespawnFail', () => {
+    console.log(`bot failed to respawn!`);
+});
+```
+
+### selfShieldHit
+This is called when the bot's shield is hit.
+
+- `oldShield` is a number
+- `newShield` is a number
+
+```js
+bot.on('selfShieldHit', (oldShield, newShield) => {
+    console.log(`bot's shield was hit! its shield was ${oldShield}, now it's ${newShield}`);
+});
+```
+
+### selfShieldLost
+This is called when the bot's shield is lost.
+
+```js
+bot.on('selfShieldLost', () => {
+    console.log(`bot's shield was lost!`);
+});
+```
+
+<Note>Github Copilot wrote most of this. Pardon any mistakes.</Note>
