@@ -18,6 +18,7 @@ Each hook has a basic example and description of usage.
 
 - [authFail](#authfail)
 - [balanceUpdate](#balanceupdate)
+- [banned](#banned)
 - [chat](#chat)
 - [close](#close)
 - [collectAmmo](#collectammo)
@@ -70,6 +71,17 @@ This is called when the bot's egg balance updates, likely due to the bot killing
 bot.on('balanceUpdate', (oldBalance, newBalance) => {
     console.log(`bot's balance was ${oldBalance}, now it's ${newBalance}`);
     console.log(`the bot gained ${newBalance - oldBalance} eggs!`);
+});
+```
+
+### banned
+This is called when the bot is banned and cannot complete authentication. If you get this event, the Bot can't be further used.
+
+- `banRemaining` is a string in the format `HH:MM:SS`
+
+```js
+bot.on('banned', (banRemaining) => {
+    console.log(`bot is banned for ${banRemaining}, and cannot authenticate. RIP`);
 });
 ```
 

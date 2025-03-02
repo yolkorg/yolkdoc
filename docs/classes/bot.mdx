@@ -208,6 +208,8 @@ This is config passed in the constructor (when you ran `new Bot({ ...opts })`)
 - `bot.players[i].hp` - the health of the player
 - `bot.players[i].hpShield` - the shield of the player
 - `bot.players[i].streakRewards` - the rewards the player has for their streak - a list of the [StreakRewards constant](../util/constants)
+- `bot.players[i].social` - an array of the player's socials (twitch, youtube, tiktok, etc) with `id`, `url`, and `active` properties. it will be null for players without any socials (average person)
+- `bot.players[i].showBadge` - whether or not to show the badge of the player (either a social or the VIP badge)
 
 ### bot.game
 
@@ -249,6 +251,12 @@ This is config passed in the constructor (when you ran `new Bot({ ...opts })`)
 - `bot.account.accountAge` - the age of the account in milliseconds
 - `bot.account.emailVerified` - if the account's email is verified
 - `bot.account.eggBalance` - the egg balance
+
+### bot.pathing
+
+- `bot.pathing.followingPath` - if the bot is following a path, setting this to false/true can pause/"play" pathfinding
+
+<Note>There's a lot more here, but it's complicated and relates to pathfinding. You likely will never need to access it.</Note>
 
 ### bot.*
 
