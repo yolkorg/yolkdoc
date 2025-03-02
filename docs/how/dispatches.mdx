@@ -12,19 +12,19 @@ bot.dispatch(new SpawnDispatch());
 ```
 
 ## Dispatch Checks
-Dispatches will always run a check to see if they can occur. This check just returns `true` or `false`, and you *should* do it on your own to make sure the Dispatch will succeed.
+Dispatches will always run a check to see if they can occur. This check just returns `true` or `false`.
 
 ```js
 import SpawnDispatch from 'yolkbot/dispatch/SpawnDispatch';
 
 const spawnDispatch = new SpawnDispatch();
 
-if (spawnDispatch.check()) {
+if (spawnDispatch.check(bot)) {
     bot.dispatch(spawnDispatch);
 }
 ```
 
-If the check is false, the Dispatch will not run.
+If the check is false, the Dispatch will be saved, and the bot will check every `tick` for the Dispatch to return `true`. Once it does, the Dispatch will be executed.
 
 ## Dispatch List
 The good part! Here are all of the dispatches:
