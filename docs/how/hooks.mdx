@@ -176,8 +176,6 @@ This is called when the game state changes. This is MAINLY used in the spatula &
 - `newState` is an object (specifically [Bot](../classes/bot).game.state)
 
 ```js
-import { GameModes } from 'yolkbot/constants';
-
 bot.on('gameStateChange', (oldState, newState) => {
     console.log(`game state has changed`);
     console.log(`old state:`, oldState);
