@@ -53,11 +53,19 @@ They are not individual files. I'm too lazy to create all of them!
 This is the entire list. My fingers will probably hurt.
 
 ### authFail
-This is called when Firebase authentication fails. Usually, it is accompanied by several console errors.
+This is called when the authentication flow fails.
+
+- `reason` is a valid reason:
+    - `bad_json` - auth returned a bad JSON - usually out of your control, check console for errors
+    - `firebase_no_credentials` - you did not pass a valid email or password
+    - `firebase_no_token` - firebase didn't return an ID token, check console for info
+    - `firebase_too_many_retries` - attempting to get auth info failed over 5 times
+    - `services_closed_early` - the game websocket closed before sending back auth info - usually out of your control
+    - `unknown_socket_error` - the websocket itself errored, usually out of your control
 
 ```js
-bot.on('authFail', () => {
-    console.log('ah, shoot. auth failed. above me is probably why.');
+bot.on('authFail', (reason) => {
+    console.log('ah, shoot. auth failed with reason', reason);
 });
 ```
 
