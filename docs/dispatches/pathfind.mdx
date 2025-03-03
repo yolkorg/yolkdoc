@@ -14,6 +14,7 @@ bot.dispatch(new PathfindDispatch(bot.players[0])); // the argument must be an e
 ### Checks
 - The bot must be playing
 - The target must be valid and playing
+- Pathfinding must have been enabled when the bot was created
 
 ### Important Note
 A PathfindDispatch will hijack **both the looking and the movement** of the bot. This means that the bot will not be able to look around or move until it reaches the target. If you NEED TO MOVE, you can:
