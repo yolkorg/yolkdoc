@@ -3,32 +3,75 @@ title: "Browser Use"
 description: "yolkbot can be used in the browser!"
 ---
 
-yolkbot can be used in the browser with 100% library support!
+yolkbot can be used in the browser, which allows you to use the biggest parts of yolkbot!
+
+yolkbot is now bundled in the browser, meaning it only imports one file (under 100kb) for the entire library, making it incredibly efficient.
 
 The only thing that changes between Node.JS and the browser is how modules are imported. Since you can't directly just import a pacakge name, you have to use a CDN to access it. Our recommended one is `esm.sh`. For example:
 
 ```js
 import Bot from 'yolkbot/bot'; // ❌ this won't work in the browser
-let { Bot } = await import('https://esm.sh/yolkbot@latest/bot'); // ✅ this is the proper method of browser importing
+let { Bot } = await import('https://esm.sh/yolkbot@latest/browser'); // ✅ this is the proper method of browser importing
 ```
 
 <Note>You may notice the brackets around the Bot in the correct example. **This is how you import things in the browser**. For anything, put brackets around it. Instead of `import Matchmaker from ...`, use `let { Matchmaker } = await ...`. This avoids some ugly bugs.</Note>
 
-Here are some more example imports in the browser:
+Imports in the browser all come from one file, `https://esm.sh/yolkbot@latest/browser`, which is the browser bundle of yolkbot.
 
 ```js
-let { Bot } = await import('https://esm.sh/yolkbot@latest/bot');
-let { Matchmaker } = await import('https://esm.sh/yolkbot@latest/matchmaker');
-
-// you can use just '/dispatch' to bulk import dispatches
-let { ChatDispatch, SpawnDispatch } = await import('https://esm.sh/yolkbot@latest/dispatch');
-
-// if you want cleaner code, you can import them individually
-let { ChatDispatch } = await import('https://esm.sh/yolkbot@latest/dispatch/ChatDispatch');
-let { SpawnDispatch } = await import('https://esm.sh/yolkbot@latest/dispatch/SpawnDispatch');
+let { Bot, Matchmaker } = await import('https://esm.sh/yolkbot@latest/browser');
 ```
 
-Although yolkbot supports the browser, we recommend using Node for several reasons:
+To import Dispatches, either destructure the dispatches object:
+
+```js
+// this will give you access to Bot, ChatDispatch, and SpawnDispatch
+let { Bot, Dispatches: { ChatDispatch, SpawnDispatch } } = await import('https://esm.sh/yolkbot@latest/browser');
+
+bot.dispatch(new ChatDispatch());
+```
+
+Or import the dispatches object directly and refer to it:
+
+```js
+let { Bot, Dispatches } = await import('https://esm.sh/yolkbot@latest/browser');
+
+bot.dispatch(new Dispatches.ChatDispatch());
+```
+
+## Import List
+These are all the things that can be imported.
+
+```js
+let {
+    Bot, // the Bot class
+    Matchmaker, // the Matchmaker class
+
+    Dispatches, // the Dispatches object with each dispatch, use Dispatches.ChatDispatch
+
+    // or destructure dispatches!
+    Dispatches: {
+        ChatDispatch, // this would let you refer to ChatDispatch without the "Dispatches." prefix
+        SpawnDispatch // this would let you refer to SpawnDispatch without the "Dispatches." prefix
+    },
+
+    // you can do the same destructuring thing with all of the things like API, Comm, etc that are objects
+
+    API, // the API object with each API function, use API.loginAnonymously, API.loginWithCredentials, etc
+    Comm, // the Comm object with each comm class, use Comm.CommIn, Comm.CommOut, Comm.Code, etc
+    Packet, // the Packet object with each packet class, use Packet.BootPacket, Packet.ChatPacket, etc
+
+    Constants, // all of the constants, use Constants.IsBrowser, Constants.GunList, etc
+    Guns, // all of the guns: Eggk-47, Scrambler, etc
+    Items, // the item array
+    Maps // the map array
+} = await import('https://esm.sh/yolkbot@latest/browser');
+```
+
+Somewhat simple.
+
+## We Recommend Node
+Why?
 
 1. The browser is slow. Anything you do will take a long time. This isn't anything we can control, it's just how browsers work.
     - For example, loading the library takes around 5 seconds before the first code is executed.
@@ -40,5 +83,10 @@ Although yolkbot supports the browser, we recommend using Node for several reaso
     - If you run the bots on, say, Shell Shockers, you're allowing Shell Shockers to potentially tamper with the bots or detect your IP botting. (If we ever find the game tampering with bot behavior, we'll obviously fix it. It's ultimately just a risk you need to take when running any code on a website.)
 
 That being said, the browser still works pretty well. If you're just testing things out or want to run a bot on a website, the browser is a great way to do it. Just be aware of the limitations and risks.
+
+## Removed in the Browser
+In the browser edition, the big thing removed is **proxy support**. The browser can't use proxies for requests or WebSockets, which removes a (kind of big) feature in yolkbot. If you don't plan to need proxies, the browser is likely still a good choice.
+
+The other thing that may run into issues is pathfinding. Pathfinding requires sending requests to Shell Shockers to get map information. If you aren't running this from a Shell Shockers page and instead some external page, the map request will likely be [blocked due to CORS](https://docs.aws.amazon.com/AmazonS3/latest/userguide/cors.html). This is a limitation of the browser and not yolkbot. Use an extension like [CORS Unblock](https://chromewebstore.google.com/detail/cors-unblock/lfhmikememgdcahcdlaciloancbhjino) to get around this.
 
 Happy botting!

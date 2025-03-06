@@ -15,9 +15,9 @@ let response = await loginAnonymously();
 console.log(response);
 ```
 
-This gives you a lot of information about the anonymous account.
+This returns information about the newly created anonymous account.
 
-You can also pass a proxy (socks4 or socks5) to use on the servies query as the first argument.
+Note that Firebase, the database provider of the game, ratelimits anon accounts created every hour.
 
 ### [async] loginWithCredentials
 This lets you login with a specified email and password.
@@ -29,7 +29,7 @@ let response = await loginWithCredentials('email@example.com', 'ThisIsAPassword1
 console.log(response);
 ```
 
-You can also pass a proxy (socks4 or socks5) to use on the servies query as the third argument.
+This returns information about the account.
 
 ### [async] queryServices
 This lets you directly query the `services` socket.
@@ -41,4 +41,10 @@ let response = await queryServices({ cmd: 'auth', firebaseToken: '...' });
 console.log(response);
 ```
 
-You can also pass a proxy (socks4 or socks5) to use on the servies query as the second argument.
+This is mostly used internally, but allows you to do things like play Chikn Winner.
+
+### Additional Arguments
+Each of these take two extra arguments at the end in the following order:
+
+- proxy (string): A socks4 or socks5 proxy to use for the request.
+- instance (string): The instance of Shell Shockers to use, default `shellshock.io`.

@@ -29,10 +29,20 @@ const bot = new Bot({
     updateInterval: 5, // how often should the bot update? (see how/updates)
 
     doPathing: true, // should the bot run map node finding / pathfinding logic?
+
+    instance: 'eggboy.xyz', // the instance of Shell Shockers to connect to, default "shellshock.io"
 })
 ```
 
 From there, you can use the various methods and attributes of the bot.
+
+All of these have a default value. The only one to do if you're not sure about this is the `name` value:
+
+```js
+const bot = new Bot({
+    name: 'My Bot'
+});
+```
 
 ## Methods
 Methods are things that allow you to run actions on a `Bot` instance.
