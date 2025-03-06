@@ -10,7 +10,7 @@ import SaveLoadoutDispatch from 'yolkbot/dispatches/SaveLoadoutDispatch';
 import { Items } from 'yolkbot/constants/items';
 
 bot.dispatch(new SaveLoadoutDispatch({
-    gunId: 0, // 0 to 6, eggk to tri-hard, in order of the gun list
+    gunId: 0, // 0 to 6, eggk to tri-hard, in order of the gun list ingame
 
     // these are all skins, you must pass a valid skin id for each skin that IS the skin
 
@@ -30,3 +30,24 @@ bot.dispatch(new SaveLoadoutDispatch({
 - The egg color must be 0-6 if you the bot is not a VIP, and 0-13 if the bot is
 - For each skin, it must either be a default skin or something the bot owns
 - For each skin, the skin must be a valid type (e.g. you cannot pass a stamp ID to `hatId`)
+
+### Notes
+When dispatching this, if a specific argument is not specified, it will be set to what it was previously. This allows you to do something like:
+
+```js
+bot.dispatch(new SaveLoadoutDispatch({
+    hatId: Items.find(item => item.name === 'Derby Hat').id
+}));
+```
+
+This will only change the hat, leaving everything else the same.
+
+Similarly, to change the gun and nothing else:
+
+```js
+bot.dispatch(new SaveLoadoutDispatch({
+    gunId: 1
+}));
+```
+
+This will change the gun to the scrambler, leaving all skins the same.
