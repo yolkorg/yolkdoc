@@ -1,0 +1,26 @@
+---
+title: "GoToSpatulaDispatch"
+description: "Pathfind to the game spatula."
+---
+
+### Example Usage
+
+```js
+import GoToSpatulaDispatch from 'yolkbot/dispatches/GoToSpatulaDispatch';
+
+bot.dispatch(new GoToSpatulaDispatch()); // the argument must be an entire "player" object
+```
+
+### Checks
+- The bot must be playing
+- Pathfinding must have been enabled when the bot was created
+- The game must be a Capture the Spatula gamemode
+- The spatula must be on the ground
+
+### Important Note
+A GoToSpatulaDispatch will hijack **both the looking and the movement** of the bot. This means that the bot will not be able to look around or move until it reaches the target. If you NEED TO MOVE, you can:
+
+1. Set `bot.pathing.followingPath` to false
+2. Do whatever looking/movement/whatever you want to do
+3. If you HAVE NOT MOVED, just set `bot.pathing.followingPath` back to true
+4. If you HAVE MOVED, you will need to create a new GoToSpatulaDispatch

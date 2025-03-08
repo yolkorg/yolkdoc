@@ -36,6 +36,7 @@ Each hook has a basic example and description of usage.
 - [playerFire](#playerfire)
 - [playerJoin](#playerjoin)
 - [playerLeave](#playerleave)
+- [playerMelee](#playermelee)
 - [playerPause](#playerpause)
 - [playerReload](#playerreload)
 - [playerRespawn](#playerrespawn)
@@ -46,6 +47,7 @@ Each hook has a basic example and description of usage.
 - [selfRespawnFail](#selfrespawnfail)
 - [selfShieldHit](#selfshieldhit)
 - [selfShieldLost](#selfshieldlost)
+- [spawnItem](#spawnitem)
 
 They are not individual files. I'm too lazy to create all of them!
 
@@ -306,6 +308,17 @@ bot.on('playerLeave', (player) => {
 });
 ```
 
+### playerMelee
+This is called when a player melees. Damage is not sent, nor what players it hits.
+
+- `player` is a Player object
+
+```js
+bot.on('playerMelee', (player) => {
+    console.log(`${player.name} meleed!`);
+});
+```
+
 ### playerPause
 This is called when a player pauses the game (clicks ESC).
 
@@ -419,4 +432,11 @@ bot.on('selfShieldLost', () => {
 });
 ```
 
-<Note>Github Copilot wrote most of this. Pardon any mistakes.</Note>
+### spawnItem
+This is called when an ammo pack or grenade is spawned in the game. The types are the numeric values of the `CollectTypes`.
+
+```js
+bot.on('spawnItem', (type, _id, pos) => {
+    console.log('a', type, 'spawned at', pos);
+})
+```

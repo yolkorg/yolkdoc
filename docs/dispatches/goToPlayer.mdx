@@ -1,0 +1,25 @@
+---
+title: "GoToPlayerDispatch"
+description: "Pathfind to a player ingame."
+---
+
+### Example Usage
+
+```js
+import GoToPlayerDispatch from 'yolkbot/dispatches/GoToPlayerDispatch';
+
+bot.dispatch(new GoToPlayerDispatch(bot.players[0])); // the argument must be an entire "player" object
+```
+
+### Checks
+- The bot must be playing
+- The target must be valid and playing
+- Pathfinding must have been enabled when the bot was created
+
+### Important Note
+A GoToPlayerDispatch will hijack **both the looking and the movement** of the bot. This means that the bot will not be able to look around or move until it reaches the target. If you NEED TO MOVE, you can:
+
+1. Set `bot.pathing.followingPath` to false
+2. Do whatever looking/movement/whatever you want to do
+3. If you HAVE NOT MOVED, just set `bot.pathing.followingPath` back to true
+4. If you HAVE MOVED, you will need to create a new GoToPlayerDispatch on your target

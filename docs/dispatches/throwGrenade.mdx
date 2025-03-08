@@ -1,0 +1,20 @@
+---
+title: "ThrowGrenadeDispatch"
+description: "Throw a grenade"
+---
+
+### Example Usage
+
+```js
+import ThrowGrenadeDispatch from 'yolkbot/dispatches/ThrowGrenadeDispatch';
+
+bot.dispatch(new ThrowGrenadeDispatch(1)); // max power
+```
+
+### Checks
+- The bot must be playing the game
+- The bot must not be reloading, swapping between the primary/secondary, or using the melee
+- The power specified must be a valid power (0-1)
+
+### Notes
+The bot will throw the grenade in the direction the bot is facing. The power will help decide how fqar it goes, but actually knowing where it would go is heavy trial and error.

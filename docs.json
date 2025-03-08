@@ -57,17 +57,19 @@
                             "docs/dispatches/chat",
                             "docs/dispatches/fire",
                             "docs/dispatches/gameOptions",
+                            "docs/dispatches/goToPlayer",
+                            "docs/dispatches/goToSpatula",
                             "docs/dispatches/lookAt",
                             "docs/dispatches/lookAtPos",
                             "docs/dispatches/melee",
                             "docs/dispatches/movement",
-                            "docs/dispatches/pathfind",
                             "docs/dispatches/pause",
                             "docs/dispatches/reload",
                             "docs/dispatches/reportPlayer",
                             "docs/dispatches/saveLoadout",
                             "docs/dispatches/swapWeapon",
-                            "docs/dispatches/switchTeam"
+                            "docs/dispatches/switchTeam",
+                            "docs/dispatches/throwGrenade"
                         ]
                     }
                 ]
