@@ -48,6 +48,7 @@ Each hook has a basic example and description of usage.
 - [selfShieldHit](#selfshieldhit)
 - [selfShieldLost](#selfshieldlost)
 - [spawnItem](#spawnitem)
+- [tick](#tick)
 
 They are not individual files. I'm too lazy to create all of them!
 
@@ -439,4 +440,13 @@ This is called when an ammo pack or grenade is spawned in the game. The types ar
 bot.on('spawnItem', (type, _id, pos) => {
     console.log('a', type, 'spawned at', pos);
 })
+```
+
+### tick
+This is called everytime an update fires. This is called incredibly often.
+
+```js
+bot.on('tick', () => {
+    console.log('tick!');
+});
 ```

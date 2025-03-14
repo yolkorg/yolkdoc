@@ -25,7 +25,8 @@
                             "docs/intro/introduction",
                             "docs/intro/quickstart",
                             "docs/intro/browser",
-                            "docs/intro/yolklab"
+                            "docs/intro/yolklab",
+                            "docs/intro/types"
                         ]
                     },
                     {
