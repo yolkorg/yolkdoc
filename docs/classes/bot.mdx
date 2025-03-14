@@ -19,9 +19,6 @@ The constructor has one parameter, which is an object with configuration. The co
 
 ```js
 const bot = new Bot({
-    name: 'My Bot', // the name of the bot
-    proxy: 'socks4://69.69.69.69:4200', // a socks4 OR socks5 proxy url for the bot
-
     doPing: true, // should the bot automatically ping the server for latency?
     pingInterval: 1000, // how often should the bot ping the server for latency? 1000 is shell's default
 
@@ -30,18 +27,17 @@ const bot = new Bot({
 
     doPathing: false, // should the bot run map node finding / pathfinding logic?
 
+    proxy: 'socks4://69.69.69.69:4200', // a socks4 OR socks5 proxy url for the bot
     instance: 'eggboy.xyz', // the instance of Shell Shockers to connect to, default "shellshock.io"
 })
 ```
 
 From there, you can use the various methods and attributes of the bot.
 
-All of these have a default value. The only one to do if you're not sure about this is the `name` value:
+All of these have a default value. If you're not sure what to do, you can just create a bot with `new Bot()` and it will work fine:
 
 ```js
-const bot = new Bot({
-    name: 'My Bot'
-});
+const bot = new Bot();
 ```
 
 ## Methods
@@ -111,14 +107,14 @@ You'd then pass that `castleId` to the `Map` parameter.
 Join a public game with the provided game code.
 
 ```js
-await bot.join('game-code-here');
+await bot.join('My Bot Name', 'game-code-here');
 ```
 
 You can also pass a result directly from the Matchmaker:
 
 ```js
 const game = await bot.matchmaker.findGame({ region: 'useast', mode: 'ffa' });
-await bot.join(game);
+await bot.join('My Bot Name', game);
 ```
 
 ### bot.update
@@ -158,7 +154,7 @@ You should, if logging in and attempting to find regions:
 - Call `bot.login()` with the proper credentials
 - Call `bot.initMatchmaker()`
 - Call the various matchmaker calls you need to
-- Call `bot.join(code)`
+- Call `bot.join(name, code)`
 
 There are several important things about the matchmaker that don't relate, so let's use a bullet pointed list:
 
@@ -171,16 +167,6 @@ There are several important things about the matchmaker that don't relate, so le
 These are variables on `bot.*` that let you get information about the Bot.
 
 <Note>Some variables are not listed, as their usage is for advanced users and messing with them may cause issues.</Note>
-
-### Constructor Config
-This is config passed in the constructor (when you ran `new Bot({ ...opts })`)
-
-- `bot.proxy` - the socks proxy url
-- `bot.name` - the name of the bot
-- `bot.autoUpdate` - do auto updates? see [updates](../how/updates)
-- `bot.updateInterval` - how often to update? see [updates](../how/updates)
-- `bot.autoPing` - automatically ping the server to test latency?
-- `bot.pingInterval` - how often to ping the server?
 
 ### bot.players
 `bot.players` is an array of players.

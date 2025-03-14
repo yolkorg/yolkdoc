@@ -36,13 +36,13 @@ Once you have yolkbot installed, you can create a new bot in just a few lines of
 ```js
 import Bot from 'yolkbot/bot';
 
-const bot = new Bot({ name: 'my bot' });
+const bot = new Bot();
 
 bot.on('playerJoin', (player) => {
     console.log(`${player.name} joined the game!`);
 });
 
-await bot.join('game-code-here');
+await bot.join('my bot name', 'game-code-here');
 ```
 
 It's that easy! From here, you can learn how the bot works by reading the following key pages:
