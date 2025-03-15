@@ -13,9 +13,9 @@ bot.dispatch(new GoToSpatulaDispatch()); // the argument must be an entire "play
 
 ### Checks
 - The bot must be playing
-- Pathfinding must have been enabled when the bot was created
 - The game must be a Capture the Spatula gamemode
 - The spatula must be on the ground
+- The bot must have the `PATHFINDING` intent
 
 ### Important Note
 A GoToSpatulaDispatch will hijack **both the looking and the movement** of the bot. This means that the bot will not be able to look around or move until it reaches the target. If you NEED TO MOVE, you can:

@@ -19,13 +19,13 @@ The constructor has one parameter, which is an object with configuration. The co
 
 ```js
 const bot = new Bot({
+    intents: [], // an array of intents - see Intents section below
+
     doPing: true, // should the bot automatically ping the server for latency?
     pingInterval: 1000, // how often should the bot ping the server for latency? 1000 is shell's default
 
     doUpdate: true, // should the bot automatically update? (see how/updates)
     updateInterval: 5, // how often should the bot update? (see how/updates)
-
-    doPathing: false, // should the bot run map node finding / pathfinding logic?
 
     proxy: 'socks4://69.69.69.69:4200', // a socks4 OR socks5 proxy url for the bot
     instance: 'eggboy.xyz', // the instance of Shell Shockers to connect to, default "shellshock.io"
@@ -39,6 +39,26 @@ All of these have a default value. If you're not sure what to do, you can just c
 ```js
 const bot = new Bot();
 ```
+
+### Intents
+Intents are a way to enable specific features that require extra API calls or use more processing power. The current intents are as follows:
+
+- `Bot.Intents.STATS` - enables the bot to its stats
+- `Bot.Intents.CHALLENGES` - enables challenge tracking
+- `Bot.Intents.PATHING` - enables pathfinding logic
+
+You can enable any intent by passing them in the `intents` array:
+
+```js
+const bot = new Bot({
+    intents: [
+        Bot.Intents.STATS,
+        Bot.Intents.CHALLENGES
+    ]
+});
+```
+
+You should **NEVER** blindly specify all intents! Many times, you will not need to do whatever the intent does. For example, if you're not using pathfinding, you should not enable the `Bot.Intents.PATHING` intent, or your computer will waste resources fetching and processing map data. Only enable the intents you need.
 
 ## Methods
 Methods are things that allow you to run actions on a `Bot` instance.
