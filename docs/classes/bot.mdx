@@ -66,6 +66,13 @@ Logs you into an account using an email and password. If you do not call this, j
 await bot.login('email@example.com', 'MyEpicPassword123!!');
 ```
 
+### [async] bot.loginAnonymously
+Logs you into a guest/anonymous account. This is the default behavior if you do not call `bot.login()`.
+
+```js
+await bot.loginAnonymously();
+```
+
 ### bot.dispatch
 Allows you to [dispatch](../how/dispatches) an action to the game server.
 
@@ -145,6 +152,57 @@ bot.onAny((eventName, data) => {
 ```
 
 `data` is what would be passed to the specified event name. So, for a `playerJoin`, eventName = `playerJoin and data = `playerThatJoined`.
+
+### [async] bot.checkChiknWinner
+Allows you to check the status of the Chikn Winner minigame for the account. It returns something like this:
+
+```js
+await bot.checkChiknWinner() /* -> {
+    atLimit: false,
+    limit: 1,
+    secondsUntilPlay: 240,
+    canPlayAgain: 1742002470386
+} */
+```
+
+More information is in the explanation for `bot.account.cw` below.
+
+### [async] bot.playChiknWinner
+Allows you to play the Chikn Winner minigame. It will either return what you pulled, which either is eggs:
+
+```js
+await bot.playChiknWinner() /* -> {
+    eggsGiven: 100,
+    itemIds: [],
+    rewardTier: 2
+} */
+```
+
+or an item:
+
+```js
+await bot.playChiknWinner() /* -> {
+    eggsGiven: 0,
+    itemIds: [3066],
+    rewardTier: 1
+} */
+```
+
+It may also return a string, which is one of these errors:
+
+- `hit_daily_limit` - the bot has hit the daily limit, run `bot.resetChiknWinner()` to reset the limit for 200 eggs
+- `on_cooldown` - chikn winner is on cooldown, see `bot.account.cw.secondsUntilPlay` for the seconds until you can play again
+- `unknown_error` - an unknown error returned by shell - create an issue on github with the content in the console
+
+### [async] bot.resetChiknWinner
+Allows you to reset Chikn Winner for 200 eggs if you have hit the daily limit.
+
+If it successfully resets, it will return the Chikn Winner status (from `bot.checkChiknWinner()`).
+
+It may also fail, returning one of these errors:
+- `not_at_limit` - the bot is not at the limit for the day, and you should play normally
+- `not_enough_eggs` - the bot does not have enough eggs to reset
+- `unknown_error` - an unknown error returned by shell - create an issue on github with the content in the console
 
 ### [async] bot.initMatchmaker
 This manually creates of a [Matchmaker](./matchmaker) on a Bot. This is why you really should never create a Matchmaker unless you don't plan to join a game at any point.
@@ -242,6 +300,7 @@ These are variables on `bot.*` that let you get information about the Bot.
 
 ### bot.account
 
+- `bot.account.id` - the id of the account
 - `bot.account.firebaseId` - the firebase id (for auth)
 - `bot.account.sessionId` - the session id (for auth)
 - `bot.account.session` - the session (for auth)
@@ -250,6 +309,12 @@ These are variables on `bot.*` that let you get information about the Bot.
 - `bot.account.accountAge` - the age of the account in milliseconds
 - `bot.account.emailVerified` - if the account's email is verified
 - `bot.account.eggBalance` - the egg balance
+- `bot.account.cw` - cw status
+    - `bot.account.cw.atLimit` - if the account is at the limit for the day
+    - `bot.account.cw.limit` - the number of times the account has played cw that day
+    - `bot.account.cw.secondsUntilPlay` - the number of seconds until the account can play again
+    - `bot.account.cw.canPlayAgain` - the timestamp the account can play again
+
 
 ### bot.pathing
 
