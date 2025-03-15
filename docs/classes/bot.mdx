@@ -86,8 +86,19 @@ Logs you into an account using an email and password. If you do not call this, j
 await bot.login('email@example.com', 'MyEpicPassword123!!');
 ```
 
+Account credentials are returned and added to `bot.account`.
+
+### [async] bot.createAccount
+Creates an account with an email and password.
+
+```js
+await bot.createAccount('email@example.com', 'MyEpicPassword123!!');
+```
+
+Account credentials are returned and added to `bot.account`.
+
 ### [async] bot.loginAnonymously
-Logs you into a guest/anonymous account. This is the default behavior if you do not call `bot.login()`.
+Logs you into a guest/anonymous account. This is the default behavior if you do not call either of the above authorization functions.
 
 ```js
 await bot.loginAnonymously();

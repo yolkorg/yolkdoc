@@ -31,6 +31,18 @@ console.log(response);
 
 This returns information about the account.
 
+### [async] createAccount
+This allows you to create an account.
+
+```js
+import { createAccount } from 'yolkbot/api';
+
+let response = await createAccount('email@example.com', 'ThisIsAPassword123!');
+console.log(response);
+```
+
+It returns the same thing as "loginWithCredentials".
+
 ### [async] queryServices
 This lets you directly query the `services` socket.
 
