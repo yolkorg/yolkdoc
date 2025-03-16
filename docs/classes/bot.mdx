@@ -127,7 +127,7 @@ Creates a private game with a specified region, mode, and map.
 await bot.createPrivateGame({
     region: 'useast',
     mode: 'ffa',
-    map: 0 // aqueduct
+    map: 'Downfall'
 });
 ```
 
@@ -135,16 +135,7 @@ You can find a region list from the [matchmaker](./matchmaker) guide.
 
 Modes can be found using the [GameMode constant](../util/constants).
 
-Maps can be found using the [Map constant](../util/constants). Use the ID of the map, or the index of where it is in the array. For example, to find the ID of the Castle map, you'd do this:
-
-```js
-import { Maps } from 'yolkbot/constants';
-
-let castleInfo = Maps.find((map) => map.name === 'Castle');
-let castleId = Maps.indexOf(castleInfo);
-```
-
-You'd then pass that `castleId` to the `Map` parameter.
+Maps can be found using the [Map constant](../util/constants). It's just the map name.
 
 ### [async] bot.join
 Join a public game with the provided game code.
@@ -340,6 +331,8 @@ These are variables on `bot.*` that let you get information about the Bot.
 - `bot.account.firebaseId` - the firebase id (for auth)
 - `bot.account.sessionId` - the session id (for auth)
 - `bot.account.session` - the session (for auth)
+- `bot.account.email` - the raw email of the account
+- `bot.account.password` - the raw password (plaintext, be careful) of the account
 - `bot.account.ownedItemIds` - the owned items' IDs
 - `bot.account.vip` - if the account is vip status
 - `bot.account.accountAge` - the age of the account in milliseconds
