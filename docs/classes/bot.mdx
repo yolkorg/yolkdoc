@@ -219,6 +219,7 @@ It may also return a string, which is one of these errors:
 
 - `hit_daily_limit` - the bot has hit the daily limit, run `bot.resetChiknWinner()` to reset the limit for 200 eggs
 - `on_cooldown` - chikn winner is on cooldown, see `bot.account.cw.secondsUntilPlay` for the seconds until you can play again
+- `session_expired` - the bot's session expired, usually because the bot's account was deleted due to bot detection
 - `unknown_error` - an unknown error returned by shell - create an issue on github with the content in the console
 
 ### [async] bot.resetChiknWinner
