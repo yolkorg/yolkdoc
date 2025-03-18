@@ -27,6 +27,7 @@ Each hook has a basic example and description of usage.
 - [gameOptionsChange](#gameoptionschange)
 - [gameReset](#gamereset)
 - [gameStateChange](#gamestatechange)
+- [grenadeExploded](#grenadeexploded)
 - [pingUpdate](#pingupdate)
 - [playerBeginStreak](#playerbeginstreak)
 - [playerChangeCharacter](#playerchangecharacter)
@@ -42,6 +43,7 @@ Each hook has a basic example and description of usage.
 - [playerRespawn](#playerrespawn)
 - [playerSwapWeapon](#playerswapweaon)
 - [playerSwitchTeam](#playerswitchteam)
+- [rocketHit](#rockethit)
 - [selfDamaged](#selfdamaged)
 - [selfMoved](#selfmoved)
 - [selfRespawnFail](#selfrespawnfail)
@@ -195,6 +197,21 @@ bot.on('gameStateChange', (oldState, newState) => {
 ```
 
 The current game state can be accessed at any time with `bot.game.state`. The object is so large, documenting it here would be a headache. See the [Bot](../classes/bot) class for more information.
+
+### grenadeExploded
+This is called when a grenade explodes somewhere on the map.
+
+- `item` is an item (if the `COSMETIC_DATA` intent is enabled), and if not, it will be the item ID #
+- `pos` is an object with the `x`, `y`, and `z` properties
+- `damage` is a number
+- `radius` is a number (float)
+
+```js
+bot.on('grenadeExploded', (item, pos, damage, radius) => {
+    console.log(`a grenade exploded at ${pos}!`);
+    console.log(`it did ${damage} damage with a ${radius} radius`);
+});
+```
 
 ### pingUpdate
 This is called when the bot's ping updates.
@@ -376,6 +393,20 @@ This is called when a player switches teams.
 ```js
 bot.on('playerSwitchTeam', (player, oldTeam, newTeam) => {
     console.log(`${player.name} switched from team ${oldTeam} to team ${newTeam}`);
+});
+```
+
+### rocketHit
+This is called when a rocket hits a location and creates an explosion.
+
+- `pos` is an object with the `x`, `y`, and `z` properties
+- `damage` is a number
+- `radius` is a number (float)
+
+```js
+bot.on('rocketHit', (pos, damage, radius) => {
+    console.log(`a rocket hit at ${pos}!`);
+    console.log(`it did ${damage} damage with a ${radius} radius`);
 });
 ```
 
