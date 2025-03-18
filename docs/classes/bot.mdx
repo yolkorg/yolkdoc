@@ -329,7 +329,8 @@ These are variables on `bot.*` that let you get information about the Bot.
     - `bot.game.spatula.controlledBy` - the player id controlling the spatula
     - `bot.game.spatula.controlledByTeam` - the team controlling the spatula
 - `bot.game.stage` - the stage of the game (instanceof [CoopStates](../util/constants))
-- `bot.game.activeZone` - the active coop zone number
+- `bot.game.zoneNumber` - the active coop zone number
+- `bot.game.activeZone` - an array of x/y/z coord objects that the current zone consists of
 - `bot.game.capturing` - the users capturing the coop
 - `bot.game.captureProgress` - a number 1-1000 that signifies the progress of the capture
 - `bot.game.numCapturing` - the number of players capturing
