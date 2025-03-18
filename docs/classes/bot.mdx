@@ -249,6 +249,17 @@ There are several important things about the matchmaker that don't relate, so le
 - The matchmaker will use the same proxy as the bot.
 - This will automatically be run anytime you use `bot.join()` or `bot.createPrivateGame()`, so you don't need to call this unless you're doing something special (e.g. finding a public game and joining it).
 
+### bot.canSee
+This allows you to check if the bot can see a player.
+
+```js
+if (bot.canSee(bot.players[0])) {
+    console.log('I can see the first player!');
+}
+```
+
+The first argument is a `GamePlayer` from `bot.players`.
+
 ## Attributes
 These are variables on `bot.*` that let you get information about the Bot.
 
