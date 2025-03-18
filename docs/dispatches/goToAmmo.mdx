@@ -1,0 +1,24 @@
+---
+title: "GoToAmmoDispatch"
+description: "Pathfind to the nearest ammo packet."
+---
+
+### Example Usage
+
+```js
+import GoToAmmoDispatch from 'yolkbot/dispatches/GoToAmmoDispatch';
+
+bot.dispatch(new GoToAmmoDispatch());
+```
+
+### Checks
+- The bot must be playing
+- The bot must have the `PATHFINDING` intent
+
+### Important Note
+A GoToAmmoDispatch will hijack **both the looking and the movement** of the bot. This means that the bot will not be able to look around or move until it reaches the target. If you NEED TO MOVE, you can:
+
+1. Set `bot.pathing.followingPath` to false
+2. Do whatever looking/movement/whatever you want to do
+3. If you HAVE NOT MOVED, just set `bot.pathing.followingPath` back to true
+4. If you HAVE MOVED, you will need to create a new GoToAmmoDispatch
