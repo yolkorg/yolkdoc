@@ -58,6 +58,7 @@
                             "docs/dispatches/chat",
                             "docs/dispatches/fire",
                             "docs/dispatches/gameOptions",
+                            "docs/dispatches/goToCoop",
                             "docs/dispatches/goToPlayer",
                             "docs/dispatches/goToSpatula",
                             "docs/dispatches/lookAt",
