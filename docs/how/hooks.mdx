@@ -43,6 +43,7 @@ Each hook has a basic example and description of usage.
 - [playerRespawn](#playerrespawn)
 - [playerSwapWeapon](#playerswapweaon)
 - [playerSwitchTeam](#playerswitchteam)
+- [playerThrowGrenade](#playerthrowgrenade)
 - [rocketHit](#rockethit)
 - [selfDamaged](#selfdamaged)
 - [selfMoved](#selfmoved)
@@ -393,6 +394,19 @@ This is called when a player switches teams.
 ```js
 bot.on('playerSwitchTeam', (player, oldTeam, newTeam) => {
     console.log(`${player.name} switched from team ${oldTeam} to team ${newTeam}`);
+});
+```
+
+### playerThrowGrenade
+This is called when a player throws a grenade.
+
+- `player` is a Player object
+- `pos` is an object with the `x`, `y`, and `z` properties
+- `dir` is an object with the `x`, `y`, and `z` properties
+
+```js
+bot.on('playerThrowGrenade', (player, pos, dir) => {
+    console.log(`${player.name} threw a grenade at ${pos} with direction ${dir}`);
 });
 ```
 
