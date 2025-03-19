@@ -313,6 +313,11 @@ if (bot.canSee(bot.players[0])) {
 
 The first argument is a `GamePlayer` from `bot.players`.
 
+### bot.quit
+This closes the connection to the game, the matchmaker, and runs various cleanup functions.
+
+Cleanup includes deleting things that are heavy on memory (like `bot.account`, `bot.game`, `bot.players`, etc). That might not be something you want. If so, pass the first argument as `true` to `bot.quit` (so `bot.quit(true)`).
+
 ## Attributes
 These are variables on `bot.*` that let you get information about the Bot.
 
