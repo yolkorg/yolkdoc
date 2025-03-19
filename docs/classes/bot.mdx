@@ -51,6 +51,10 @@ Intents are a way to enable specific features that require extra API calls or us
     - For example, `bot.players[x].character.hat` is usually an item ID. Enabling this makes it an item object.
     - This is due to the resources searching through items takes (it's usually not worth it).
     - `bot.players[x].character.primaryGun` is always the object due to various internal needs.
+- `Bot.Intents.PLAYER_HEALTH` - enables player health tracking
+    - health regen is currently VERY intensive on your computer
+    - `player[x].hp` will be updated without this, but it likely will not be accurate
+    - `player[x].hpShield` is not impacted
 
 You can enable any intent by passing them in the `intents` array:
 
