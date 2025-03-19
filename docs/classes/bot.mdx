@@ -102,6 +102,55 @@ await bot.createAccount('email@example.com', 'MyEpicPassword123!!');
 
 Account credentials are returned and added to `bot.account`.
 
+### [async] bot.loginWithRefreshToken
+Logs you into an account using a Firebase refresh token.
+
+This is the current best method to log in using Google.
+
+To obtain a refresh token from Shell, run the following console script:
+
+```js
+const notLoggedIn = () => console.error('You do not appear to be logged in.');
+
+const request = indexedDB.open('firebaseLocalStorageDb');
+
+request.onsuccess = function(event) {
+    const db = event.target.result;
+    const transaction = db.transaction(['firebaseLocalStorage'], 'readonly');
+    const store = transaction.objectStore('firebaseLocalStorage');
+
+    const getAllKeysRequest = store.getAllKeys();
+
+    getAllKeysRequest.onsuccess = function() {
+        const getRequest = store.get(getAllKeysRequest.result[0]);
+
+        getRequest.onsuccess = function() {
+            window.copy = () => {
+                document.querySelector('#cp').remove();
+                navigator.clipboard.writeText(getRequest.result.value.stsTokenManager.refreshToken)
+            };
+            document.body.insertAdjacentHTML('beforeend', `<div style="position:absolute;top:0;left:0;width: 100%;height:100%;background:black;cursor:pointer;display:flex;justify-content:center;align-items:center;z-index:999999;" onclick="copy()" id="cp"><h1 style="color:white;font-family:'Nunito';font-weight:bold;">click me to copy token!</h1></div>`);
+        };
+
+        getRequest.onerror = () => notLoggedIn();
+    };
+
+    getAllKeysRequest.onerror = () => notLoggedIn();
+};
+
+request.onerror = () => notLoggedIn();
+```
+
+This will create a black screen with a white text that says "click me to copy token!". Clicking it will copy the refresh token to your clipboard. Then, put it into `loginWithRefreshToken`:
+
+```js
+await bot.loginWithRefreshToken('some-VeRy-L0ng-rAndomTexT-heRe');
+```
+
+This allows you to cleanly (and consistently) login with Google.
+
+Account credentials are returned and added to `bot.account`.
+
 ### [async] bot.loginAnonymously
 Logs you into a guest/anonymous account. This is the default behavior if you do not call either of the above authorization functions.
 
