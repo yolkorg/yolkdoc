@@ -38,17 +38,17 @@
                         ]
                     },
                     {
-                        "group": "Deep Docs",
+                        "group": "Bot",
                         "pages": [
-                            "docs/classes/bot",
-                            "docs/classes/matchmaker"
+                            "docs/bot/bot"
                         ]
                     },
                     {
-                        "group": "Utilities",
+                        "group": "Classes",
                         "pages": [
-                            "docs/util/api",
-                            "docs/util/constants"
+                            "docs/classes/api",
+                            "docs/classes/constants",
+                            "docs/classes/matchmaker"
                         ]
                     },
                     {

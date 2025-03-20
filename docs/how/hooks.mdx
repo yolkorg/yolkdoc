@@ -126,13 +126,13 @@ bot.on('close', (code) => {
 });
 ```
 
-You can compare this to the `CloseCode` [constant](../util/constants).
+You can compare this to the `CloseCode` [constant](../classes/constants).
 
 ### collectAmmo
 This is called when a player collects an ammo pack.
 
 - `player` is a Player object
-- `weapon` is a Gun class (see [Gun](../util/constants))
+- `weapon` is a Gun class (see [Gun](../classes/constants))
 
 ```js
 bot.on('collectAmmo', (player, weapon) => {
@@ -163,8 +163,8 @@ bot.on('gameForcePause', () => {
 ### gameOptionsChange
 This is called when the game options change by a host in a private room.
 
-- `oldOptions` is an object (specifically [Bot](../classes/bot).game.options)
-- `newOptions` is an object (specifically [Bot](../classes/bot).game.options)
+- `oldOptions` is an object (specifically [Bot](../bot/bot).game.options)
+- `newOptions` is an object (specifically [Bot](../bot/bot).game.options)
 
 ```js
 bot.on('gameOptionsChange', (oldOptions, newOptions) => {
@@ -186,8 +186,8 @@ bot.on('gameReset', () => {
 ### gameStateChange
 This is called when the game state changes. This is MAINLY used in the spatula & KOTC gamemodes, wich signify whe things like the spatula is dropped or someone starts/stops capturing a coop, among many other things.
 
-- `oldState` is an object (specifically [Bot](../classes/bot).game.state)
-- `newState` is an object (specifically [Bot](../classes/bot).game.state)
+- `oldState` is an object (specifically [Bot](../bot/bot).game.state)
+- `newState` is an object (specifically [Bot](../bot/bot).game.state)
 
 ```js
 bot.on('gameStateChange', (oldState, newState) => {
@@ -197,7 +197,7 @@ bot.on('gameStateChange', (oldState, newState) => {
 });
 ```
 
-The current game state can be accessed at any time with `bot.game.state`. The object is so large, documenting it here would be a headache. See the [Bot](../classes/bot) class for more information.
+The current game state can be accessed at any time with `bot.game.state`. The object is so large, documenting it here would be a headache. See the [Bot](../bot/bot) class for more information.
 
 ### grenadeExploded
 This is called when a grenade explodes somewhere on the map.
@@ -230,7 +230,7 @@ bot.on('pingUpdate', (oldPing, newPing) => {
 This is called when a player begins a streak reward (2x damage, overheal, etc).
 
 - `player` is a Player object
-- `streak` is a value of the [`ShellStreaks`](../util/constants) enum
+- `streak` is a value of the [`ShellStreaks`](../classes/constants) enum
 
 ```js
 bot.on('playerBeginStreak', (player, streak) => {
@@ -242,8 +242,8 @@ bot.on('playerBeginStreak', (player, streak) => {
 This is called when a player changes their skin set.
 
 - `player` is a Player object
-- `oldCharacter` is an object (specifically [Bot](../classes/bot).game.players[player.id].character)
-- `newCharacter` is an object (specifically [Bot](../classes/bot).game.players[player.id].character)
+- `oldCharacter` is an object (specifically [Bot](../bot/bot).game.players[player.id].character)
+- `newCharacter` is an object (specifically [Bot](../bot/bot).game.players[player.id].character)
 
 ```js
 bot.on('playerChangeCharacter', (player, oldCharacter, newCharacter) => {
@@ -297,7 +297,7 @@ bot.on('playerDeath', (player, killer) => {
 This is called when a player fires their gun.
 
 - `player` is a Player object
-- `weapon` is a Gun class (see [Gun](../util/constants))
+- `weapon` is a Gun class (see [Gun](../classes/constants))
 
 ```js
 bot.on('playerFire', (player, weapon) => {
@@ -353,7 +353,7 @@ bot.on('playerPause', (player) => {
 This is called when a player reloads their gun.
 
 - `player` is a Player object
-- `weapon` is a Gun class (see [Gun](../util/constants))
+- `weapon` is a Gun class (see [Gun](../classes/constants))
 
 ```js
 bot.on('playerReload', (player, weapon) => {
@@ -388,8 +388,8 @@ bot.on('playerSwapWeapon', (player, nowActive) => {
 This is called when a player switches teams.
 
 - `player` is a Player object
-- `oldTeam` is a number (see the [`Teams`](../util/constants) enum)
-- `newTeam` is a number (see the [`Teams`](../util/constants) enum)
+- `oldTeam` is a number (see the [`Teams`](../classes/constants) enum)
+- `newTeam` is a number (see the [`Teams`](../classes/constants) enum)
 
 ```js
 bot.on('playerSwitchTeam', (player, oldTeam, newTeam) => {

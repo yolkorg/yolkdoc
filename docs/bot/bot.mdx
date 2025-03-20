@@ -186,9 +186,9 @@ await bot.createPrivateGame({
 
 You can find a region list from the [matchmaker](./matchmaker) guide.
 
-Modes can be found using the [GameMode constant](../util/constants).
+Modes can be found using the [GameMode constant](../classes/constants).
 
-Maps can be found using the [Map constant](../util/constants). It's just the map name.
+Maps can be found using the [Map constant](../classes/constants). It's just the map name.
 
 ### [async] bot.join
 Join a public game with the provided game code.
@@ -371,15 +371,15 @@ These are variables on `bot.*` that let you get information about the Bot.
 - `bot.players[i].kills` - the number of kills the player has
 - `bot.players[i].hp` - the health of the player
 - `bot.players[i].hpShield` - the shield of the player
-- `bot.players[i].streakRewards` - the rewards the player has for their streak - a list of the [StreakRewards constant](../util/constants)
+- `bot.players[i].streakRewards` - the rewards the player has for their streak - a list of the [StreakRewards constant](../classes/constants)
 - `bot.players[i].social` - an array of the player's socials (twitch, youtube, tiktok, etc) with `id`, `url`, and `active` properties. it will be null for players without any socials (average person)
 - `bot.players[i].showBadge` - whether or not to show the badge of the player (either a social or the VIP badge)
 
 ### bot.game
 
 - `bot.game.code` - the game code of the game
-- `bot.game.gameMode` - the game mode of the game (instanceof [GameMode](../util/constants))
-- `bot.game.map` - the map of the game (instanceof [Map](../util/constants))
+- `bot.game.gameMode` - the game mode of the game (instanceof [GameMode](../classes/constants))
+- `bot.game.map` - the map of the game (instanceof [Map](../classes/constants))
 - `bot.game.playerLimit` - the player limit of the game
 - `bot.game.isGameOwner` - if the bot is the game owner
 - `bot.game.isPrivate` - if the game is private
@@ -390,14 +390,14 @@ These are variables on `bot.*` that let you get information about the Bot.
     - `bot.game.options.locked` - if the game is locked
     - `bot.game.options.noTeamChange` - if the game has no team change
     - `bot.game.options.noTeamShuffle` - if the game has no team shuffle
-    - `bot.game.options.weaponsDisabled` - the weapons disabled in the game - in the order of [GunList](../util/constants) - 1 = disabled, 0 = enabled
+    - `bot.game.options.weaponsDisabled` - the weapons disabled in the game - in the order of [GunList](../classes/constants) - 1 = disabled, 0 = enabled
     - `bot.game.options.mustUseSecondary` - if the player must use the secondary weapon due to all weapons being disabled
 - `bot.game.teamScore` - the team score of the game
 - `bot.game.spatula` - the spatula of the game
     - `bot.game.spatula.coords` - the coords of the spatula
     - `bot.game.spatula.controlledBy` - the player id controlling the spatula
     - `bot.game.spatula.controlledByTeam` - the team controlling the spatula
-- `bot.game.stage` - the stage of the game (instanceof [CoopStates](../util/constants))
+- `bot.game.stage` - the stage of the game (instanceof [CoopStates](../classes/constants))
 - `bot.game.zoneNumber` - the active coop zone number
 - `bot.game.activeZone` - an array of x/y/z coord objects that the current zone consists of
 - `bot.game.capturing` - the users capturing the coop
