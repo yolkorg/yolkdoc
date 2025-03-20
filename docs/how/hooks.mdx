@@ -126,13 +126,13 @@ bot.on('close', (code) => {
 });
 ```
 
-You can compare this to the `CloseCode` [constant](../classes/constants).
+You can compare this to the `CloseCode` [constant](../tools/constants).
 
 ### collectAmmo
 This is called when a player collects an ammo pack.
 
 - `player` is a Player object
-- `weapon` is a Gun class (see [Gun](../classes/constants))
+- `weapon` is a Gun class (see [Gun](../tools/constants))
 
 ```js
 bot.on('collectAmmo', (player, weapon) => {
@@ -230,7 +230,7 @@ bot.on('pingUpdate', (oldPing, newPing) => {
 This is called when a player begins a streak reward (2x damage, overheal, etc).
 
 - `player` is a Player object
-- `streak` is a value of the [`ShellStreaks`](../classes/constants) enum
+- `streak` is a value of the [`ShellStreaks`](../tools/constants) enum
 
 ```js
 bot.on('playerBeginStreak', (player, streak) => {
@@ -297,7 +297,7 @@ bot.on('playerDeath', (player, killer) => {
 This is called when a player fires their gun.
 
 - `player` is a Player object
-- `weapon` is a Gun class (see [Gun](../classes/constants))
+- `weapon` is a Gun class (see [Gun](../tools/constants))
 
 ```js
 bot.on('playerFire', (player, weapon) => {
@@ -353,7 +353,7 @@ bot.on('playerPause', (player) => {
 This is called when a player reloads their gun.
 
 - `player` is a Player object
-- `weapon` is a Gun class (see [Gun](../classes/constants))
+- `weapon` is a Gun class (see [Gun](../tools/constants))
 
 ```js
 bot.on('playerReload', (player, weapon) => {
@@ -388,8 +388,8 @@ bot.on('playerSwapWeapon', (player, nowActive) => {
 This is called when a player switches teams.
 
 - `player` is a Player object
-- `oldTeam` is a number (see the [`Teams`](../classes/constants) enum)
-- `newTeam` is a number (see the [`Teams`](../classes/constants) enum)
+- `oldTeam` is a number (see the [`Teams`](../tools/constants) enum)
+- `newTeam` is a number (see the [`Teams`](../tools/constants) enum)
 
 ```js
 bot.on('playerSwitchTeam', (player, oldTeam, newTeam) => {

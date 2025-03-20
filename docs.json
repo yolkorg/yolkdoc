@@ -44,11 +44,11 @@
                         ]
                     },
                     {
-                        "group": "Classes",
+                        "group": "Tools",
                         "pages": [
-                            "docs/classes/api",
-                            "docs/classes/constants",
-                            "docs/classes/matchmaker"
+                            "docs/tools/api",
+                            "docs/tools/constants",
+                            "docs/tools/matchmaker"
                         ]
                     },
                     {
