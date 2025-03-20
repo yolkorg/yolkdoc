@@ -313,6 +313,17 @@ if (bot.canSee(bot.players[0])) {
 
 The first argument is a `GamePlayer` from `bot.players`.
 
+### bot.getBestTarget
+Returns the closest player that is in the bot's LoS. Returns nothing if no one is in the bot's LoS.
+
+```js
+const bestTarget = bot.getBestTarget();
+if (bestTarget) {
+    bot.dispatch(new LookAtDispatch(bestTarget.id));
+    bot.dispatch(new FireDispatch(1));
+}
+```
+
 ### bot.quit
 This closes the connection to the game, the matchmaker, and runs various cleanup functions.
 
