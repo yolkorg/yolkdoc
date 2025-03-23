@@ -19,6 +19,7 @@ Each hook has a basic example and description of usage.
 - [authFail](#authfail)
 - [balanceUpdate](#balanceupdate)
 - [banned](#banned)
+- [challengeComplete](#challengecomplete)
 - [chat](#chat)
 - [close](#close)
 - [collectAmmo](#collectammo)
@@ -99,6 +100,21 @@ bot.on('banned', (banRemaining) => {
     console.log(`bot is banned for ${banRemaining}, and cannot authenticate. RIP`);
 });
 ```
+
+### challengeComplete
+This is called when a challenge is completed.
+
+- `player` - the player that completed the challenge
+    - if the bot is in a game, this will be a GamePlayer object
+    - if the bot is not in a game, this will be `bot.account`
+- `challenge` - the challenge ID number
+    - if the `CHALLENGES` intent is enabled AND the player is the bot, this will be from `bot.account.challenges`
+
+```js
+bot.on('challengeCompleted', (player, challenge) => {
+    if (player.id == bot.me.id) console.log(`${player.name} completed challenge ${challenge}!`);
+    else console.log(`someone else completed challenge ${challenge}!`);
+});
 
 ### chat
 This is called when a chat message is sent in the game.
