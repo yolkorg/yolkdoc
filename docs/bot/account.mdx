@@ -93,6 +93,11 @@ This is an object that stores account information.
     - `bot.account.cw.limit` - the number of times the account has played cw that day
     - `bot.account.cw.secondsUntilPlay` - the number of seconds until the account can play again
     - `bot.account.cw.canPlayAgain` - the timestamp the account can play again
+- `bot.account.stats` - user stats
+    - `bot.account.stats.montly` - monthly stats
+    - `bot.account.stats.lifetime` - lifetime stats
+    - structure for both: [click](https://github.com/enbyte/yolkbot/blob/cebc489c180240773905a1159024b1a0907e4b7b/src/types/bot.d.ts#L26C1-L62C2)
+    - requires `STATS` [intent](./intents)
 
 ## Chikn Winner
 These methods allow you to play Chikn Winner.
