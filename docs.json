@@ -40,7 +40,10 @@
                     {
                         "group": "Bot",
                         "pages": [
-                            "docs/bot/bot"
+                            "docs/bot/bot",
+                            "docs/bot/intents",
+                            "docs/bot/account",
+                            "docs/bot/game"
                         ]
                     },
                     {

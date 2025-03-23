@@ -1,0 +1,178 @@
+---
+title: "Game Stuff"
+description: "You can join and then control a game with 100% coverage."
+---
+
+## Joining
+This is obviously what you have to do first, which you can do in 2 ways:
+
+### [async] bot.createPrivateGame
+Creates a private game with a specified region, mode, and map.
+
+```js
+await bot.createPrivateGame({
+    region: 'useast',
+    mode: 'ffa',
+    map: 'Downfall'
+});
+```
+
+You can find a region list from the [matchmaker](./matchmaker) guide. Modes can be found using the [GameMode constant](../tools/constants). Maps can be found using the [Map constant](../tools/constants). It's just the map name.
+
+### [async] bot.initMatchmaker
+This manually creates of a [Matchmaker](./matchmaker) on a Bot. This is useful for finding public games.
+
+You should, if logging in and attempting to find a publix game:
+- Create a bot with `new Bot()`
+- Call `bot.login()` with the proper credentials
+- Call `bot.initMatchmaker()`
+- Call `bot.matchmaker.findPublicGame()`
+- Call `bot.join(name, code)`
+
+There are several important things about the matchmaker that don't relate, so let's use a bullet pointed list:
+
+- If you don't login before using initMatchmaker, it will first create an anonymous account, attach the anon account to the bot, then use that anon account until you call `login()`. This is why you should really call `login()` first.
+- The matchmaker will use the proxy you used to create the bot.
+- The Matchmaker will disconnect & (temporarily?) blacklist you if you spam `findPublicGame` on the same proxy ~10 times.
+- This will automatically be run anytime you use `bot.join()` or `bot.createPrivateGame()`, so you don't need to call this unless you're doing something special (e.g. finding a public game and joining it).
+
+### [async] bot.join
+Join a public game with the provided game code.
+
+```js
+await bot.join('My Bot Name', 'game-code-here');
+```
+
+You can also pass a result directly from the Matchmaker:
+
+```js
+const game = await bot.matchmaker.findGame({ region: 'useast', mode: 'ffa' });
+await bot.join('My Bot Name', game);
+```
+
+## bot.game
+This has various information about the current game.
+
+- `bot.game.code` - the game code of the game
+- `bot.game.gameMode` - the game mode of the game (instanceof [GameMode](../tools/constants))
+- `bot.game.map` - the map of the game (instanceof [Map](../tools/constants))
+- `bot.game.playerLimit` - the player limit of the game
+- `bot.game.isGameOwner` - if the bot is the game owner
+- `bot.game.isPrivate` - if the game is private
+- `bot.game.options` - the options of the game
+    - `bot.game.options.gravity` - the gravity of the game
+    - `bot.game.options.damage` - the damage of the game
+    - `bot.game.options.healthRegen` - the health regen of the game
+    - `bot.game.options.locked` - if the game is locked
+    - `bot.game.options.noTeamChange` - if the game has no team change
+    - `bot.game.options.noTeamShuffle` - if the game has no team shuffle
+    - `bot.game.options.weaponsDisabled` - the weapons disabled in the game - in the order of [GunList](../tools/constants) - 1 = disabled, 0 = enabled
+    - `bot.game.options.mustUseSecondary` - if the player must use the secondary weapon due to all weapons being disabled
+- `bot.game.teamScore` - the team score of the game
+- `bot.game.spatula` - the spatula of the game
+    - `bot.game.spatula.coords` - the coords of the spatula
+    - `bot.game.spatula.controlledBy` - the player id controlling the spatula
+    - `bot.game.spatula.controlledByTeam` - the team controlling the spatula
+- `bot.game.stage` - the stage of the game (instanceof [CoopStates](../tools/constants))
+- `bot.game.zoneNumber` - the active coop zone number
+- `bot.game.activeZone` - an array of x/y/z coord objects that the current zone consists of
+- `bot.game.capturing` - the users capturing the coop
+- `bot.game.captureProgress` - a number 1-1000 that signifies the progress of the capture
+- `bot.game.numCapturing` - the number of players capturing
+- `bot.game.stageName` - the name of the game stage (as `bot.game.stage` is a number)
+- `bot.game.capturePercent` - the capture percent of the game (as `bot.game.captureProgress` is a number, this is for convenience)
+- `bot.game.collectables` - an array with index 0 as an ammo array and index 1 as a grenade array -- each ammo has an ID and an x/y/z coord
+
+## Game Actions
+Here are some things you can do inside of a game.
+
+### bot.dispatch
+Allows you to [dispatch](../how/dispatches) an action.
+
+```js
+import LookAtDispatch from 'yolkbot/dispatch/LookAtDispatch';
+
+bot.dispatch(new LookAtDispatch(0));
+```
+
+This is how you do most things. Read the [dispatch](../how/dispatches) guide for more information.
+
+### bot.quit
+This closes the connection to the game, the matchmaker, and runs various cleanup functions.
+
+Cleanup includes deleting things that are heavy on memory (like `bot.account`, `bot.game`, `bot.players`, etc). That might not be something you want. If so, pass the first argument as `true` to `bot.quit` (so `bot.quit(true)`).
+
+## Utilities
+These are utilities that can be used in a game.
+
+### bot.canSee
+This allows you to check if the bot can see a player.
+
+```js
+if (bot.canSee(bot.players[0])) {
+    console.log('I can see the first player that joined!');
+}
+```
+
+The first argument is a `GamePlayer` from `bot.players`.
+
+### bot.getBestTarget
+Returns the closest player that is in the bot's LoS. Returns `null` if no one is in the bot's LoS.
+
+```js
+const bestTarget = bot.getBestTarget();
+if (bestTarget) {
+    bot.dispatch(new LookAtDispatch(bestTarget.id));
+    bot.dispatch(new FireDispatch(1));
+}
+```
+
+## bot.players
+`bot.players` is an array of players that have information about each player.
+
+<Note>bot.me is a reference to the `bot.players` object that represents you.</Note>
+
+- `bot.players[i].id` - the id of the player relative to the players
+    - IDs are the index of `bot.players` the bot is
+    - for example, ID 3 would be `bot.players[3]`
+- `bot.players[i].team` - the team the player is on
+- `bot.players[i].name` - the name of the player
+- `bot.players[i].uniqueId` - the unique id of the player
+- `bot.players[i].position` - the position of the player
+    - `bot.players[i].position.x` - the x position of the player
+    - `bot.players[i].position.y` - the y position of the player
+    - `bot.players[i].position.z` - the z position of the player
+- `bot.players[i].view` - the view of the player
+    - `bot.players[i].view.yaw` - the yaw of the player
+    - `bot.players[i].view.pitch` - the pitch of the player
+- `bot.players[i].jumping` - if the player is jumping
+- `bot.players[i].climbing` - if the player is climbing
+- `bot.players[i].character` - the character of the player
+    - `bot.players[i].character.eggColor` - the color of the player's egg
+    - `bot.players[i].character.primaryGun` - the primary gun of the player
+    - `bot.players[i].character.secondaryGun` - the secondary gun of the player
+    - `bot.players[i].character.stamp` - the stamp of the player
+    - `bot.players[i].character.hat` - the hat of the player
+    - `bot.players[i].character.grenade` - the grenade of the player
+    - `bot.players[i].character.melee` - the melee of the player
+- `bot.players[i].activeGun` - the active gun of the player (primary or secondary)
+- `bot.players[i].selectedGun` - the selected gun of the player (eggk, crackshot, etc)
+- `bot.players[i].weapons` - the weapons of the player
+    - `bot.players[i].weapons[0]` - the primary weapon of the player (instanceof [gun](../constants/gun))
+    - `bot.players[i].weapons[1]` - the secondary weapon of the player (instanceof [gun](../constants/gun), always a cluck9mm)
+- `bot.players[i].grenades` - the number of grenades the player has
+- `bot.players[i].kills` - the number of kills the player has
+- `bot.players[i].hp` - the health of the player
+- `bot.players[i].hpShield` - the shield of the player
+- `bot.players[i].streakRewards` - the rewards the player has for their streak - a list of the [StreakRewards constant](../tools/constants)
+- `bot.players[i].social` - an array of the player's socials (twitch, youtube, tiktok, etc) with `id`, `url`, and `active` properties. it will be null for players without any socials (average person)
+- `bot.players[i].showBadge` - whether or not to show the badge of the player (either a social or the VIP badge)
+
+## Misc Attributes
+Here are some extra attributes that you might want to note:
+
+- `bot.pathing.followingPath` - if the bot is following a path
+    - setting this to false/true can pause/"play" pathfinding
+    - there's a lot more on `bot.pathing`, but it's mostly for advanced users
+- `bot.ping` - the websocket latency (ping)
+- `bot.matchmaker` - an instance of [matchmaker](./matchmaker) that uses the bot's proxy & auth

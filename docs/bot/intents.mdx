@@ -1,0 +1,40 @@
+---
+title: "Intents"
+description: "Intents are various features the user can enable that are usually disabled for performance."
+---
+
+Intents are a way to enable specific features that are disabled by default for 1 of 2 reasons:
+
+1. They require extra API calls
+2. They are unusually intensive on your device
+
+Here's a list:
+
+- `Bot.Intents.STATS` - enables the bot to its stats
+- `Bot.Intents.CHALLENGES` - enables challenge tracking
+- `Bot.Intents.PATHING` - enables pathfinding logic
+- `Bot.Intents.BUFFERS` - enables buffer tracking of other users
+    - this is an advanced feature. only do this if you actually need it.
+- `Bot.Intents.PING` - enables pinging logic
+- `Bot.Intents.COSMETIC_DATA` - enables fetching of cosmetic data
+    - If this is not enabled, `bot.players[x].character` will not have items but rather item IDs.
+    - For example, `bot.players[x].character.hat` is usually an item ID. Enabling this makes it an item object.
+    - This is due to the resources searching through items takes (it's usually not worth it).
+    - `bot.players[x].character.primaryGun` is always the object due to various internal needs.
+- `Bot.Intents.PLAYER_HEALTH` - enables player health tracking
+    - health regen is currently VERY intensive on your computer
+    - `player[x].hp` will be updated without this, but it likely will not be accurate
+    - `player[x].hpShield` is not impacted
+
+You can enable any intent by passing them in the `intents` array:
+
+```js
+const bot = new Bot({
+    intents: [
+        Bot.Intents.STATS,
+        Bot.Intents.CHALLENGES
+    ]
+});
+```
+
+You should **NEVER** blindly specify all intents! Many times, you will not need to do whatever the intent does. For example, if you're not using pathfinding, you should not enable the `Bot.Intents.PATHING` intent, or your computer will waste resources fetching and processing map data. Only enable the intents you need.
