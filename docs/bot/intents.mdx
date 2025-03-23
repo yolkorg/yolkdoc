@@ -25,6 +25,8 @@ Here's a list:
     - health regen is currently VERY intensive on your computer
     - `player[x].hp` will be updated without this, but it likely will not be accurate
     - `player[x].hpShield` is not impacted
+- `Bot.Intents.PACKET_HOOK` - enables the `packet` hook
+    - this is potentially intensive (we cba to check) so it's locked here
 
 You can enable any intent by passing them in the `intents` array:
 

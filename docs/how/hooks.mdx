@@ -28,6 +28,7 @@ Each hook has a basic example and description of usage.
 - [gameReset](#gamereset)
 - [gameStateChange](#gamestatechange)
 - [grenadeExploded](#grenadeexploded)
+- [packet](#packet)
 - [pingUpdate](#pingupdate)
 - [playerBeginStreak](#playerbeginstreak)
 - [playerChangeCharacter](#playerchangecharacter)
@@ -213,6 +214,19 @@ bot.on('grenadeExploded', (item, pos, damage, radius) => {
     console.log(`it did ${damage} damage with a ${radius} radius`);
 });
 ```
+
+### packet
+This is called when any packet is sent. It sends the raw packet, so you should create a `CommIn` and manually inspect it. Using this requires the [`Bot.Intents.PACKET_HOOK`](../bot/intents) intent.
+
+- `packet` is an encoded packet string
+
+```js
+bot.on('packet', (packet) => {
+    console.log('packet received!');
+});
+```
+
+If you are trying to get every event, you are much better off with [`bot.onAny`](../bot/bot).
 
 ### pingUpdate
 This is called when the bot's ping updates.
