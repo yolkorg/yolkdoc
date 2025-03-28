@@ -161,11 +161,12 @@ if (bestTarget) {
     - `bot.players[i].weapons[0]` - the primary weapon of the player (instanceof [gun](../constants/gun))
     - `bot.players[i].weapons[1]` - the secondary weapon of the player (instanceof [gun](../constants/gun), always a cluck9mm)
 - `bot.players[i].grenades` - the number of grenades the player has
-- `bot.players[i].kills` - the number of kills the player has
+- `bot.players[i].streak` - the killstreak of the player
 - `bot.players[i].hp` - the health of the player
 - `bot.players[i].hpShield` - the shield of the player
 - `bot.players[i].streakRewards` - the rewards the player has for their streak - a list of the [StreakRewards constant](../tools/constants)
-- `bot.players[i].social` - an array of the player's socials (twitch, youtube, tiktok, etc) with `id`, `url`, and `active` properties. it will be null for players without any socials (average person)
+- `bot.players[i].socials` - an array of the player's socials (twitch, youtube, tiktok, etc) with `id`, `url`, `type`, and `active` properties. it will be null for players without any socials (average person)
+- `bot.players[i].isVip` - is the player wasting $5/month?
 - `bot.players[i].showBadge` - whether or not to show the badge of the player (either a social or the VIP badge)
 
 ## Misc Attributes
