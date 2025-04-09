@@ -177,3 +177,5 @@ Here are some extra attributes that you might want to note:
     - there's a lot more on `bot.pathing`, but it's mostly for advanced users
 - `bot.ping` - the websocket latency (ping)
 - `bot.matchmaker` - an instance of [matchmaker](./matchmaker) that uses the bot's proxy & auth
+    - this is not automatically created, you may need `bot.initMatchmaker()`
+- `bot.state.weaponIdx` - you can change this before you join a game to change the weapon the bot joins with

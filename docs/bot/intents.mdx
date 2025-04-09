@@ -26,6 +26,10 @@ Here's a list:
     - `player[x].hpShield` is not impacted
 - `Bot.Intents.PACKET_HOOK` - enables the `packet` hook
     - this is potentially intensive (we cba to check) so it's locked here
+- `Bot.Intents.MONITOR` - disables all passive websocket responses
+    - this allows you to use a Bot to monitor packets
+    - passing this on a standalone bot will make the bot not work
+    - dispatches are still processed normally
 
 You can enable any intent by passing them in the `intents` array:
 
