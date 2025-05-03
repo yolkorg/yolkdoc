@@ -30,6 +30,10 @@ Here's a list:
     - this allows you to use a Bot to monitor packets
     - passing this on a standalone bot will make the bot not work
     - dispatches are still processed normally
+- `Bot.Intents.LOG_PACKETS` - enables logging of all packets to the console
+    - only used for deep debugging
+- `Bot.Intents.NO_LOGIN` - disables the login process and authenticates with an empty session ID
+    - this will cause issues with the normal shell servers, you should probably never use this
 
 You can enable any intent by passing them in the `intents` array:
 

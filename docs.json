@@ -51,7 +51,8 @@
                         "pages": [
                             "docs/tools/api",
                             "docs/tools/constants",
-                            "docs/tools/matchmaker"
+                            "docs/tools/matchmaker",
+                            "docs/tools/map"
                         ]
                     },
                     {

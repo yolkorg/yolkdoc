@@ -13,11 +13,14 @@ The Matchmaker takes an object of configuration:
 import Matchmaker from 'yolkbot/matchmaker';
 
 const mm = new Matchmaker({
-    sessionId: 'wiefjvc30cwmwopdkx3oiaufe4wjafejwiafeio', // a custom sessionId to use, allows the matchmaker to send things through a specific account
+    sessionId: 'e2e36ea2-c10d-441e-b396-e1ce15d92263', // a custom sessionId to use, allows the matchmaker to send things through a specific account
 
     proxy: 'socks5://69.69.69.69:42069', // a proxy to use for the matchmaker websocket
 
-    instance: 'shellshock.io' // the instance of Shell Shockers to use for the websocket, default 'shellshock.io'
+    instance: 'shellshock.io', // the instance of Shell Shockers to use for the websocket, default 'shellshock.io'
+    protocol: 'wss', // the protocol to use for the websocket, default 'wss'
+
+    noLogin: false // if true, the matchmaker will not log in at all (including anon account) - this will break on normal shell, do not enable unless you know what you're doing
 });
 ```
 

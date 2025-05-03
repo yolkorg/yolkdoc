@@ -1,23 +1,26 @@
 ---
 title: "Types"
-description: "yolkbot has (almost) full Typescript support!"
+description: "yolkbot has Typescript support!"
 ---
 
-yolkbot has (almost) full Typescript support! This means that you can use yolkbot in a Typescript project and get full type checking and intellisense. IDEs like VSCode will support yolkbot's types and autocomplete things, making it easier to write code.
+yolkbot has (almost) full Typescript support! This means that you can use yolkbot in a Typescript project and get full type checking and intellisense. IDEs like VSCode will support yolkbot's types and autocomplete things even if you use Javascript, making it easier to write code.
 
 ### Supported Types
-All of these modules 
+All of these modules are fully typed!
+
 - `yolkbot/api`
 - `yolkbot/bot`
+- `yolkbot/comm/*`
 - `yolkbot/constants/*`
 - `yolkbot/dispatch/*`
 - `yolkbot/matchmaker`
 - `yolkbot/socket`
+- `yolkbot/util`
 
-### Unsupported Types
-These are not supposed due to the high complexity. Users using these modules should really know the code or how they work.
+Types are bundled in the package; there is no need to install them separately. `@types/yolkbot` doesn't exist for this reason.
 
-- `yolkbot/comm` (partially documented)
-- `yolkbot/pathing`
+We've slowly typed everything and then checked everything throughout various projects. Types are 99% accurate, and we're always testing and finding any issues.
 
 <Note>The browser edition of yolkbot does not contain types. This is because the browser edition is a single file that is not compiled with Typescript. If you want to use types, you must use the Node edition.</Note>
+
+<Note>Pathfinding is not typed. It's too much of a headache, and I've never needed it in a Typescript project, so I've neber added types.</Note>

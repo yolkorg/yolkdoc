@@ -17,6 +17,7 @@ bot.on('playerJoin', (player) => {
 Each hook has a basic example and description of usage.
 
 - [authFail](#authfail)
+- [authSuccess](#authsuccess)
 - [balanceUpdate](#balanceupdate)
 - [banned](#banned)
 - [challengeComplete](#challengecomplete)
@@ -26,6 +27,7 @@ Each hook has a basic example and description of usage.
 - [collectGrenade](#collectgrenade)
 - [gameForcePause](#gameforcepause)
 - [gameOptionsChange](#gameoptionschange)
+- [gameReady](#gameready)
 - [gameReset](#gamereset)
 - [gameStateChange](#gamestatechange)
 - [grenadeExploded](#grenadeexploded)
@@ -46,6 +48,7 @@ Each hook has a basic example and description of usage.
 - [playerSwapWeapon](#playerswapweaon)
 - [playerSwitchTeam](#playerswitchteam)
 - [playerThrowGrenade](#playerthrowgrenade)
+- [quit](#quit)
 - [rocketHit](#rockethit)
 - [selfDamaged](#selfdamaged)
 - [selfMoved](#selfmoved)
@@ -74,6 +77,18 @@ This is called when the authentication flow fails.
 ```js
 bot.on('authFail', (reason) => {
     console.log('ah, shoot. auth failed with reason', reason);
+});
+```
+
+### authSuccess
+This is called when the authentication flow succeeds.
+
+- `account` is the account object (see [Bot](../bot/bot).account)
+
+```js
+bot.on('authSuccess', (account) => {
+    console.log('bot authenticated successfully!');
+    console.log('account:', account);
 });
 ```
 
@@ -115,6 +130,7 @@ bot.on('challengeCompleted', (player, challenge) => {
     if (player.id == bot.me.id) console.log(`${player.name} completed challenge ${challenge}!`);
     else console.log(`someone else completed challenge ${challenge}!`);
 });
+```
 
 ### chat
 This is called when a chat message is sent in the game.
@@ -188,6 +204,21 @@ bot.on('gameOptionsChange', (oldOptions, newOptions) => {
     console.log('game options have changed!');
     console.log('old options:', oldOptions);
     console.log('new options:', newOptions);
+});
+```
+
+### gameReady
+This is called when the game is ready. You should usually send, say, a first spawn packet here.
+
+```js
+bot.on('gameReady', () => {
+    console.log('game is ready!');
+
+    // this is a good place to call a spawn dispatch
+    bot.dispatch(new SpawnDispatch());
+
+    // this is also a good place to call a change weapon dispatch
+    bot.dispatch(new SaveLoadoutDispatch({ gunId: 1 }));
 });
 ```
 
@@ -437,6 +468,15 @@ This is called when a player throws a grenade.
 ```js
 bot.on('playerThrowGrenade', (player, pos, dir) => {
     console.log(`${player.name} threw a grenade at ${pos} with direction ${dir}`);
+});
+```
+
+### quit
+This is called when the bot is quit, either because the socket closes or `bot.quit()` is called.
+
+```js
+bot.on('quit', () => {
+    console.log('bot has left the game');
 });
 ```
 

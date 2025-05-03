@@ -38,7 +38,8 @@ If you want to see the values of each constant, [read the internal file](https:/
 - `GunList` - An **array** of all the guns in the game, ordered by the selector menu.
 - `IsBrowser` - A quick and easy check for if the bot is running in the browser.
 - `Movements` - The different ways to move. Critical for MovementDispatch.
-- `PlayTypes` - These are the different ways to join a game. The key is the name and the value is the 
+- `PlayTypes` - These are the different ways to join a game. The key is the name and the value is the integer.
+- `ProxiesEnabled` - If the bot can use proxies based on the environment.
 - `ShellStreaks` - The different streaks in the game. (health shield, double damage, etc)
 - `SocialMedias` - The different social media platforms CCs have.
 - `SocialRewards` - The rewards claimable for clicking BWD's social media links.
@@ -55,7 +56,7 @@ Game data also falls into the constant category.
 Guns are represented by classes.
 
 ```js
-import { AUG, CSG1, DozenGauge, Eggk47, M24, RPEGG, SMG } from 'yolkbot/constants/guns.js';
+import { AUG, CSG1, DozenGauge, Eggk47, M24, RPEGG, SMG } from 'yolkbot/constants/guns';
 ```
 
 This is a list of all of the guns in the game. Some are the name in the game, some are the actual name of the gun. The gun names match what the game's code calls them. Here's what each is:
@@ -71,16 +72,14 @@ This is a list of all of the guns in the game. Some are the name in the game, so
 
 The guns (excluding secondary) are listed in the `GunList` constant mentioned above.
 
-The gun class has a lot of information about each gun, which is better gleamed by just...[reading the code...](https://github.com/yolkorg/yolkbot/blob/main/src/constants/guns.js)
+Gun information is large and hard to summarize. For a good idea on gun values, [read the types](https://github.com/yolkorg/yolkbot/blob/main/src/types/constants/guns.d.ts).
 
 ### Items
-Items are a giant array. Like, a really giant array. Yoinked directly from the game source.
+This is a VERY large array of all items in the game. This includes hats, stamps, gun items, grenades, melee items, etc.
 
 ```js
 import { Items } from 'yolkbot/constants/items';
 ```
-
-Items are a large thing I don't want to document. I'm documenting yolkbot, not shell. [Read the code.](https://github.com/yolkorg/yolkbot/blob/main/src/constants/items.js)
 
 You can use the `findItemById` constant from `yolkbot/constants`:
 
@@ -118,14 +117,38 @@ Example item:
 }
 ```
 
+Item Structure:
+
+```ts
+interface Item {
+    id: number;
+    name: string;
+    price: number;
+    item_type_id: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+    item_type_name: 'Hat' | 'Stamp' | 'Primary' | 'Secondary' | 'Melee' | 'Grenade';
+    exclusive_for_class: null | 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    item_data: {
+        meshName: string;
+        tags: string[];
+    };
+    is_available: boolean;
+    unlock: 'default' | 'purchase' | 'physical' | 'manual' | 'premium' | 'vip';
+    align: {
+        x: number;
+        y: number;
+        z: number;
+    };
+}
+```
+
+<Note>If you bundle yolkbot somewhere, we recommend you use a tool like `bun patch` to patch out the `findItemById` to not import the items file at all unless you actually need it. The items file is nearly 1MB, which is INSANE to import and makes bundle sizes spike.</Note>
+
 ### Maps
-Maps are ALSO a giant array. Yoinked directly from the game source.
+This is a large array of all maps in the game.
 
 ```js
 import { Maps } from 'yolkbot/constants/maps';
 ```
-
-I'm not documenting the Map object either. It's briefly covered when discussing the Matchmaker in the [Bot](../bot/bot) guide. [Read the code.](https://github.com/yolkorg/yolkbot/blob/main/src/constants/maps.js)
 
 Example map:
 
@@ -143,4 +166,166 @@ Example map:
     "availability": "both",
     "numPlayers": "18"
 }
+```
+
+Map Structure:
+
+```ts
+interface Map {
+    filename: string;
+    hash: string;
+    name: string;
+    modes: {
+        FFA: boolean;
+        Teams: boolean;
+        Spatula: boolean;
+        King?: boolean;
+    };
+    availability: string;
+    numPlayers: string;
+}
+```
+
+### Challenges
+This is an array of all challenges in the game.
+
+```js
+import { Challenges } from 'yolkbot/constants/challenges';
+```
+
+Example challenge:
+
+```json
+{
+    "id": 1,
+    "loc_ref": "chlg_kill_streak_five",
+    "type": 0,
+    "subType": 0,
+    "period": 0,
+    "goal": 1,
+    "reward": 100,
+    "conditional": 0,
+    "value": "5",
+    "valueTwo": null,
+    "tier": 2,
+    "loc": {
+        "title": "Master Chef",
+        "desc": "Get a 5 killstreak"
+    }
+}
+```
+
+Challenge Structure:
+
+```ts
+interface Challenge {
+    id: number;
+    loc_ref: string;
+    type: number;
+    subType: number;
+    period: number;
+    goal: number;
+    reward: number;
+    conditional: number;
+    value: string;
+    valueTwo: string | null;
+    tier: number;
+    loc: {
+        title: string;
+        desc: string;
+    }
+}
+```
+
+### Changelog
+This is a list of all changes, which is used for the ingame changelog.
+
+```js
+import { Changelog } from 'yolkbot/constants/changelog';
+```
+
+Example changelog entry:
+
+```json
+{
+    "version": "1.0.1",
+    "date": "May 1 2025",
+    "content": [
+        "Lock in & look out eggventurers, it's time for the Leggacy of the Sun update!",
+        "Congrats to the winners of the EGG ORG takeover - all players have been awarded an Eggsassin Stamp!",
+        "We liked random killstreak bonuses so much we decided to keep them!",
+        "Eggiana Jones has arrived - the newest item bundle featuring a cracking new melee!",
+        "Throw Throw Apocalypto! Try the latest Premium Mayan Grenade - in-store & free for VIPs ",
+        "We got a hot one! Try the latest map Greenhouse in public & private lobbies",
+        "The Public Map pool has been overhauled! The Egg Org Maps are gone, replaced by a range of Mayan maps & old favorites!"
+    ]
+}
+```
+
+Changelog Structure:
+
+```ts
+interface ChangelogEntry {
+    version: string;
+    date: string;
+    content: string[];
+}
+```
+
+### CommCodes
+This is a list of all of the CommCodes. This is especially useful, considering how Shell has started minifying them.
+
+```js
+import { CommCode } from 'yolkbot/constants/codes';
+```
+
+Usage:
+
+```js
+CommCode.syncMe
+CommCode.syncThem
+CommCode.requestRespawn
+// etc
+```
+
+### Language
+This is an index of all of the English language strings in the game. This is used for localization.
+
+```js
+import { Language } from 'yolkbot/constants/language';
+```
+
+### House Promo
+"House Promo" refers to the various promotional images around the game, usually on the homescreen (hence the word "house"). It promotes other BWD games, BWD socials, and various other things. It also has the Shell logo variations.
+
+```js
+import { HousePromo } from 'yolkbot/constants/housePromo';
+```
+
+### ShellNews
+This is an index of all of the things that appear in the news panel.
+
+```js
+import { ShellNews } from 'yolkbot/constants/shellNews';
+```
+
+### ShellYoutube
+This is an index of all of the YouTube videos shown on the homescreen.
+
+```js
+import { ShellYoutube } from 'yolkbot/constants/shellYoutube';
+```
+
+### ShopItems
+This is an index of all of the items in the shop. This seems to include bundles.
+
+```js
+import { ShopItems } from 'yolkbot/constants/shopItems';
+```
+
+### Sounds
+This is an index of all ingame sounds.
+
+```js
+import { Sounds } from 'yolkbot/constants/sounds';
 ```

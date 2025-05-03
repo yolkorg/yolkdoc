@@ -98,6 +98,18 @@ This is an object that stores account information.
     - `bot.account.stats.lifetime` - lifetime stats
     - structure for both: [click](https://github.com/yolkorg/yolkbot/blob/cebc489c180240773905a1159024b1a0907e4b7b/src/types/bot.d.ts#L26C1-L62C2)
     - requires `STATS` [intent](./intents)
+- `bot.account.challenges` - an array of challenges, each challenge has the following props:
+    - `id` - the id of the challenge as seen in the Challenge constant
+    - `name` - the name of the challenge
+    - `desc` - the description of the challenge
+    - `rewardEggs` - the egg number reward of the challenge
+    - `isRerolled` - if the challenge was rerolled
+    - `isClaimed` - if the challenge was claimed
+    - `isCompleted` - if the challenge was completed
+    - `progressNum` - the current progress of the challenge
+    - `goalNum` - the goal of the challenge
+    - `raw` - raw data, might have a couple extra properties
+    - requires `CHALLENGES` [intent](./intents)
 
 ## Chikn Winner
 These methods allow you to play Chikn Winner.
@@ -144,6 +156,8 @@ It may also return a string, which is one of these errors:
 - `session_expired` - the bot's session expired, usually because the bot's account was deleted due to bot detection
 - `unknown_error` - an unknown error returned by shell - create an issue on github with the content in the console
 
+You can also pass `true` to the first parameter, which can sometimes fix issues with false cooldown calculation. If you don't have any issues with this, leave it as-is.
+
 ### [async] bot.resetChiknWinner
 Allows you to reset Chikn Winner for 200 eggs if you have hit the daily limit.
 
@@ -153,3 +167,30 @@ It may also fail, returning one of these errors:
 - `not_at_limit` - the bot is not at the limit for the day, and you should play normally
 - `not_enough_eggs` - the bot does not have enough eggs to reset
 - `unknown_error` - an unknown error returned by shell - create an issue on github with the content in the console
+
+## Challenges
+These methods all require the `CHALLENGES` [intent](./intents) to be enabled.
+
+### [async] bot.refreshChallenges
+Refreshes the challenges for the account. This will return the challenges, which is an array of challenges. See `bot.account.challenges` for more information.
+
+### [async] bot.claimChallenge
+Claims a completed challenge. This will return the egg reward and the updated challenge list.
+
+```js
+const firstChallengeId = bot.account.challenges[0].id; // must have been completed
+const result = await bot.claimChallenge(firstChallengeId);
+
+console.log('the bot got', result.eggReward, 'eggs');
+console.log('the bot now has', bot.account.eggBalance, 'eggs');
+console.log('updated challenge list', result.updatedChallenges);
+```
+
+### [async] bot.rerollChallenge
+Rerolls a challenge that has not yet been completed. This will return the updated challenge list.
+
+```js
+const firstChallengeId = bot.account.challenges[0].id; // must not have been completed
+const result = await bot.rerollChallenge(firstChallengeId);
+console.log('updated challenge list', result);
+```

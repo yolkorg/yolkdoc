@@ -1,0 +1,53 @@
+---
+title: "Map Utilities"
+description: "yolkbot/util provides various map-related utilities."
+---
+
+yolkbot/util provides various map-related utilities. These are useful for things that would usually take a few extra lines to do yourself.
+
+### fetchMap
+This fetches a map from the game and returns it. This is useful for getting map data without having to do it yourself.
+
+It will store maps in `~/.yolkbot/maps` (your homedir). It bases maps off their hashes, which change if the maps change. Hashes are provided by shell. If you call `fetchMap` with a map that is in the map cache, it will return the cached map instead of fetching it again. You can bypass this by passing a random string (i.e. `Math.random().toString()`) as the second argument.
+
+```js
+import { fetchMap } from 'yolkbot/util';
+
+const map = await fetchMap('Greenhouse', 'jd29d92d'); // name, hash
+console.log(map); // ==> { name: 'Greenhouse', hash: 'jd29d92d' ... }
+```
+
+### initKotcZones
+This initializes the KOTC zones on a mapData. This is for advanced users who want to get custom KOTC zones for a map.
+
+This is called internally by yolkbot and stored in `bot.game.map.zones`. You should not need to call this yourself unless you are creating an advanced program.
+
+It takes an input of an array of `DYNAMIC.capture-zone.none` cells (so an array of x/y/z objects) and returns an array similar to this:
+
+```js
+const result = [
+    [
+        { x: 0, y: 0, z: 0 },
+        { x: 1, y: 1, z: 1 },
+        { x: 2, y: 2, z: 2 }
+    ],
+    [
+        { x: 3, y: 3, z: 3 },
+        { x: 4, y: 4, z: 4 },
+        { x: 5, y: 5, z: 5 }
+    ]
+]
+```
+
+This continues. The `activeZone` prop refers to a result index, so if `activeZone` is `0`, the cells included in the coop are `result[0]`.
+
+For example, to run this on Greenhouse:
+
+```js
+import { fetchMap, initKotcZones } from 'yolkbot/util';
+
+const map = await fetchMap('Greenhouse', 'jd29d92d');
+const zones = initKotcZones(map.data['DYNAMIC.capture-zone.none']);
+
+console.log(zones); // ==> [ [ { x: 0, y: 0, z: 0 }, ... ], [ { x: 3, y: 3, z: 3 }, ... ] ]
+```
