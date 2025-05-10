@@ -53,6 +53,3 @@ The good part! Here are all of the dispatches:
 Each of these has their own file to explain what checks are ran and the function in a deeper form.
 
 In the end, dispatches are fairly simple - check they can run and run them!
-
-> [!NOTE]
-> If there are 50 pending dispatches that are all returning `false` for their checks, the bot will start logging a warning to the console. This is to prevent the bot from getting stuck in a loop of checking dispatches that will never run. If you see this warning, it means that you really need to check your code and see why the dispatches are not running. It cannot be turned off, since you're likely to run out of memory if you are checking for 50+ dispatches 30 times a second (1500 dispatch checks/second).
