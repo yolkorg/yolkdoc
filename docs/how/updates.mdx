@@ -3,7 +3,7 @@ title: "Updates"
 description: "The update loop is how the bot processes the game."
 ---
 
-The update loop is how the bot processes the game. It's a loop that runs every few milliseconds and updates the game state. This is how we make sure that things actually work. If you want to look at a player, fire your gun, and reload, you'd have to call three dispatches:
+The update loop is how the bot processes the game. It's a loop that runs every ~33ms (100/3ms) and updates the game state. This is how we make sure that things actually work. If you want to look at a player, fire your gun, and reload, you'd have to call three dispatches:
 
 ```js
 bot.dispatch(new LookAtDispatch(0));
@@ -11,27 +11,8 @@ bot.dispatch(new FireDispatch());
 bot.dispatch(new ReloadDispatch());
 ```
 
-This will, in order, look at the player, fire the gun, and reload the gun. We accomplish this by having one dispatch at a time. The update loop will process the first dispatch, then the second, and so on. If you throw a chat message in there, it'll be processed in between whichever events. Dispatches are synchronous, so they will all be instantly queued and ran at the appropriate time. This is very similar to Shell's internal game, where there is an update loop that runs every 33.333 milliseconds.
+Dispatches all run at the same time. If a dispatch can be run, it is instantly run. This is why we recommend binding changes to something like the `tick` event.
 
-You can control how the update loop runs by passing arguments when you create a bot:
+Every 3 updates, the bot will send a `syncMe` packet to the server that updates the bot's position, yaw, pitch, fires the gun, etc. Hence, the bot syncs things every 100 milliseconds, or 10 times a second.
 
-```js
-const bot = new ShellBot({
-    updateInterval: 10,
-    doUpdate: true
-});
-```
-
-The `updateInterval` controls how often the bot updates. By default, it updates every 10 milliseconds. This is around 3x faster than Shell's native update loop, which allows dispatches to fire in a more timely manner. Since the above example with the firing & reloading goes in order, that means that it woud logically take around 30 milliseconds to complete each dispatch. We don't need to worry about the bot reloading before it's finished firing, as the game servers will queue events. Similarly, you can call a `SpawnDispatch` anytime you want, and the server will execute it once the conditions meet for your respawning.
-
-Additionally, `doUpdate` is by default `true`, which keeps the bot automatically updating. If you want the bot to update to match specific conditions or other events, you can set `doUpdate` to `false` and manually update the bot when you want.
-
-```js
-const bot = new ShellBot({
-    doUpdate: false
-});
-
-bot.update();
-```
-
-Every time you call `update`, the bot will...update...how shocking...
+Updates run automatically, and are considered so critical that they *cannot be turned off*.
