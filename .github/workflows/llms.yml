@@ -5,10 +5,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  scrape:
+  update-llms:
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
+
     steps:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
