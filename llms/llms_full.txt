@@ -1,0 +1,2490 @@
+yolkbot is an npm library that provides an API for bot making on shellshock.io (Shell Shockers).
+
+## Introduction
+### yolkbot in an eggshell...get it??
+### introduction.mdx
+
+yolkbot is a highly efficient, easy-to-use bot system for Shell Shockers. It's designed to be as simple as possible, while still being powerful enough to have 100% coverage (meaning it does literally everything in the game).
+
+yolkbot was created by 1ust (hi, that's me) to solve 3 problems:
+
+1. Shell Shockers is a game that is constantly changing, and the bots need to be able to adapt to those changes.
+  - In the past, bots have been created that are too slow to adapt to the changes in the game, or are too complex to be able to adapt at all.
+  - yolkbot fixes this issue by simply making everything flexible internally while automatically updating crucial data (like maps, items, etc.) when the game changes.
+2. Shell Shockers bots require hundreds of lines of code to do simple things, like joining a game.
+  - yolkbot fixes this issue by creating a unified way to create bots that can do anything in the game with just a few lines of code.
+  - Furthermore, yolkbot covers **100%** of the game, meaning you can do anything from creating a bot that farms eggs, to a bot that plays chikn winner, to a bot that redeems codes from Twitch chat - all under 50 lines of code.
+3. Shell Shockers needs a global botting library.
+  - yolkbot fixes this issue by creating a global botting library that can be used for any purpose.
+  - yolkbot is public! This means that anyone can use it, and anyone can contribute to it. This is a huge step forward for the Shell Shockers community, and I hope that you will join us in making yolkbot the best (and only) botting library for Shell Shockers.
+
+<Note>I know that no one wants to read 100 pages of documentation. There *are* a lot of pages, but most of them are short, and I try to make them somewhat entertaining with bad humor while throwing the information at your face.</Note>
+
+I'm always ready to see what you create, so join me on [Discord](https://discord.gg/gYugVUCaMr) and get started below! 🥳
+
+----------------------
+
+## Quickstart
+### Get started with yolkbot in just a few minutes!
+### quickstart.mdx
+
+You can install yolkbot using whatever package manager supports your needs. We heavily recommend using **bun** or **pnpm**.
+
+<Note>We also support the browser! This guide doesn't help you much in terms of browser usage, so we recommend you read [the browser guide](../how/browser) if you want to use yolkbot in the browser.</Note>
+
+<CodeGroup>
+
+```sh npm
+npm install yolkbot@latest
+```
+
+```sh pnpm
+pnpm install yolkbot@latest
+```
+
+```sh bun
+bun add yolkbot@latest
+```
+
+</CodeGroup>
+
+You can also choose to use the alpha version, where we test features still in development. This is not recommended for production use, and should be used if you have a specific feature you want to use. Install `yolkbot@alpha` to help us out with testing!
+
+<Note>We only use one package, `yolkbot` -- do not install any others, as they are not supported and may lead to you being hacked. The legacy `yolkbot-alpha` package is no longer supported.</Note>
+
+Once you have yolkbot installed, you can create a new bot in just a few lines of code. Here's an example of a simple bot that joins a game an logs when players join:
+
+```js
+import Bot from 'yolkbot/bot';
+
+const bot = new Bot();
+
+bot.on('playerJoin', (player) => {
+    console.log(`${player.name} joined the game!`);
+});
+
+await bot.join('my bot name', 'game-code-here');
+```
+
+It's that easy! From here, you can learn how the bot works by reading the following key pages:
+
+- [Dispatches](../how/dispatches)
+- [Hooks](../how/hooks)
+- [Updates](../how/updates)
+
+These are the three main things you need to know about yolkbot, and will help you understand how to create a bot that does exactly what you want it to do. If you have any questions, feel free to ask in our [Discord](https://discord.gg/gYugVUCaMr)!
+
+----------------------
+
+## Browser Use
+### yolkbot can be used in the browser!
+### browser.mdx
+
+yolkbot can be used in the browser, which allows you to use the biggest parts of yolkbot!
+
+The only thing that changes between Node.JS and the browser is how modules are imported. Since you can't directly just import a pacakge name, you have to use a CDN to access it. Our recommended one is `esm.sh`. For example:
+
+```js
+import Bot from 'yolkbot/bot'; // ❌ this won't work in the browser
+let { Bot } = await import('https://esm.sh/yolkbot@latest/browser'); // ✅ this is the proper method of browser importing
+```
+
+<Note>You may notice the brackets around the Bot in the correct example. **This is how you import things in the browser**. For anything, put brackets around it. Instead of `import Matchmaker from ...`, use `let { Matchmaker } = await ...`. This avoids some ugly bugs.</Note>
+
+Imports in the browser all come from one file, `https://esm.sh/yolkbot@latest/browser`, which is the browser bundle of yolkbot.
+
+```js
+let { Bot, Matchmaker } = await import('https://esm.sh/yolkbot@latest/browser');
+```
+
+To import Dispatches, either destructure the dispatches object:
+
+```js
+// this will give you access to Bot, ChatDispatch, and SpawnDispatch
+let { Bot, Dispatches: { ChatDispatch, SpawnDispatch } } = await import('https://esm.sh/yolkbot@latest/browser');
+
+bot.dispatch(new ChatDispatch());
+```
+
+Or import the dispatches object directly and refer to it:
+
+```js
+let { Bot, Dispatches } = await import('https://esm.sh/yolkbot@latest/browser');
+
+bot.dispatch(new Dispatches.ChatDispatch());
+```
+
+## Import List
+These are all the things that can be imported.
+
+```js
+let {
+    Bot, // the Bot class
+    GamePlayer, // represents an empty bot.player object, only useful for typing
+
+    Matchmaker, // the Matchmaker class
+
+    Dispatches, // the Dispatches object with each dispatch, use Dispatches.ChatDispatch
+
+    // or destructure dispatches!
+    Dispatches: {
+        ChatDispatch, // this would let you refer to ChatDispatch without the "Dispatches." prefix
+        SpawnDispatch // this would let you refer to SpawnDispatch without the "Dispatches." prefix
+    },
+
+    // you can do the same destructuring thing with all of the things like API, Comm, etc that are objects
+
+    API, // the API object with each API function, use API.loginAnonymously, API.loginWithCredentials, etc
+    Comm, // the Comm object with each comm class, use Comm.CommIn, Comm.CommOut, Comm.Code, etc
+    Packet, // the Packet object with each packet class, use Packet.BootPacket, Packet.ChatPacket, etc
+
+    Constants, // all of the constants, use Constants.IsBrowser, Constants.GunList, etc
+    Guns, // all of the guns: Eggk-47, Scrambler, etc
+    Items, // the item array
+    Maps // the map array
+} = await import('https://esm.sh/yolkbot@latest/browser');
+```
+
+Somewhat simple.
+
+## Patching out items
+Items take up a TON of space in a bundle, and if you don't use the `COSMETIC_DATA` intent, there's no reasomn to bundle them. We recommend you use a tool like [Bun](https://bun.sh/) to patch out the items from the bundle. This will make your bundle size much smaller, and make it easier to load in the browser.
+
+Here's an example patch file:
+
+```patch
+diff --git a/dist/constants/findItemById.js b/dist/constants/findItemById.js
+index c9f05c9487ae21ea4fc1ee17b387e14395daa639..e7eac0dcad66d8884655c43103b19d1e113f5470 100644
+
+
+----------------------
+
+## YolkLab
+### yolkbot uses tests to make sure the codebase works. These can help you!
+### yolklab.mdx
+
+Anytime we change something related to, say, movement, we run the `move.test.js` file to make sure movement still works cleanly. If we change big things, we run all of the test files to make sure the code works cleanly. These test files document usage of the codebase, and are a great way to see examples of `yolkbot` - it's literally `yolkbot` in action! By this point, there's a test that contains nearly every dispatch, and other dispatches have examples of how to listen for things, or check attributes on the `bot`.
+
+Tests are named so that you can figure out what they do easily. You can find all of the tests in the `labs/` folder on:
+
+https://github.com/yolkorg/yolklab
+
+Tests are SUPER great for beginners since they provide really nice examples that are broken down and easy to read/figure out. Try reading some, they make any Bot incredibly easy to understand.
+
+----------------------
+
+## Types
+### yolkbot has Typescript support!
+### types.mdx
+
+yolkbot has (almost) full Typescript support! This means that you can use yolkbot in a Typescript project and get full type checking and intellisense. IDEs like VSCode will support yolkbot's types and autocomplete things even if you use Javascript, making it easier to write code.
+
+### Supported Types
+All of these modules are fully typed!
+
+- `yolkbot/api`
+- `yolkbot/bot`
+- `yolkbot/comm/*`
+- `yolkbot/constants/*`
+- `yolkbot/dispatch/*`
+- `yolkbot/matchmaker`
+- `yolkbot/socket`
+- `yolkbot/util`
+
+Types are bundled in the package; there is no need to install them separately. `@types/yolkbot` doesn't exist for this reason.
+
+We've slowly typed everything and then checked everything throughout various projects. Types are 99% accurate, and we're always testing and finding any issues.
+
+<Note>The browser edition of yolkbot does not contain types. This is because the browser edition is a single file that is not compiled with Typescript. If you want to use types, you must use the Node edition.</Note>
+
+<Note>Pathfinding is not typed. It's too much of a headache, and I've never needed it in a Typescript project, so I've neber added types.</Note>
+
+----------------------
+
+## Dispatches
+### Dispatches are how you command you bot to...do something!
+### dispatches.mdx
+
+Dispatches are how you tell the bot to do something.
+
+```js
+import SpawnDispatch from 'yolkbot/dispatch/SpawnDispatch';
+
+bot.dispatch(new SpawnDispatch());
+```
+
+## Dispatch Checks
+Dispatches will always run a check to see if they can occur. This check just returns `true` or `false`.
+
+```js
+import SpawnDispatch from 'yolkbot/dispatch/SpawnDispatch';
+
+const spawnDispatch = new SpawnDispatch();
+
+if (spawnDispatch.check(bot)) {
+    bot.dispatch(spawnDispatch);
+}
+```
+
+If the check returns `true`, the dispatch will be instantly executed. If the check returns `false`, the dispatch will be saved and the bot will check every ~33ms for the Dispatch to return `true`. Once it returns `true`, the dispatch will be removed from the queue and executed.
+
+## Dispatch List
+The good part! Here are all of the dispatches:
+
+- [BootPlayerDispatch](../dispatches/bootPlayer) - boot a player from a private room
+- [ChatDispatch](../dispatches/chat) - send a chat message
+- [FireDispatch](../dispatches/fire) - fire the gun
+- [GameOptionsDispatch](../dispatches/gameOptions) - change game settings in private rooms
+- [GoToAmmoDispatch](../dispatches/goToAmmo) - go to the nearest ammo pickup
+- [GoToCoopDispatch](../dispatches/goToCoop) - go to the coop
+- [GoToGrenadeDispatch](../dispatches/goToGrenade) - go to the nearest grenade pickup
+- [GoToPlayerDispatch](../dispatches/goToPlayer) - go to a specified player
+- [GoToSpatulaDispatch](../dispatches/goToSpatula) - go to the spatula
+- [LookAtDispatch](../dispatches/lookAt) - look at a player
+- [LookAtPosDispatch](../dispatches/lookAtPos) - look at a position
+- [MeleeDispatch](../dispatches/melee) - use the melee
+- [MovementDispatch](../dispatches/movement) - move!!
+- [PauseDispatch](../dispatches/pause) - pause the game (clicking esc)
+- [ReloadDispatch](../dispatches/reload) - reload the gun
+- [ReportPlayerDispatch](../dispatches/reportPlayer) - report someone
+- [SaveLoadoutDispatch](../dispatches/saveLoadout) - change your gun & skins
+- [SwapWeaponDispatch](../dispatches/swapWeapon) - swap between primary & secondary
+- [SwitchTeamDispatch](../dispatches/switchTeam) - switch your team
+- [ThrowGrenadeDispatch](../dispatches/throwGrenade) - throw a grenade
+
+Each of these has their own file to explain what checks are ran and the function in a deeper form.
+
+In the end, dispatches are fairly simple - check they can run and run them!
+
+----------------------
+
+## Hooks
+### Hooks are how you find out what's going on in game!
+### hooks.mdx
+
+Hooks are how you find out what's going on in game. They are called when certain events happen, and you can use them to do things like log information, send messages, or even dispatch other actions.
+
+If you've ever used Discord.JS or some other library with a `.on` system, that's what a hook is, we just needed a creative name for it.
+
+```js
+bot.on('playerJoin', (player) => {
+    console.log(`${player.name} has joined the game!`);
+});
+```
+
+## Hook List
+Each hook has a basic example and description of usage.
+
+- [authFail](#authfail)
+- [authSuccess](#authsuccess)
+- [balanceUpdate](#balanceupdate)
+- [banned](#banned)
+- [challengeComplete](#challengecomplete)
+- [chat](#chat)
+- [close](#close)
+- [collectAmmo](#collectammo)
+- [collectGrenade](#collectgrenade)
+- [gameForcePause](#gameforcepause)
+- [gameOptionsChange](#gameoptionschange)
+- [gameReady](#gameready)
+- [gameReset](#gamereset)
+- [gameStateChange](#gamestatechange)
+- [grenadeExploded](#grenadeexploded)
+- [packet](#packet)
+- [pingUpdate](#pingupdate)
+- [playerBeginStreak](#playerbeginstreak)
+- [playerChangeCharacter](#playerchangecharacter)
+- [playerChangeGun](#playerchangegun)
+- [playerDamaged](#playerdamaged)
+- [playerDeath](#playerdeath)
+- [playerFire](#playerfire)
+- [playerJoin](#playerjoin)
+- [playerLeave](#playerleave)
+- [playerMelee](#playermelee)
+- [playerPause](#playerpause)
+- [playerReload](#playerreload)
+- [playerRespawn](#playerrespawn)
+- [playerSwapWeapon](#playerswapweaon)
+- [playerSwitchTeam](#playerswitchteam)
+- [playerThrowGrenade](#playerthrowgrenade)
+- [quit](#quit)
+- [rocketHit](#rockethit)
+- [selfDamaged](#selfdamaged)
+- [selfMoved](#selfmoved)
+- [selfRespawnFail](#selfrespawnfail)
+- [selfShieldHit](#selfshieldhit)
+- [selfShieldLost](#selfshieldlost)
+- [spawnItem](#spawnitem)
+- [tick](#tick)
+
+They are not individual files. I'm too lazy to create all of them!
+
+## Hooks
+This is the entire list. My fingers will probably hurt.
+
+### authFail
+This is called when the authentication flow fails.
+
+- `reason` is a valid reason:
+    - `bad_json` - auth returned a bad JSON - usually out of your control, check console for errors
+    - `firebase_no_credentials` - you did not pass a valid email or password
+    - `firebase_no_token` - firebase didn't return an ID token, check console for info
+    - `firebase_too_many_retries` - attempting to get auth info failed over 5 times
+    - `services_closed_early` - the game websocket closed before sending back auth info - usually out of your control
+    - `unknown_socket_error` - the websocket itself errored, usually out of your control
+
+```js
+bot.on('authFail', (reason) => {
+    console.log('ah, shoot. auth failed with reason', reason);
+});
+```
+
+### authSuccess
+This is called when the authentication flow succeeds.
+
+- `account` is the account object (see [Bot](../bot/bot).account)
+
+```js
+bot.on('authSuccess', (account) => {
+    console.log('bot authenticated successfully!');
+    console.log('account:', account);
+});
+```
+
+### balanceUpdate
+This is called when the bot's egg balance updates, likely due to the bot killing someone.
+
+- `oldBalance` is a number
+- `newBalance` is a number
+
+```js
+bot.on('balanceUpdate', (oldBalance, newBalance) => {
+    console.log(`bot's balance was ${oldBalance}, now it's ${newBalance}`);
+    console.log(`the bot gained ${newBalance - oldBalance} eggs!`);
+});
+```
+
+### banned
+This is called when the bot is banned and cannot complete authentication. If you get this event, the Bot can't be further used.
+
+- `banRemaining` is a string in the format `HH:MM:SS`
+
+```js
+bot.on('banned', (banRemaining) => {
+    console.log(`bot is banned for ${banRemaining}, and cannot authenticate. RIP`);
+});
+```
+
+### challengeComplete
+This is called when a challenge is completed.
+
+- `player` - the player that completed the challenge
+    - if the bot is in a game, this will be a GamePlayer object
+    - if the bot is not in a game, this will be `bot.account`
+- `challenge` - the challenge ID number
+    - if the `CHALLENGES` intent is enabled AND the player is the bot, this will be from `bot.account.challenges`
+
+```js
+bot.on('challengeCompleted', (player, challenge) => {
+    if (player.id == bot.me.id) console.log(`${player.name} completed challenge ${challenge}!`);
+    else console.log(`someone else completed challenge ${challenge}!`);
+});
+```
+
+### chat
+This is called when a chat message is sent in the game.
+
+- `player` is a Player object
+- `message` is a string
+- `flags` is a number
+
+```js
+bot.on('chat', (player, message, flags) => {
+    if (player) console.log(`${player.name} said: ${message}`);
+    else if (flags === 255) console.log(`<SERVER (probably Harrison)> ${message}`);
+    else if (flags === 254) console.log(`<Mod> ${message}`);
+    else console.log(`Unknown sourced chat message: ${message}`);
+});
+```
+
+### close
+This is called when the bot's connection to the game is closed.
+
+- `code` is a number
+
+```js
+bot.on('close', (code) => {
+    console.log('bot has disconnected from the game with code', code);
+});
+```
+
+You can compare this to the `CloseCode` [constant](../tools/constants).
+
+### collectAmmo
+This is called when a player collects an ammo pack.
+
+- `player` is a Player object
+- `weapon` is a Gun class (see [Gun](../tools/constants))
+
+```js
+bot.on('collectAmmo', (player, weapon) => {
+    console.log(`${player.name} collected ${weapon.ammo.pickup} ammo for their ${weapon.weaponName}!`);
+});
+```
+
+### collectGrenade
+This is called when a player collects a grenade.
+
+- `player` is a Player object
+
+```js
+bot.on('collectGrenade', (player) => {
+    console.log(`${player.name} collected a grenade, and now has ${player.grenades} grenades!`);
+});
+```
+
+### gameForcePause
+This is called when the game is forcibly paused. It's not horribly clear WHEN this is called.
+
+```js
+bot.on('gameForcePause', () => {
+    console.log('game has been forcibly paused, who knows why');
+});
+```
+
+### gameOptionsChange
+This is called when the game options change by a host in a private room.
+
+- `oldOptions` is an object (specifically [Bot](../bot/bot).game.options)
+- `newOptions` is an object (specifically [Bot](../bot/bot).game.options)
+
+```js
+bot.on('gameOptionsChange', (oldOptions, newOptions) => {
+    console.log('game options have changed!');
+    console.log('old options:', oldOptions);
+    console.log('new options:', newOptions);
+});
+```
+
+### gameReady
+This is called when the game is ready. You should usually send, say, a first spawn packet here.
+
+```js
+bot.on('gameReady', () => {
+    console.log('game is ready!');
+
+    // this is a good place to call a spawn dispatch
+    bot.dispatch(new SpawnDispatch());
+
+    // this is also a good place to call a change weapon dispatch
+    bot.dispatch(new SaveLoadoutDispatch({ gunId: 1 }));
+});
+```
+
+### gameReset
+This is called when the game is reset by the host. This is probably when `gameForcePause` is called.
+
+```js
+bot.on('gameReset', () => {
+    console.log('game has been reset!');
+});
+```
+
+### gameStateChange
+This is called when the game state changes. This is MAINLY used in the spatula & KOTC gamemodes, wich signify whe things like the spatula is dropped or someone starts/stops capturing a coop, among many other things.
+
+- `oldState` is an object (specifically [Bot](../bot/bot).game.state)
+- `newState` is an object (specifically [Bot](../bot/bot).game.state)
+
+```js
+bot.on('gameStateChange', (oldState, newState) => {
+    console.log(`game state has changed`);
+    console.log(`old state:`, oldState);
+    console.log(`new state:`, newState);
+});
+```
+
+The current game state can be accessed at any time with `bot.game.state`. The object is so large, documenting it here would be a headache. See the [Bot](../bot/bot) class for more information.
+
+### grenadeExploded
+This is called when a grenade explodes somewhere on the map.
+
+- `item` is an item (if the `COSMETIC_DATA` intent is enabled), and if not, it will be the item ID #
+- `pos` is an object with the `x`, `y`, and `z` properties
+- `damage` is a number
+- `radius` is a number (float)
+
+```js
+bot.on('grenadeExploded', (item, pos, damage, radius) => {
+    console.log(`a grenade exploded at ${pos}!`);
+    console.log(`it did ${damage} damage with a ${radius} radius`);
+});
+```
+
+### packet
+This is called when any packet is sent. It sends the raw packet, so you should create a `CommIn` and manually inspect it. Using this requires the [`Bot.Intents.PACKET_HOOK`](../bot/intents) intent.
+
+- `packet` is an encoded packet string
+
+```js
+bot.on('packet', (packet) => {
+    console.log('packet received!');
+});
+```
+
+If you are trying to get every event, you are much better off with [`bot.onAny`](../bot/bot).
+
+### pingUpdate
+This is called when the bot's ping updates.
+
+- `oldPing` is a number
+- `newPing` is a number
+
+```js
+bot.on('pingUpdate', (oldPing, newPing) => {
+    console.log(`bot's ping was ${oldPing}, now it's ${newPing}`);
+});
+```
+
+### playerBeginStreak
+This is called when a player begins a streak reward (2x damage, overheal, etc).
+
+- `player` is a Player object
+- `streak` is a value of the [`ShellStreaks`](../tools/constants) enum
+
+```js
+bot.on('playerBeginStreak', (player, streak) => {
+    console.log(`${player.name} has begun a ${streak} killstreak!`);
+});
+```
+
+### playerChangeCharacter
+This is called when a player changes their skin set.
+
+- `player` is a Player object
+- `oldCharacter` is an object (specifically [Bot](../bot/bot).game.players[player.id].character)
+- `newCharacter` is an object (specifically [Bot](../bot/bot).game.players[player.id].character)
+
+```js
+bot.on('playerChangeCharacter', (player, oldCharacter, newCharacter) => {
+    console.log(`${player.name} has changed their skins`);
+    console.log(`old skins:`, oldCharacter);
+    console.log(`new skins:`, newCharacter);
+});
+```
+
+### playerChangeGun
+This is called when a player changes their gun. The guns are a 0-6 index, with 0 being the eggk and 6 being the tri-hard (in order of gun list).
+
+- `player` is a Player object
+- `oldGun` is a number (0-6)
+- `newGun` is a number (0-6)
+
+```js
+bot.on('playerChangeGun', (player, oldGun, newGun) => {
+    console.log(`${player.name} has changed their gun`);
+    console.log(`old gun:`, oldGun);
+    console.log(`new gun:`, newGun);
+});
+```
+
+### playerDamaged
+This is called when a player is hurt (using gun/grenade/melee). It's not clear if this is when ANYONE hits a player, or when just the bot hits a player.
+
+- `player` is a Player object
+- `oldHp` is a number
+- `newHp` is a number
+
+```js
+bot.on('playerDamaged', (player, oldHp, newHp) => {
+    console.log(`${player.name} was hit! their health was ${oldHp}, now it's ${newHp}`);
+});
+```
+
+### playerDeath
+This is called when a player dies.
+
+- `player` is a Player object
+- `killer` is a Player object
+
+```js
+bot.on('playerDeath', (player, killer) => {
+    console.log(`${player.name} was killed by ${killer.name}`);
+});
+```
+
+### playerFire
+This is called when a player fires their gun.
+
+- `player` is a Player object
+- `weapon` is a Gun class (see [Gun](../tools/constants))
+
+```js
+bot.on('playerFire', (player, weapon) => {
+    console.log(`${player.name} fired their ${weapon.weaponName}!`);
+});
+```
+
+### playerJoin
+This is called when a player joins the game.
+
+- `player` is a Player object
+
+```js
+bot.on('playerJoin', (player) => {
+    console.log(`${player.name} has joined the game!`);
+});
+```
+
+### playerLeave
+This is called when a player leaves the game.
+
+- `player` is a Player object
+
+```js
+bot.on('playerLeave', (player) => {
+    console.log(`${player.name} has left the game, RIP :(`);
+});
+```
+
+### playerMelee
+This is called when a player melees. Damage is not sent, nor what players it hits.
+
+- `player` is a Player object
+
+```js
+bot.on('playerMelee', (player) => {
+    console.log(`${player.name} meleed!`);
+});
+```
+
+### playerPause
+This is called when a player pauses the game (clicks ESC).
+
+- `player` is a Player object
+
+```js
+bot.on('playerPause', (player) => {
+    console.log(`${player.name} has paused the game!`);
+});
+```
+
+### playerReload
+This is called when a player reloads their gun.
+
+- `player` is a Player object
+- `weapon` is a Gun class (see [Gun](../tools/constants))
+
+```js
+bot.on('playerReload', (player, weapon) => {
+    console.log(`${player.name} reloaded their ${weapon.weaponName}!`);
+});
+```
+
+### playerRespawn
+This is called when a player respawns.
+
+- `player` is a Player object
+
+```js
+bot.on('playerRespawn', (player) => {
+    console.log(`${player.name} has respawned!`);
+});
+```
+
+### playerSwapWeapon
+This is called when a player swaps their weapon (between primary and secondary).
+
+- `player` is a Player object
+- `nowActive` is a number (0 or 1)
+
+```js
+bot.on('playerSwapWeapon', (player, nowActive) => {
+    console.log(`${player.name} swapped to their ${nowActive == 0 ? 'primary' : 'secondary'} weapon!`);
+});
+```
+
+### playerSwitchTeam
+This is called when a player switches teams.
+
+- `player` is a Player object
+- `oldTeam` is a number (see the [`Teams`](../tools/constants) enum)
+- `newTeam` is a number (see the [`Teams`](../tools/constants) enum)
+
+```js
+bot.on('playerSwitchTeam', (player, oldTeam, newTeam) => {
+    console.log(`${player.name} switched from team ${oldTeam} to team ${newTeam}`);
+});
+```
+
+### playerThrowGrenade
+This is called when a player throws a grenade.
+
+- `player` is a Player object
+- `pos` is an object with the `x`, `y`, and `z` properties
+- `dir` is an object with the `x`, `y`, and `z` properties
+
+```js
+bot.on('playerThrowGrenade', (player, pos, dir) => {
+    console.log(`${player.name} threw a grenade at ${pos} with direction ${dir}`);
+});
+```
+
+### quit
+This is called when the bot is quit, either because the socket closes or `bot.quit()` is called.
+
+```js
+bot.on('quit', () => {
+    console.log('bot has left the game');
+});
+```
+
+### rocketHit
+This is called when a rocket hits a location and creates an explosion.
+
+- `pos` is an object with the `x`, `y`, and `z` properties
+- `damage` is a number
+- `radius` is a number (float)
+
+```js
+bot.on('rocketHit', (pos, damage, radius) => {
+    console.log(`a rocket hit at ${pos}!`);
+    console.log(`it did ${damage} damage with a ${radius} radius`);
+});
+```
+
+### selfDamaged
+This is called when the bot is hurt.
+
+- `oldHp` is a number
+- `newHp` is a number
+
+```js
+bot.on('selfDamaged', (oldHp, newHp) => {
+    console.log(`bot was hit! its health was ${oldHp}, now it's ${newHp}`);
+});
+```
+
+### selfMoved
+This is called when the bot moves.
+
+- `oldPos` is an object with the `x`, `y`, and `z` properties
+- `newPos` is an object with the `x`, `y`, and `z` properties
+
+```js
+bot.on('selfMoved', (oldPos, newPos) => {
+    console.log(`bot moved from ${oldPos} to ${newPos}`);
+});
+```
+
+### selfRespawnFail
+This is called when the bot fails to respawn. This ideally should never be called, as our dispatch checks should stop this from happening.
+
+```js
+bot.on('selfRespawnFail', () => {
+    console.log(`bot failed to respawn!`);
+});
+```
+
+### selfShieldHit
+This is called when the bot's shield is hit.
+
+- `oldShield` is a number
+- `newShield` is a number
+
+```js
+bot.on('selfShieldHit', (oldShield, newShield) => {
+    console.log(`bot's shield was hit! its shield was ${oldShield}, now it's ${newShield}`);
+});
+```
+
+### selfShieldLost
+This is called when the bot's shield is lost.
+
+```js
+bot.on('selfShieldLost', () => {
+    console.log(`bot's shield was lost!`);
+});
+```
+
+### spawnItem
+This is called when an ammo pack or grenade is spawned in the game. The types are the numeric values of the `CollectTypes`.
+
+```js
+bot.on('spawnItem', (type, _id, pos) => {
+    console.log('a', type, 'spawned at', pos);
+})
+```
+
+### tick
+This is called everytime an update fires. This is called incredibly often.
+
+```js
+bot.on('tick', () => {
+    console.log('tick!');
+});
+```
+
+----------------------
+
+## Updates
+### The update loop is how the bot processes the game.
+### updates.mdx
+
+The update loop is how the bot processes the game. It's a loop that runs every ~33ms (100/3ms) and updates the game state. This is how we make sure that things actually work. If you want to look at a player, fire your gun, and reload, you'd have to call three dispatches:
+
+```js
+bot.dispatch(new LookAtDispatch(0));
+bot.dispatch(new FireDispatch());
+bot.dispatch(new ReloadDispatch());
+```
+
+Dispatches all run at the same time. If a dispatch can be run, it is instantly run. This is why we recommend binding changes to something like the `tick` event.
+
+Every 3 updates, the bot will send a `syncMe` packet to the server that updates the bot's position, yaw, pitch, fires the gun, etc. Hence, the bot syncs things every 100 milliseconds, or 10 times a second.
+
+Updates run automatically, and are considered so critical that they *cannot be turned off*.
+
+----------------------
+
+## Bot Class
+### This is a generic Bot.
+### bot.mdx
+
+```js
+import Bot from 'yolkbot/bot';
+```
+
+You can create one using the standard constructor format:
+
+```js
+const bot = new Bot();
+```
+
+The constructor has one parameter, which is an object with configuration. The configuration object can have the following properties:
+
+```js
+const bot = new Bot({
+    intents: [], // an array of intents - see Intents section below
+
+    proxy: 'socks4://69.69.69.69:4200', // a socks4 OR socks5 proxy url for the bot
+    instance: 'eggboy.xyz', // the instance of Shell Shockers to connect to, default "shellshock.io"
+    protocol: 'wss', // the protocol to use, default "wss" (for secure websockets)
+})
+```
+
+From there, you can use the various methods and attributes of the bot.
+
+All of these have a default value. If you're not sure what to do, you can just create a bot with `new Bot()` and it will work fine:
+
+```js
+const bot = new Bot();
+```
+
+The entire bot file got too large, so it's been split up into a ton of smaller files.
+
+You should read the following file in full:
+
+- [Intents](./intents) - an explanation of how to enable various features
+
+You should read the following files based on what you plan to use yolkbot for:
+
+- [Account Management](./account)
+- [Game Management](./game)
+
+If you become confused with dispatches, refer to the [dispatches](../how/dispatches) guide.
+
+## Hooks
+Hooks allow you to listen for various events and then (theoretically) do something with them. Note that some hooks aren't specific to the game, like the `banned` hook. 
+
+### bot.on
+This is how you listen to a [hook](../how/hooks) on the bot.
+
+```js
+bot.on('playerJoin', (player) => {
+    console.log('a player joined! say hi to ' + player.name);
+    // some custom logic might go here
+});
+```
+
+You can get a list of hooks in the [hook guide](../how/hooks).
+
+### bot.onAny
+This is how you add a listener to ALL hooks. Since this includes things like packets, ticks, and pings (which occur very frequently), this probably isn't good unless you're debugging issues.
+
+```js
+bot.onAny((eventName, data) => {
+    console.log('event ' + eventName + ' was called with data: ' + data);
+});
+```
+
+`data` is what would be passed to the specified event name. So, for a `playerJoin`, eventName = `playerJoin` and data = `playerThatJoined`.
+
+----------------------
+
+## Intents
+### Intents are various features the user can enable that are usually disabled for performance.
+### intents.mdx
+
+Intents are a way to enable specific features that are disabled by default for 1 of 2 reasons:
+
+1. They require extra API calls
+2. They are unusually intensive on your device
+
+Here's a list:
+
+- `Bot.Intents.STATS` - enables the bot to its stats
+- `Bot.Intents.CHALLENGES` - enables challenge tracking
+- `Bot.Intents.PATHING` - enables pathfinding logic
+- `Bot.Intents.PING` - enables pinging logic
+- `Bot.Intents.COSMETIC_DATA` - enables fetching of cosmetic data
+    - If this is not enabled, `bot.players[x].character` will not have items but rather item IDs.
+    - For example, `bot.players[x].character.hat` is usually an item ID. Enabling this makes it an item object.
+    - This is due to the resources searching through items takes (it's usually not worth it).
+- `Bot.Intents.PLAYER_HEALTH` - enables player health tracking
+    - health regen is currently VERY intensive on your computer
+    - `player[x].hp` will be occasionally updated without this, but it won't include health regeneration
+- `Bot.Intents.PACKET_HOOK` - enables the `packet` hook
+    - this is potentially intensive (we cba to check) so it's locked here
+- `Bot.Intents.LOG_PACKETS` - enables logging of all packets to the console
+    - only used for deep debugging
+- `Bot.Intents.NO_LOGIN` - disables the login process and authenticates with an empty session ID
+    - this will cause issues with the normal shell servers, you should probably never use this
+- `Bot.Intents.DEBUG_BUFFER` - helps you debug buffer issues (mostly for my dev use only)
+
+You can enable any intent by passing them in the `intents` array:
+
+```js
+const bot = new Bot({
+    intents: [
+        Bot.Intents.STATS,
+        Bot.Intents.CHALLENGES
+    ]
+});
+```
+
+You should **NEVER** blindly specify all intents! Many times, you will not need to do whatever the intent does. For example, if you're not using pathfinding, you should not enable the `Bot.Intents.PATHING` intent, or your computer will waste resources fetching and processing map data. Only enable the intents you need.
+
+----------------------
+
+## Account Stuff
+### You can control an account and do various tasks, from buying things in the shop to playing Chikn Winner.
+### account.mdx
+
+None of these methods require you to join a game.
+
+## Login Methods
+There are 4 ways to become authorized. These are all asynchronous and should be `await`ed. They also all return the same thing, which is either an error string or `bot.account`.
+
+### [async] bot.createAccount
+Creates an account with an email and password.
+
+```js
+await bot.createAccount('email@example.com', 'MyEpicPassword123!!');
+```
+
+### [async] bot.login
+Logs you into an account using an email and password. If you do not call this, joining a game will create and use an anonymous account.
+
+```js
+await bot.login('email@example.com', 'MyEpicPassword123!!');
+```
+
+### [async] bot.loginWithRefreshToken
+Logs you into an account using a Firebase refresh token.
+
+This is currently a method that does not violate Google's ToS (automation). It also works with Facebook, although no one uses Facebook. It could also be used for email/password, although it is technically less stable.
+
+To obtain a refresh token from Shell, run the following console script while logged into your account:
+
+```js
+const notLoggedIn = () => console.error('You do not appear to be logged in.');
+
+const request = indexedDB.open('firebaseLocalStorageDb');
+
+request.onsuccess = function(event) {
+    const db = event.target.result;
+    const transaction = db.transaction(['firebaseLocalStorage'], 'readonly');
+    const store = transaction.objectStore('firebaseLocalStorage');
+
+    const getAllKeysRequest = store.getAllKeys();
+
+    getAllKeysRequest.onsuccess = function() {
+        const getRequest = store.get(getAllKeysRequest.result[0]);
+
+        getRequest.onsuccess = function() {
+            window.copy = () => {
+                document.querySelector('#cp').remove();
+                navigator.clipboard.writeText(getRequest.result.value.stsTokenManager.refreshToken)
+            };
+            document.body.insertAdjacentHTML('beforeend', `<div style="position:absolute;top:0;left:0;width: 100%;height:100%;background:black;cursor:pointer;display:flex;justify-content:center;align-items:center;z-index:999999;" onclick="copy()" id="cp"><h1 style="color:white;font-family:'Nunito';font-weight:bold;">click me to copy token!</h1></div>`);
+        };
+
+        getRequest.onerror = () => notLoggedIn();
+    };
+
+    getAllKeysRequest.onerror = () => notLoggedIn();
+};
+
+request.onerror = () => notLoggedIn();
+```
+
+This will create a black screen with a white text that says "click me to copy token!". Clicking it will copy the refresh token to your clipboard. Then, put it into `loginWithRefreshToken`:
+
+```js
+await bot.loginWithRefreshToken('some-VeRy-L0ng-rAndomTexT-heRe');
+```
+
+### [async] bot.loginAnonymously
+Logs you into a guest/anonymous account. This is the default behavior if you do not call either of the above authorization functions and attempt to do something like joining a game.
+
+```js
+await bot.loginAnonymously();
+```
+
+## bot.account
+This is an object that stores account information.
+
+- `bot.account.id` - the id of the account
+- `bot.account.firebaseId` - the firebase id (for auth)
+- `bot.account.sessionId` - the session id (for auth)
+- `bot.account.session` - the session (for auth)
+- `bot.account.email` - the raw email of the account
+- `bot.account.password` - the raw password (plaintext, be careful) of the account
+- `bot.account.ownedItemIds` - the owned items' IDs
+- `bot.account.vip` - if the account is vip status
+- `bot.account.accountAge` - the age of the account in milliseconds
+- `bot.account.emailVerified` - if the account's email is verified
+- `bot.account.eggBalance` - the egg balance
+- `bot.account.cw` - cw status
+    - `bot.account.cw.atLimit` - if the account is at the limit for the day
+    - `bot.account.cw.limit` - the number of times the account has played cw that day
+    - `bot.account.cw.secondsUntilPlay` - the number of seconds until the account can play again
+    - `bot.account.cw.canPlayAgain` - the timestamp the account can play again
+- `bot.account.stats` - user stats
+    - `bot.account.stats.montly` - monthly stats
+    - `bot.account.stats.lifetime` - lifetime stats
+    - structure for both: [click](https://github.com/yolkorg/yolkbot/blob/cebc489c180240773905a1159024b1a0907e4b7b/src/types/bot.d.ts#L26C1-L62C2)
+    - requires `STATS` [intent](./intents)
+- `bot.account.challenges` - an array of challenges, each challenge has the following props:
+    - `id` - the id of the challenge as seen in the Challenge constant
+    - `name` - the name of the challenge
+    - `desc` - the description of the challenge
+    - `rewardEggs` - the egg number reward of the challenge
+    - `isRerolled` - if the challenge was rerolled
+    - `isClaimed` - if the challenge was claimed
+    - `isCompleted` - if the challenge was completed
+    - `progressNum` - the current progress of the challenge
+    - `goalNum` - the goal of the challenge
+    - `raw` - raw data, might have a couple extra properties
+    - requires `CHALLENGES` [intent](./intents)
+
+## Chikn Winner
+These methods allow you to play Chikn Winner.
+
+### [async] bot.checkChiknWinner
+Allows you to check the status of the Chikn Winner minigame for the account. It returns something like this:
+
+```js
+await bot.checkChiknWinner() /* -> {
+    atLimit: false,
+    limit: 1,
+    secondsUntilPlay: 240,
+    canPlayAgain: 1742002470386
+} */
+```
+
+More information is in the explanation for `bot.account.cw` below.
+
+### [async] bot.playChiknWinner
+Allows you to play the Chikn Winner minigame. It will either return what you pulled, which either is eggs:
+
+```js
+await bot.playChiknWinner() /* -> {
+    eggsGiven: 100,
+    itemIds: [],
+    rewardTier: 2
+} */
+```
+
+or an item:
+
+```js
+await bot.playChiknWinner() /* -> {
+    eggsGiven: 0,
+    itemIds: [3066],
+    rewardTier: 1
+} */
+```
+
+It may also return a string, which is one of these errors:
+
+- `hit_daily_limit` - the bot has hit the daily limit, run `bot.resetChiknWinner()` to reset the limit for 200 eggs
+- `on_cooldown` - chikn winner is on cooldown, see `bot.account.cw.secondsUntilPlay` for the seconds until you can play again
+- `session_expired` - the bot's session expired, usually because the bot's account was deleted due to bot detection
+- `unknown_error` - an unknown error returned by shell - create an issue on github with the content in the console
+
+You can also pass `true` to the first parameter, which can sometimes fix issues with false cooldown calculation. If you don't have any issues with this, leave it as-is.
+
+### [async] bot.resetChiknWinner
+Allows you to reset Chikn Winner for 200 eggs if you have hit the daily limit.
+
+If it successfully resets, it will return the Chikn Winner status (from `bot.checkChiknWinner()`).
+
+It may also fail, returning one of these errors:
+- `not_at_limit` - the bot is not at the limit for the day, and you should play normally
+- `not_enough_eggs` - the bot does not have enough eggs to reset
+- `unknown_error` - an unknown error returned by shell - create an issue on github with the content in the console
+
+## Challenges
+These methods all require the `CHALLENGES` [intent](./intents) to be enabled.
+
+### [async] bot.refreshChallenges
+Refreshes the challenges for the account. This will return the challenges, which is an array of challenges. See `bot.account.challenges` for more information.
+
+### [async] bot.claimChallenge
+Claims a completed challenge. This will return the egg reward and the updated challenge list.
+
+```js
+const firstChallengeId = bot.account.challenges[0].id; // must have been completed
+const result = await bot.claimChallenge(firstChallengeId);
+
+console.log('the bot got', result.eggReward, 'eggs');
+console.log('the bot now has', bot.account.eggBalance, 'eggs');
+console.log('updated challenge list', result.updatedChallenges);
+```
+
+### [async] bot.rerollChallenge
+Rerolls a challenge that has not yet been completed. This will return the updated challenge list.
+
+```js
+const firstChallengeId = bot.account.challenges[0].id; // must not have been completed
+const result = await bot.rerollChallenge(firstChallengeId);
+console.log('updated challenge list', result);
+```
+
+----------------------
+
+## Game Stuff
+### You can join and then control a game with 100% coverage.
+### game.mdx
+
+## Joining
+This is obviously what you have to do first, which you can do in 2 ways:
+
+### [async] bot.createPrivateGame
+Creates a private game with a specified region, mode, and map.
+
+```js
+await bot.createPrivateGame({
+    region: 'useast',
+    mode: 'ffa',
+    map: 'Downfall'
+});
+```
+
+You can find a region list from the [matchmaker](./matchmaker) guide. Modes can be found using the [GameMode constant](../tools/constants). Maps can be found using the [Map constant](../tools/constants). It's just the map name.
+
+### [async] bot.initMatchmaker
+This manually creates of a [Matchmaker](./matchmaker) on a Bot. This is useful for finding public games.
+
+You should, if logging in and attempting to find a publix game:
+- Create a bot with `new Bot()`
+- Call `bot.login()` with the proper credentials
+- Call `bot.initMatchmaker()`
+- Call `bot.matchmaker.findPublicGame()`
+- Call `bot.join(name, code)`
+
+There are several important things about the matchmaker that don't relate, so let's use a bullet pointed list:
+
+- If you don't login before using initMatchmaker, it will first create an anonymous account, attach the anon account to the bot, then use that anon account until you call `login()`. This is why you should really call `login()` first.
+- The matchmaker will use the proxy you used to create the bot.
+- The Matchmaker will disconnect & (temporarily?) blacklist you if you spam `findPublicGame` on the same proxy ~10 times.
+- This will automatically be run anytime you use `bot.join()` or `bot.createPrivateGame()`, so you don't need to call this unless you're doing something special (e.g. finding a public game and joining it).
+
+### [async] bot.join
+Join a public game with the provided game code.
+
+```js
+await bot.join('My Bot Name', 'game-code-here');
+```
+
+You can also pass a result directly from the Matchmaker:
+
+```js
+const game = await bot.matchmaker.findGame({ region: 'useast', mode: 'ffa' });
+await bot.join('My Bot Name', game);
+```
+
+## bot.game
+This has various information about the current game.
+
+- `bot.game.code` - the game code of the game
+- `bot.game.gameMode` - the game mode of the game (instanceof [GameMode](../tools/constants))
+- `bot.game.map` - the map of the game (instanceof [Map](../tools/constants))
+- `bot.game.playerLimit` - the player limit of the game
+- `bot.game.isGameOwner` - if the bot is the game owner
+- `bot.game.isPrivate` - if the game is private
+- `bot.game.options` - the options of the game
+    - `bot.game.options.gravity` - the gravity of the game
+    - `bot.game.options.damage` - the damage of the game
+    - `bot.game.options.healthRegen` - the health regen of the game
+    - `bot.game.options.locked` - if the game is locked
+    - `bot.game.options.noTeamChange` - if the game has no team change
+    - `bot.game.options.noTeamShuffle` - if the game has no team shuffle
+    - `bot.game.options.weaponsDisabled` - the weapons disabled in the game - in the order of [GunList](../tools/constants) - 1 = disabled, 0 = enabled
+    - `bot.game.options.mustUseSecondary` - if the player must use the secondary weapon due to all weapons being disabled
+- `bot.game.teamScore` - the team score of the game
+- `bot.game.spatula` - the spatula of the game
+    - `bot.game.spatula.coords` - the coords of the spatula
+    - `bot.game.spatula.controlledBy` - the player id controlling the spatula
+    - `bot.game.spatula.controlledByTeam` - the team controlling the spatula
+- `bot.game.stage` - the stage of the game (instanceof [CoopStates](../tools/constants))
+- `bot.game.zoneNumber` - the active coop zone number
+- `bot.game.activeZone` - an array of x/y/z coord objects that the current zone consists of
+- `bot.game.capturing` - the users capturing the coop
+- `bot.game.captureProgress` - a number 1-1000 that signifies the progress of the capture
+- `bot.game.numCapturing` - the number of players capturing
+- `bot.game.stageName` - the name of the game stage (as `bot.game.stage` is a number)
+- `bot.game.capturePercent` - the capture percent of the game (as `bot.game.captureProgress` is a number, this is for convenience)
+- `bot.game.collectables` - an array with index 0 as an ammo array and index 1 as a grenade array -- each ammo has an ID and an x/y/z coord
+
+## Game Actions
+Here are some things you can do inside of a game.
+
+### bot.dispatch
+Allows you to [dispatch](../how/dispatches) an action.
+
+```js
+import LookAtDispatch from 'yolkbot/dispatch/LookAtDispatch';
+
+bot.dispatch(new LookAtDispatch(0));
+```
+
+This is how you do most things. Read the [dispatch](../how/dispatches) guide for more information.
+
+### bot.quit
+This closes the connection to the game, the matchmaker, and runs various cleanup functions.
+
+Cleanup includes deleting things that are heavy on memory (like `bot.account`, `bot.game`, `bot.players`, etc). That might not be something you want. If so, pass the first argument as `true` to `bot.quit` (so `bot.quit(true)`).
+
+## Utilities
+These are utilities that can be used in a game.
+
+### bot.canSee
+This allows you to check if the bot can see a player.
+
+```js
+if (bot.canSee(bot.players[0])) {
+    console.log('I can see the first player that joined!');
+}
+```
+
+The first argument is a `GamePlayer` from `bot.players`.
+
+### bot.getBestTarget
+Returns the closest player that is in the bot's LoS. Returns `null` if no one is in the bot's LoS.
+
+```js
+const bestTarget = bot.getBestTarget();
+if (bestTarget) {
+    bot.dispatch(new LookAtDispatch(bestTarget.id));
+    bot.dispatch(new FireDispatch(1));
+}
+```
+
+## bot.players
+`bot.players` is an array of players that have information about each player.
+
+<Note>bot.me is a reference to the `bot.players` object that represents you.</Note>
+
+- `bot.players[i].id` - the id of the player relative to the players
+    - IDs are the index of `bot.players` the bot is
+    - for example, ID 3 would be `bot.players[3]`
+- `bot.players[i].team` - the team the player is on
+- `bot.players[i].name` - the name of the player
+- `bot.players[i].uniqueId` - the unique id of the player
+- `bot.players[i].position` - the position of the player
+    - `bot.players[i].position.x` - the x position of the player
+    - `bot.players[i].position.y` - the y position of the player
+    - `bot.players[i].position.z` - the z position of the player
+- `bot.players[i].view` - the view of the player
+    - `bot.players[i].view.yaw` - the yaw of the player
+    - `bot.players[i].view.pitch` - the pitch of the player
+- `bot.players[i].jumping` - if the player is jumping
+- `bot.players[i].climbing` - if the player is climbing
+- `bot.players[i].character` - the character of the player
+    - `bot.players[i].character.eggColor` - the color of the player's egg
+    - `bot.players[i].character.primaryGun` - the primary gun of the player
+    - `bot.players[i].character.secondaryGun` - the secondary gun of the player
+    - `bot.players[i].character.stamp` - the stamp of the player
+    - `bot.players[i].character.hat` - the hat of the player
+    - `bot.players[i].character.grenade` - the grenade of the player
+    - `bot.players[i].character.melee` - the melee of the player
+- `bot.players[i].activeGun` - the active gun of the player (primary or secondary)
+- `bot.players[i].selectedGun` - the selected gun of the player (eggk, crackshot, etc)
+- `bot.players[i].weapons` - the weapons of the player
+    - `bot.players[i].weapons[0]` - the primary weapon of the player (instanceof [gun](../constants/gun))
+    - `bot.players[i].weapons[1]` - the secondary weapon of the player (instanceof [gun](../constants/gun), always a cluck9mm)
+- `bot.players[i].grenades` - the number of grenades the player has
+- `bot.players[i].streak` - the killstreak of the player
+- `bot.players[i].hp` - the health of the player
+- `bot.players[i].hpShield` - the shield of the player
+- `bot.players[i].streakRewards` - the rewards the player has for their streak - a list of the [StreakRewards constant](../tools/constants)
+- `bot.players[i].socials` - an array of the player's socials (twitch, youtube, tiktok, etc) with `id`, `url`, `type`, and `active` properties. it will be null for players without any socials (average person)
+- `bot.players[i].isVip` - is the player wasting $5/month?
+- `bot.players[i].showBadge` - whether or not to show the badge of the player (either a social or the VIP badge)
+
+## Misc Attributes
+Here are some extra attributes that you might want to note:
+
+- `bot.pathing.followingPath` - if the bot is following a path
+    - setting this to false/true can pause/"play" pathfinding
+    - there's a lot more on `bot.pathing`, but it's mostly for advanced users
+- `bot.ping` - the websocket latency (ping)
+- `bot.matchmaker` - an instance of [matchmaker](./matchmaker) that uses the bot's proxy & auth
+    - this is not automatically created, you may need `bot.initMatchmaker()`
+- `bot.state.weaponIdx` - you can change this before you join a game to change the weapon the bot joins with
+
+----------------------
+
+## API Tools
+### yolkbot provides a few API-related functions.
+### api.mdx
+
+<Note>You probably shouldn't directly use any of these. Most of them are used internally and exposed for *advanced users*.</Note>
+
+### [async] loginAnonymously
+This lets you login anonymously. It returns a response from the `auth` services command.
+
+```js
+import { loginAnonymously } from 'yolkbot/api';
+
+let response = await loginAnonymously();
+console.log(response);
+```
+
+This returns information about the newly created anonymous account.
+
+Note that Firebase, the database provider of the game, ratelimits anon accounts created every hour.
+
+### [async] loginWithCredentials
+This lets you login with a specified email and password.
+
+```js
+import { loginWithCredentials } from 'yolkbot/api';
+
+let response = await loginWithCredentials('email@example.com', 'ThisIsAPassword123!');
+console.log(response);
+```
+
+This returns information about the account.
+
+### [async] loginWithRefreshToken
+This lets you login using a Firebase refresh token
+
+You can learn about obtaining those by looking at the `loginWithRefreshToken` docs for the [Bot](../bot/bot).
+
+```js
+import { loginWithRefreshToken } from 'yolkbot/api';
+
+let response = await loginWithRefreshToken('some-VeRy-L0ng-rAndomTexT-heRe');
+console.log(response);
+```
+
+This returns information about the account.
+
+### [async] createAccount
+This allows you to create an account.
+
+```js
+import { createAccount } from 'yolkbot/api';
+
+let response = await createAccount('email@example.com', 'ThisIsAPassword123!');
+console.log(response);
+```
+
+It returns the same thing as "loginWithCredentials".
+
+### [async] queryServices
+This lets you directly query the `services` socket.
+
+```js
+import { queryServices } from 'yolkbot/api';
+
+let response = await queryServices({ cmd: 'auth', firebaseToken: '...' });
+console.log(response);
+```
+
+This is mostly used internally, but allows you to do things like play Chikn Winner.
+
+### Additional Arguments
+Each of these take two extra arguments at the end in the following order:
+
+- proxy (string): A socks4 or socks5 proxy to use for the request.
+- instance (string): The instance of Shell Shockers to use, default `shellshock.io`.
+
+----------------------
+
+## Constants
+### Constants are global variables that are usable across a Bot.
+### constants.mdx
+
+Constants are the core numbers and ways we can easily define information in a readable format. Instead of always calling the blue team `1`, the value, we instead can call it `Teams.blue`!
+
+You don't *need* to use constants, but if anything changes in shell, they will be updated and your "magic numbers" might not be. Constants are super easy to understand and improve code readability, so we highly recommend them.
+
+You can import any constant using this format:
+
+```js
+import { CONSTANT_NAME } from 'yolkbot/constants';
+```
+
+To import multiple constants at once, you can use this format:
+
+```js
+import { CONSTANT_NAME_1, CONSTANT_NAME_2 } from 'yolkbot/constants';
+```
+
+### Constant List
+These do not have indivisual pages or code examples. If you become confused, paste this into ChatGPT and ask it how to import a specific constant. The names are exactly how you'd import them. If you see the name `Teams`, you'd use:
+
+```js
+import { Teams } from 'yolkbot/constants';
+```
+
+If you want to see the values of each constant, [read the internal file](https://github.com/yolkorg/yolkbot/blob/main/src/constants.js). Documentation is handtyped by us and we do not have that time.
+
+- `ChiknWinnerDailyLimit` - The number of times you can play Chikn winner before it "goes to sleep"
+- `CollectTypes` - The enum of items on the ground (ammo/grenade)
+- `CoopStates` - The different stages of a coop name (contested, capturing, abandoned, etc)
+- `FirebaseKey` - The firebase API key used to interact with game authorization
+- `GameActions` - The different actions executed by a host (pause/reset)
+- `GameModes` - The different game modes. (kotc, ffa, etc)
+- `GameOptionFlags` - The different extra options game hosts control (team switching/locking)
+- `GunList` - An **array** of all the guns in the game, ordered by the selector menu.
+- `IsBrowser` - A quick and easy check for if the bot is running in the browser.
+- `Movements` - The different ways to move. Critical for MovementDispatch.
+- `PlayTypes` - These are the different ways to join a game. The key is the name and the value is the integer.
+- `ProxiesEnabled` - If the bot can use proxies based on the environment.
+- `ShellStreaks` - The different streaks in the game. (health shield, double damage, etc)
+- `SocialMedias` - The different social media platforms CCs have.
+- `SocialRewards` - The rewards claimable for clicking BWD's social media links.
+- `Teams` - The two teams (blue/red)
+- `URLRewards` - Rewards that are put at the end of a URL that users can claim.
+- `UserAgent` - The user agent used for connecting to WebSockets and sending requests
+
+Some of these, like `Movements`, are very important for the movement dispatch. Others, like `GameOptionFlags`, are relatively obscure and will likely never be needed by you.
+
+## Game Data
+Game data also falls into the constant category.
+
+### Guns
+Guns are represented by classes.
+
+```js
+import { AUG, CSG1, DozenGauge, Eggk47, M24, RPEGG, SMG } from 'yolkbot/constants/guns';
+```
+
+This is a list of all of the guns in the game. Some are the name in the game, some are the actual name of the gun. The gun names match what the game's code calls them. Here's what each is:
+
+- Eggk47 - Eggk47
+- Scrambler - DozenGauge
+- Free Ranger - CSG1
+- RPEGG - RPEGG
+- Whipper - SMG
+- Crackshot - M24
+- Tri-Hard - AUG
+- Secondary - Cluck9mm
+
+The guns (excluding secondary) are listed in the `GunList` constant mentioned above.
+
+Gun information is large and hard to summarize. For a good idea on gun values, [read the types](https://github.com/yolkorg/yolkbot/blob/main/src/types/constants/guns.d.ts).
+
+### Items
+This is a VERY large array of all items in the game. This includes hats, stamps, gun items, grenades, melee items, etc.
+
+```js
+import { Items } from 'yolkbot/constants/items';
+```
+
+You can use the `findItemById` constant from `yolkbot/constants`:
+
+```js
+import { findItemById } from 'yolkbot/constants';
+
+console.log(findItemById(1001)) // ==> { id: 1001, name: 'Baseball Hat', ... }
+```
+
+Example item:
+
+```json
+{
+    "id": 1001,
+    "name": "Ball Cap",
+    "price": 0,
+    "item_type_id": 1,
+    "item_type_name": "Hat",
+    "category_name": "Hats",
+    "exclusive_for_class": null,
+    "item_data": {
+        "meshName": "hat_ballCap",
+        "tags": [
+            "Green",
+            "White"
+        ]
+    },
+    "is_available": true,
+    "unlock": "default",
+    "align": {
+        "x": -0.12075649338775385,
+        "y": -0.2670312477499075,
+        "z": -0.05526682671835026
+    }
+}
+```
+
+Item Structure:
+
+```ts
+interface Item {
+    id: number;
+    name: string;
+    price: number;
+    item_type_id: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+    item_type_name: 'Hat' | 'Stamp' | 'Primary' | 'Secondary' | 'Melee' | 'Grenade';
+    exclusive_for_class: null | 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    item_data: {
+        meshName: string;
+        tags: string[];
+    };
+    is_available: boolean;
+    unlock: 'default' | 'purchase' | 'physical' | 'manual' | 'premium' | 'vip';
+    align: {
+        x: number;
+        y: number;
+        z: number;
+    };
+}
+```
+
+<Note>If you bundle yolkbot somewhere, we recommend you use a tool like `bun patch` to patch out the `findItemById` to not import the items file at all unless you actually need it. The items file is nearly 1MB, which is INSANE to import and makes bundle sizes spike.</Note>
+
+### Maps
+This is a large array of all maps in the game.
+
+```js
+import { Maps } from 'yolkbot/constants/maps';
+```
+
+Example map:
+
+```json
+{
+    "filename": "aqueduct",
+    "hash": "11dp765kifr",
+    "name": "Aqueduct",
+    "modes": {
+        "FFA": true,
+        "Teams": true,
+        "Spatula": true,
+        "King": true
+    },
+    "availability": "both",
+    "numPlayers": "18"
+}
+```
+
+Map Structure:
+
+```ts
+interface Map {
+    filename: string;
+    hash: string;
+    name: string;
+    modes: {
+        FFA: boolean;
+        Teams: boolean;
+        Spatula: boolean;
+        King?: boolean;
+    };
+    availability: string;
+    numPlayers: string;
+}
+```
+
+### Challenges
+This is an array of all challenges in the game.
+
+```js
+import { Challenges } from 'yolkbot/constants/challenges';
+```
+
+Example challenge:
+
+```json
+{
+    "id": 1,
+    "loc_ref": "chlg_kill_streak_five",
+    "type": 0,
+    "subType": 0,
+    "period": 0,
+    "goal": 1,
+    "reward": 100,
+    "conditional": 0,
+    "value": "5",
+    "valueTwo": null,
+    "tier": 2,
+    "loc": {
+        "title": "Master Chef",
+        "desc": "Get a 5 killstreak"
+    }
+}
+```
+
+Challenge Structure:
+
+```ts
+interface Challenge {
+    id: number;
+    loc_ref: string;
+    type: number;
+    subType: number;
+    period: number;
+    goal: number;
+    reward: number;
+    conditional: number;
+    value: string;
+    valueTwo: string | null;
+    tier: number;
+    loc: {
+        title: string;
+        desc: string;
+    }
+}
+```
+
+### Changelog
+This is a list of all changes, which is used for the ingame changelog.
+
+```js
+import { Changelog } from 'yolkbot/constants/changelog';
+```
+
+Example changelog entry:
+
+```json
+{
+    "version": "1.0.1",
+    "date": "May 1 2025",
+    "content": [
+        "Lock in & look out eggventurers, it's time for the Leggacy of the Sun update!",
+        "Congrats to the winners of the EGG ORG takeover - all players have been awarded an Eggsassin Stamp!",
+        "We liked random killstreak bonuses so much we decided to keep them!",
+        "Eggiana Jones has arrived - the newest item bundle featuring a cracking new melee!",
+        "Throw Throw Apocalypto! Try the latest Premium Mayan Grenade - in-store & free for VIPs ",
+        "We got a hot one! Try the latest map Greenhouse in public & private lobbies",
+        "The Public Map pool has been overhauled! The Egg Org Maps are gone, replaced by a range of Mayan maps & old favorites!"
+    ]
+}
+```
+
+Changelog Structure:
+
+```ts
+interface ChangelogEntry {
+    version: string;
+    date: string;
+    content: string[];
+}
+```
+
+### CommCodes
+This is a list of all of the CommCodes. This is especially useful, considering how Shell has started minifying them.
+
+```js
+import { CommCode } from 'yolkbot/constants/codes';
+```
+
+Usage:
+
+```js
+CommCode.syncMe
+CommCode.syncThem
+CommCode.requestRespawn
+// etc
+```
+
+### Language
+This is an index of all of the English language strings in the game. This is used for localization.
+
+```js
+import { Language } from 'yolkbot/constants/language';
+```
+
+### House Promo
+"House Promo" refers to the various promotional images around the game, usually on the homescreen (hence the word "house"). It promotes other BWD games, BWD socials, and various other things. It also has the Shell logo variations.
+
+```js
+import { HousePromo } from 'yolkbot/constants/housePromo';
+```
+
+### ShellNews
+This is an index of all of the things that appear in the news panel.
+
+```js
+import { ShellNews } from 'yolkbot/constants/shellNews';
+```
+
+### ShellYoutube
+This is an index of all of the YouTube videos shown on the homescreen.
+
+```js
+import { ShellYoutube } from 'yolkbot/constants/shellYoutube';
+```
+
+### ShopItems
+This is an index of all of the items in the shop. This seems to include bundles.
+
+```js
+import { ShopItems } from 'yolkbot/constants/shopItems';
+```
+
+### Sounds
+This is an index of all ingame sounds.
+
+```js
+import { Sounds } from 'yolkbot/constants/sounds';
+```
+
+----------------------
+
+## Matchmaker Class
+### The Matchmaker class provides a wrapper of the game's Matchmaker.
+### matchmaker.mdx
+
+The Matchmaker is how you can connect to the game server to find things like public games.
+
+<Warning>Usually, a Matchmaker will be connected to a Bot. You really shouldn't ever need to create one yourself. To use a Matchmaker with a bot, call [`bot.initMatchmaker()`](./bot) and then use `bot.matchmaker`</Warning>
+
+The Matchmaker takes an object of configuration:
+
+```js
+import Matchmaker from 'yolkbot/matchmaker';
+
+const mm = new Matchmaker({
+    sessionId: 'e2e36ea2-c10d-441e-b396-e1ce15d92263', // a custom sessionId to use, allows the matchmaker to send things through a specific account
+
+    proxy: 'socks5://69.69.69.69:42069', // a proxy to use for the matchmaker websocket
+
+    instance: 'shellshock.io', // the instance of Shell Shockers to use for the websocket, default 'shellshock.io'
+    protocol: 'wss', // the protocol to use for the websocket, default 'wss'
+
+    noLogin: false // if true, the matchmaker will not log in at all (including anon account) - this will break on normal shell, do not enable unless you know what you're doing
+});
+```
+
+If a custom sesssion ID is omitted, the matchmaker will create an anonymous account and use that session ID. If a proxy is omitted, no proxy will be used. None of these are required, and you can specify nothing or an empty object:
+
+```js
+// both of these work
+const mm = new Matchmaker();
+const mm = new Matchmaker({});
+```
+
+<Note>Upon constructing a Matchmaker, it will connect to and then infinitely reconnect to the matchmaker WebSocket. Using `<Matchmaker>.ws.close()` will **instantly reopen the connection**. If you need to close the Matchmaker, use `<Matchmaker>.close()`</Note>
+
+## Methods
+These are all the things you can run on a `Matchmaker`.
+
+<Note>A Matchmaker has an EventEmitter system, meaning the matchmaker allows you to use `on`/`off`/`once`. This is assumed that you understand this. For an idea on how to use these functions, see the Node [EventEmitter](https://nodejs.org/en/learn/asynchronous-work/the-nodejs-event-emitter) documentation. Note that you cannot call `emit`.</Note>
+
+### [async] waitForConnect
+An easy async function that lets you wait for the Matchmaker to connect.
+
+```js
+const matchmaker = new Matchmaker();
+
+console.log(matchmaker.connected); // ==> false
+await matchmaker.waitForConnect();
+console.log(matchmaker.connected) // ==> true
+```
+
+### [async] getRegions
+This fetches the region list from the game and then returns it, as well as stores it in `<Matchmaker>.regionList`.
+
+Example usage:
+```js
+const matchmaker = new Matchmaker();
+const regionList = await matchmaker.getRegions();
+
+console.log(regionList); // ==> [{ id: 'sydney', sub: 'egs...' }, { id: 'useast', 'sub': 'egs...' }]
+console.log(matchmaker.regionList); // ==> [{ id: 'sydney', sub: 'egs...' }, { id: 'useast', sub: 'egs...' }]
+console.log(regionList == matchmaker.regionList) // ==> true
+```
+
+This will be required for `getRandomRegion()`, as well as region validation in `findGame()`.
+
+<Note>If you use the Matchmaker as part of a `Bot`, this is automatically called.</Note>
+
+### [async] findGame
+This finds a game with the specified parameters, `region` and `mode`.
+
+A region list can be found using `getRegions()`, and will a specified region **will only be validated if `getRegions()` has previously been called**.
+
+The `mode` can be any of the following: `ffa`, `team`, `spatula`, & `kotc`.
+
+It will return a standardized game object similar to the following:
+
+```js
+{
+  command: 'gameFound',
+  region: 'santiago', // the game region
+  subdomain: 'egs-static-live-santiago-1s5w3cdc',
+  id: 'just-mode-hawk', // the game code
+  uuid: '...',
+  private: false,
+  noobLobby: false
+}
+```
+
+The game code is `<response>.id`. You can connect to this using `<Player>.join('bot name', code)`.
+
+Example usage:
+
+```js
+const matchmaker = new Matchmaker();
+
+let regions = await matchmaker.getRegions()
+
+const game = await matchmaker.findGame({
+    region: regions[0].id, // --> 'sydney', 'useast', 'germany', etc
+    mode: 'ffa'
+}); // ==> a game object
+```
+
+### getRandomRegion
+Get a random region ID that can be directly passed to findGame().
+
+You MUST have previously called `getRegions()`.
+
+```js
+const matchmaker = new Matchmaker();
+
+await matchmaker.getRegions()
+
+const game = await matchmaker.findGame({
+    region: matchmaker.getRandomRegion()
+    mode: 'ffa'
+}); // ==> a game object
+```
+
+### getRandomGameMode
+Get a random game mode ID that can be directly passed to findGame.
+
+```js
+const matchmaker = new Matchmaker();
+
+const game = await matchmaker.findGame({
+    region: 'useast'
+    mode: matchmaker.getRandomGameMode()
+}); // ==> a game object
+```
+
+### send
+Sends a custom WebSocket message through the Matchmaker. This is automatically stringified, so all you need to pass is a JSON.
+
+```js
+const matchmaker = new Matchmaker();
+
+matchmaker.send({
+    command: 'joinGame',
+    id: 'game-code-here',
+    observe: false,
+    sessionId: '...'
+});
+```
+
+<Warning>You should NEVER call `joinGame` directly! It is something a `Bot` does for you. Use a `Bot` if you need to join a game. This event is here as an EXAMPLE USE, **NOT** a recommended one.</Warning>
+
+### close
+As mentioned above in the constructor, directly closing the matchmaker WebSocket (`<Matchmaker>.ws.close()`) will cause it to instantly reopen, doing effectively nothing. In order to prevent it from reopening, call `close()`.
+
+```js
+const matchmaker = new Matchmaker();
+
+// do NOT do this!
+matchmaker.ws.close();
+console.log(matchmaker.connected) // ==> true
+
+// do THIS instead!
+matchmaker.close();
+console.log(matchmaker.connected) // ==> false
+```
+
+
+----------------------
+
+## Map Utilities
+### yolkbot/util provides various map-related utilities.
+### map.mdx
+
+yolkbot/util provides various map-related utilities. These are useful for things that would usually take a few extra lines to do yourself.
+
+### fetchMap
+This fetches a map from the game and returns it. This is useful for getting map data without having to do it yourself.
+
+It will store maps in `~/.yolkbot/maps` (your homedir). It bases maps off their hashes, which change if the maps change. Hashes are provided by shell. If you call `fetchMap` with a map that is in the map cache, it will return the cached map instead of fetching it again. You can bypass this by passing a random string (i.e. `Math.random().toString()`) as the second argument.
+
+```js
+import { fetchMap } from 'yolkbot/util';
+
+const map = await fetchMap('Greenhouse', 'jd29d92d'); // name, hash
+console.log(map); // ==> { name: 'Greenhouse', hash: 'jd29d92d' ... }
+```
+
+### initKotcZones
+This initializes the KOTC zones on a mapData. This is for advanced users who want to get custom KOTC zones for a map.
+
+This is called internally by yolkbot and stored in `bot.game.map.zones`. You should not need to call this yourself unless you are creating an advanced program.
+
+It takes an input of an array of `DYNAMIC.capture-zone.none` cells (so an array of x/y/z objects) and returns an array similar to this:
+
+```js
+const result = [
+    [
+        { x: 0, y: 0, z: 0 },
+        { x: 1, y: 1, z: 1 },
+        { x: 2, y: 2, z: 2 }
+    ],
+    [
+        { x: 3, y: 3, z: 3 },
+        { x: 4, y: 4, z: 4 },
+        { x: 5, y: 5, z: 5 }
+    ]
+]
+```
+
+This continues. The `activeZone` prop refers to a result index, so if `activeZone` is `0`, the cells included in the coop are `result[0]`.
+
+For example, to run this on Greenhouse:
+
+```js
+import { fetchMap, initKotcZones } from 'yolkbot/util';
+
+const map = await fetchMap('Greenhouse', 'jd29d92d');
+const zones = initKotcZones(map.data['DYNAMIC.capture-zone.none']);
+
+console.log(zones); // ==> [ [ { x: 0, y: 0, z: 0 }, ... ], [ { x: 3, y: 3, z: 3 }, ... ] ]
+```
+
+----------------------
+
+## BootPlayerDispatch
+### Boot a player from a private game (where you are the host)
+### bootPlayer.mdx
+
+### Example Usage
+
+```js
+import BootPlayerDispatch from 'yolkbot/dispatches/BootPlayerDispatch';
+
+// uniqueId must be a player's "uniqueId" property
+bot.dispatch(new BootPlayerDispatch(uniqueId));
+```
+
+### Checks
+- The `uniqueId` must be a string.
+- The `uniqueId` must be the unique ID of a valid player in the game.
+- The bot must be the owner of the game.
+
+### Notes
+Booting causes a player to be removed from the game. The player's IP will be banned from that game. That player's account (may?) be banned from that game. It will also cause any accounts on the same IP to be removed from the game.
+
+----------------------
+
+## ChatDispatch
+### Send a chat message
+### chat.mdx
+
+### Example Usage
+
+```js
+import ChatDispatch from 'yolkbot/dispatches/ChatDispatch';
+
+bot.dispatch(new ChatDispatch('message here'));
+```
+
+### Checks
+- The message must be a valid string
+- The message must be between 1 and 64 characters (game limit)
+- The bot must be in a game and not have chatted in the last 3 seconds
+    - This helps prevent ratelimits in chat.
+    - If you want to disable this functionality, pass `true` as the second argument to the dispatch.
+        - Example: `bot.dispatch(new ChatDispatch('message here', true));`
+- If the bot is not in a private game, the account must be email verified and at least 12 hours old
+    - This is because chat is disabled for unverified accounts in public games.
+
+----------------------
+
+## FireDispatch
+### Fire the gun currently in your hand
+### fire.mdx
+
+### Example Usage
+
+```js
+import FireDispatch from 'yolkbot/dispatches/FireDispatch';
+
+// where 3 is the number of bullets
+bot.dispatch(new FireDispatch(3));
+```
+
+### Checks
+- The bot must be playing the game
+- The bot must not be reloading, swapping between the primary/secondary, or using the melee
+- The specified number of bullets must be greater than or equal to 1
+- The bot's active gun's ammo must have enough to shoot the specified number of bullets
+
+### Notes
+The bullet's direction is decided by where the player is looking, not by any specification of the bot. The bullets will be specified to be fired the next time the player syncs to the server, which is when the bot specifies the number of bullets to shoot.
+
+----------------------
+
+## GameOptionsDispatch
+### Change game settings in private game (where you are the host)
+### gameOptions.mdx
+
+### Example Usage
+
+```js
+import GameOptionsDispatch from 'yolkbot/dispatches/GameOptionsDispatch';
+
+bot.dispatch(new GameOptionsDispatch());
+```
+
+### Dispatch Checks
+- The bot must be the owner of the game
+- Each of the `bot.game` options must be valid
+
+### Changing Options
+Option changing isn't handled directly through the dispatch. To change game options, modify the `bot.game.options` object through raw setting values (e.g. `bot.game.options.gravity = 0.5`). Then, call the dispatch to apply the changes.
+
+----------------------
+
+## GoToAmmoDispatch
+### Pathfind to the nearest ammo packet.
+### goToAmmo.mdx
+
+### Example Usage
+
+```js
+import GoToAmmoDispatch from 'yolkbot/dispatches/GoToAmmoDispatch';
+
+bot.dispatch(new GoToAmmoDispatch());
+```
+
+### Checks
+- The bot must be playing
+- The bot must have the `PATHFINDING` intent
+
+### Important Note
+A GoToAmmoDispatch will hijack **both the looking and the movement** of the bot. This means that the bot will not be able to look around or move until it reaches the target. If you NEED TO MOVE, you can:
+
+1. Set `bot.pathing.followingPath` to false
+2. Do whatever looking/movement/whatever you want to do
+3. If you HAVE NOT MOVED, just set `bot.pathing.followingPath` back to true
+4. If you HAVE MOVED, you will need to create a new GoToAmmoDispatch
+
+----------------------
+
+## GoToCoopDispatch
+### Pathfind to the coop.
+### goToCoop.mdx
+
+### Example Usage
+
+```js
+import GoToCoopDispatch from 'yolkbot/dispatches/GoToCoopDispatch';
+
+bot.dispatch(new GoToCoopDispatch());
+```
+
+### Checks
+- The bot must be playing
+- The game must be a KOTC gamemode
+- There must be an accessible coop
+- The bot must have the `PATHFINDING` intent
+
+### Important Note
+A GoToCoopDispatch will hijack **both the looking and the movement** of the bot. This means that the bot will not be able to look around or move until it reaches the target. If you NEED TO MOVE, you can:
+
+1. Set `bot.pathing.followingPath` to false
+2. Do whatever looking/movement/whatever you want to do
+3. If you HAVE NOT MOVED, just set `bot.pathing.followingPath` back to true
+4. If you HAVE MOVED, you will need to create a new GoToCoopDispatch
+
+----------------------
+
+## GoToGrenadeDispatch
+### Pathfind to the nearest grenade item.
+### goToGrenade.mdx
+
+### Example Usage
+
+```js
+import GoToGrenadeDispatch from 'yolkbot/dispatches/GoToGrenadeDispatch';
+
+bot.dispatch(new GoToGrenadeDispatch());
+```
+
+### Checks
+- The bot must be playing
+- The bot must have the `PATHFINDING` intent
+
+### Important Note
+A GoToGrenadeDispatch will hijack **both the looking and the movement** of the bot. This means that the bot will not be able to look around or move until it reaches the target. If you NEED TO MOVE, you can:
+
+1. Set `bot.pathing.followingPath` to false
+2. Do whatever looking/movement/whatever you want to do
+3. If you HAVE NOT MOVED, just set `bot.pathing.followingPath` back to true
+4. If you HAVE MOVED, you will need to create a new GoToGrenadeDispatch
+
+----------------------
+
+## GoToPlayerDispatch
+### Pathfind to a player ingame.
+### goToPlayer.mdx
+
+### Example Usage
+
+```js
+import GoToPlayerDispatch from 'yolkbot/dispatches/GoToPlayerDispatch';
+
+bot.dispatch(new GoToPlayerDispatch(bot.players[0])); // the argument must be an entire "player" object
+```
+
+### Checks
+- The bot must be playing
+- The target must be valid and playing
+- The bot must have the `PATHFINDING` intent
+
+### Important Note
+A GoToPlayerDispatch will hijack **both the looking and the movement** of the bot. This means that the bot will not be able to look around or move until it reaches the target. If you NEED TO MOVE, you can:
+
+1. Set `bot.pathing.followingPath` to false
+2. Do whatever looking/movement/whatever you want to do
+3. If you HAVE NOT MOVED, just set `bot.pathing.followingPath` back to true
+4. If you HAVE MOVED, you will need to create a new GoToPlayerDispatch on your target
+
+
+----------------------
+
+## GoToSpatulaDispatch
+### Pathfind to the game spatula.
+### goToSpatula.mdx
+
+### Example Usage
+
+```js
+import GoToSpatulaDispatch from 'yolkbot/dispatches/GoToSpatulaDispatch';
+
+bot.dispatch(new GoToSpatulaDispatch());
+```
+
+### Checks
+- The bot must be playing
+- The game must be a Capture the Spatula gamemode
+- The spatula must be on the ground
+- The bot must have the `PATHFINDING` intent
+
+### Important Note
+A GoToSpatulaDispatch will hijack **both the looking and the movement** of the bot. This means that the bot will not be able to look around or move until it reaches the target. If you NEED TO MOVE, you can:
+
+1. Set `bot.pathing.followingPath` to false
+2. Do whatever looking/movement/whatever you want to do
+3. If you HAVE NOT MOVED, just set `bot.pathing.followingPath` back to true
+4. If you HAVE MOVED, you will need to create a new GoToSpatulaDispatch
+
+----------------------
+
+## LookAtDispatch
+### Look at a player
+### lookAt.mdx
+
+### Example Usage
+
+```js
+import LookAtDispatch from 'yolkbot/dispatches/LookAtDispatch';
+
+bot.dispatch(new LookAtDispatch(0)); // a player's ID
+bot.dispatch(new LookAtDispatch('playerName')); // a player's name
+```
+
+### Checks
+- The bot must be playing the game
+- The player passed must be a valid player in the game
+
+### Notes
+The bot will calculate the yaw and pitch of a player and look at the player. Bloom is NOT calculated.
+
+----------------------
+
+## LookAtPosDispatch
+### Look at an X/Y/Z position
+### lookAtPos.mdx
+
+### Example Usage
+
+```js
+import LookAtPosDispatch from 'yolkbot/dispatches/LookAtPosDispatch';
+
+bot.dispatch(new LookAtPosDispatch({ x: 0, y: 0, z: 0 }));
+```
+
+### Checks
+- The bot must be playing the game
+- The position passed must have an X, Y, and Z value
+
+----------------------
+
+## MeleeDispatch
+### Use the melee weapon
+### melee.mdx
+
+### Example Usage
+
+```js
+import MeleeDispatch from 'yolkbot/dispatches/MeleeDispatch';
+
+bot.dispatch(new MeleeDispatch());
+```
+
+### Checks
+- The bot must be playing the game
+- The bot must not be reloading, swapping between the primary/secondary, or using the melee already
+
+### Notes
+The bot will melee in the direction the bot is facing.
+
+----------------------
+
+## MovementDispatch
+### Move the bot
+### movement.mdx
+
+### Example Usage
+
+```js
+import MovementDispatch from 'yolkbot/dispatches/MovementDispatch';
+import { Movements } from 'yolkbot/constants';
+
+bot.dispatch(new MovementDispatch(Movement.FORWARD)); // move forward
+bot.dispatch(new MovementDispatch([Movement.FORWARD, Movement.LEFT])); // move forward & to the left
+bot.dispatch(new MovementDispatch([Movement.FORWARD, Movement.LEFT, Movement.JUMP])); // move forward & to the left while jumping
+bot.dispatch(new MovementDispatch()); // stop moving entirely
+```
+
+### Checks
+- The bot must be playing the game
+- The movement passed must be a valid movement
+    - Movement validation is not as strict as other dispatches due to the enum format
+    - Be careful to only pass valid movement patterns
+    - Things like moving forward and backwards at the same time will not fail the check!
+
+### Notes
+Similar to how firing/the FireDispatch works, movement is not instantly sent. It is sent with the next `syncMe` packet. Movement is part of the `syncMe` packet, not a separate one.
+
+----------------------
+
+## PauseDispatch
+### Pause the game (equivalent of esc key)
+### pause.mdx
+
+### Example Usage
+
+```js
+import PauseDispatch from 'yolkbot/dispatches/PauseDispatch';
+
+bot.dispatch(new PauseDispatch());
+```
+
+### Checks
+- The bot must be playing the game (wow, who would've thought?)
+
+----------------------
+
+## ReloadDispatch
+### Reload the gun currently in your hand
+### reload.mdx
+
+### Example Usage
+
+```js
+import ReloadDispatch from 'yolkbot/dispatches/ReloadDispatch';
+
+bot.dispatch(new ReloadDispatch());
+```
+
+### Checks
+- The bot must be playing the game
+- The bot must not be already reloading, swapping between the primary/secondary, or using the melee
+
+----------------------
+
+## ReportPlayerDispatch
+### Report a player in your game
+### reportPlayer.mdx
+
+### Example Usage
+
+```js
+import ReportPlayerDispatch from 'yolkbot/dispatches/ReportPlayerDispatch';
+
+bot.dispatch(new ReportPlayerDispatch(0, {
+    cheating: true,
+    harassment: true,
+    offensive: true,
+    other: false
+})); // a player's ID with the "cheating", "harassment", and "offensive" reasons selected
+
+bot.dispatch(new ReportPlayerDispatch('playerName')); // a player's name with no reasons selected (it will select just the "other" option)
+```
+
+### Checks
+- The bot must be in a game
+- The player passed must be a valid player in the game
+
+### Notes
+The following options can be passed:
+
+- `cheating`
+- `harassment`
+- `offensive`
+- `other`
+
+If you don't pass an option, it will be assumed that the option is not selected.
+
+If you don't pass a reason object, it will assume reason is "other" and go through with the report. 
+
+----------------------
+
+## SaveLoadoutDispatch
+### Change the bot's skin(s) or gun
+### saveLoadout.mdx
+
+### Example Usage
+
+```js
+import SaveLoadoutDispatch from 'yolkbot/dispatches/SaveLoadoutDispatch';
+import { Items } from 'yolkbot/constants/items';
+
+bot.dispatch(new SaveLoadoutDispatch({
+    gunId: 0, // 0 to 6, eggk to tri-hard, in order of the gun list ingame
+
+    // these are all skins, you must pass a valid skin id for each skin that IS the skin
+
+    hatId: Items.find(item => item.name === 'Derby Hat').id, // finds the derby hat and selects it
+    stampId: 2004, // a hardcoded stamp ID (the peace stamp in this case)
+    grenadeId: null, // pass "null" for the default grenade
+    meleeId: Items.find(item => item.name === 'The Whisk Melee').id, // the default melee
+    eggColor: 0, // the color list as in the game inventory, from left to right 0-13
+    primaryId: ['eggk ID', 'scrambler ID', 'free ranger ID', '...'] // an array of primary gun skin IDs
+    secondaryId: ['the secondary used with eggk', 'the secondary used with scrambler', '...'] // an array of secondary gun skin IDs
+}));
+```
+
+### Checks
+- The bot must not actively be playing (can be in a game, but not playing)
+- The gun ID must be a valid ID from 0-6
+- The egg color must be 0-6 if you the bot is not a VIP, and 0-13 if the bot is
+- For each skin, it must either be a default skin or something the bot owns
+- For each skin, the skin must be a valid type (e.g. you cannot pass a stamp ID to `hatId`)
+
+### Notes
+When dispatching this, if a specific argument is not specified, it will be set to what it was previously. This allows you to do something like:
+
+```js
+bot.dispatch(new SaveLoadoutDispatch({
+    hatId: Items.find(item => item.name === 'Derby Hat').id
+}));
+```
+
+This will only change the hat, leaving everything else the same.
+
+Similarly, to change the gun and nothing else:
+
+```js
+bot.dispatch(new SaveLoadoutDispatch({
+    gunId: 1
+}));
+```
+
+This will change the gun to the scrambler, leaving all skins the same.
+
+----------------------
+
+## SwapWeaponDispatch
+### Swaps between your primary and secondary
+### swapWeapon.mdx
+
+### Example Usage
+
+```js
+import SwapWeaponDispatch from 'yolkbot/dispatches/SwapWeaponDispatch';
+
+bot.dispatch(new SwapWeaponDispatch());
+```
+
+### Checks
+- The bot must be playing the game
+- The bot must not be reloading, already swapping between the primary/secondary, or using the melee
+
+----------------------
+
+## SwitchTeamDispatch
+### Switch the bot's team
+### switchTeam.mdx
+
+### Example Usage
+
+```js
+import SwitchTeamDispatch from 'yolkbot/dispatches/SwitchTeamDispatch';
+
+bot.dispatch(new SwitchTeamDispatch());
+```
+
+### Checks
+- The bot must be in a game, but not playing
+- The bot must not be in an FFA game
+- If the room is private:
+    - The host must not have disabled team switching
+- If the room is public:
+    - The bot must have fewer teammates than the enemies
+    - This *should* end up running the same check the server does, and will never switch teams if the bot shouldn't be able it
+
+----------------------
+
+## ThrowGrenadeDispatch
+### Throw a grenade
+### throwGrenade.mdx
+
+### Example Usage
+
+```js
+import ThrowGrenadeDispatch from 'yolkbot/dispatches/ThrowGrenadeDispatch';
+
+bot.dispatch(new ThrowGrenadeDispatch(1)); // max power
+```
+
+### Checks
+- The bot must be playing the game
+- The bot must not be reloading, swapping between the primary/secondary, or using the melee
+- The power specified must be a valid power (0-1)
+
+### Notes
+The bot will throw the grenade in the direction the bot is facing. The power will help decide how fqar it goes, but actually knowing where it would go is heavy trial and error.
+
+----------------------
+
+This is the end of the documentation. A copy is online at https://yolkbot.villainsrule.xyz
