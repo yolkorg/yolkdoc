@@ -5,8 +5,6 @@ description: "yolkbot can be used in the browser!"
 
 yolkbot can be used in the browser, which allows you to use the biggest parts of yolkbot!
 
-yolkbot is now bundled in the browser, meaning it only imports one file (under 100kb) for the entire library, making it incredibly efficient.
-
 The only thing that changes between Node.JS and the browser is how modules are imported. Since you can't directly just import a pacakge name, you have to use a CDN to access it. Our recommended one is `esm.sh`. For example:
 
 ```js
@@ -72,25 +70,34 @@ let {
 
 Somewhat simple.
 
-## We Recommend Node
-Why?
+## Patching out items
+Items take up a TON of space in a bundle, and if you don't use the `COSMETIC_DATA` intent, there's no reasomn to bundle them. We recommend you use a tool like [Bun](https://bun.sh/) to patch out the items from the bundle. This will make your bundle size much smaller, and make it easier to load in the browser.
 
-1. The browser is slow. Anything you do will take a long time. This isn't anything we can control, it's just how browsers work.
-    - For example, loading the library takes around 5 seconds before the first code is executed.
-    - In another example, authorization is around 2x slower.
-2. The browser is limited.
-    - For example, you're unable to use proxies. Browsers just don't support proxied WebSockets.
-    - Additionally, whatever scope you run the bots in is ultimately limited in terms of resources. A tab can only use up so much CPU or RAM before most browsers shut it down.
-3. The browser is insecure.
-    - If you run the bots on, say, Shell Shockers, you're allowing Shell Shockers to potentially tamper with the bots or detect your IP botting. (If we ever find the game tampering with bot behavior, we'll obviously fix it. It's ultimately just a risk you need to take when running any code on a website.)
-4. The browser is hard to write in.
-    - Types and hence the things like intellisense that come with them are not featured in the browser bundle due to the obvious lack of typing support in browsers. This makes writing code harder and more prone to errors.
+Here's an example patch file:
 
-That being said, the browser still works pretty well. If you're just testing things out or want to run a bot on a website, the browser is a great way to do it. Just be aware of the limitations and risks.
+```patch
+diff --git a/dist/constants/findItemById.js b/dist/constants/findItemById.js
+index c9f05c9487ae21ea4fc1ee17b387e14395daa639..e7eac0dcad66d8884655c43103b19d1e113f5470 100644
+--- a/dist/constants/findItemById.js
++++ b/dist/constants/findItemById.js
+@@ -1,3 +1 @@
+-import { Items } from './items.js';
+-
+-export const findItemById = (id) => Items.find(item => item.id === id);
+\ No newline at end of file
++export const findItemById = (id) => null;
+\ No newline at end of file
+```
+
+With Bun, you can run `bun patch yolkbot` and edit `dist/constants/findItemById.js` to simply have the content:
+
+```js
+export const findItemById = (id) => null;
+```
+
+This will remove the items from the bundle, and make it 90% smaller (literally).
 
 ## Removed in the Browser
 In the browser edition, the big thing removed is **proxy support**. The browser can't use proxies for requests or WebSockets, which removes a (kind of big) feature in yolkbot. If you don't plan to need proxies, the browser is likely still a good choice.
-
-The other thing that may run into issues is pathfinding. Pathfinding requires sending requests to Shell Shockers to get map information. If you aren't running this from a Shell Shockers page and instead some external page, the map request will likely be [blocked due to CORS](https://docs.aws.amazon.com/AmazonS3/latest/userguide/cors.html). This is a limitation of the browser and not yolkbot. Use an extension like [CORS Unblock](https://chromewebstore.google.com/detail/cors-unblock/lfhmikememgdcahcdlaciloancbhjino) to get around this.
 
 Happy botting!

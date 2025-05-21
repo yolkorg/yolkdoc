@@ -1,0 +1,32 @@
+name: Update LLM files
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Update LLMs
+        run: |
+          cd llms
+          bun generate.js
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "yolkbot"
+          git config --global user.email "octocat@nowhere.com"
+          git add .
+          git commit -m "update llms.txt"
+          git push origin master
